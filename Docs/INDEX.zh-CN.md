@@ -32,4 +32,4 @@
 
 完整离线资产导出位于 `E:\CODE\SoD2_MOD_Dev\ReverseEngineering\Inputs\16535856\SoD2StaticFullUassetExportsFinal`，和源码同属总工作目录，但不在源码 Git 仓库内。本项目源码不能单独替代所有报告的原始输入；每个生成器的参数和报告中的 source/hash 决定复现要求。游戏文件与大规模资产导出不应加入对外 Mod 包。
 
-E 盘离线资料已经分类整理到 `E:\CODE\SoD2_MOD_Dev\ReverseEngineering`，目录说明与 `move-manifest-2026-09-24.json` 位于该目录根部。旧路径 `E:\SoD2Research` 是指向新位置的目录联接点。历史 JSON 中的 export_root_name 是保持不变的目录名，不是失效的绝对路径。
+E 盘离线资料已经分类整理到 `E:\CODE\SoD2_MOD_Dev\ReverseEngineering`，目录说明与 `move-manifest-2026-09-24.json` 位于该目录根部。旧路径 `E:\SoD2Research` 已移走，其目录联接点归档在总工作目录的 `LegacyLinks/SoD2Research`。历史 JSON 中的 export_root_name 是保持不变的目录名，不是失效的绝对路径。
