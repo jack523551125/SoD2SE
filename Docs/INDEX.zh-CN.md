@@ -28,7 +28,7 @@
 
 ## 旧资料与外部依赖
 
-工作区 work 下的 assets、config-analysis、melee-analysis、native-analysis、re-extract、recruitment-assets、recruitment-native、recruitment-tests 是早期材料或分析结果；尚未逐文件证明完全重复，因此保留，不作为更新后的权威定义。native-mod 是早期实现参考。disasm-libs、native-tools、SoD2-Editor、sod2-tools、u4pak 保留为工具或参考项目，不移动其依赖路径，不将其授权归属混入自研源码。
+早期的 assets、各类 UI/配置/近战/招募分析、re-extract、recruitment-tests 与 native-mod 已归入 `E:\CODE\SoD2_MOD_Dev\ReverseEngineering\Legacy\Work`；它们尚未逐文件证明完全重复，保留作历史参考，不作为更新后的权威定义。disasm-libs、native-tools、SoD2-Editor、sod2-tools、u4pak 同处该目录，仍是独立工具或第三方参考项目，不将其授权归属混入自研源码。旧 work 下的同名目录是兼容目录联接点。
 
 完整离线资产导出位于 `E:\CODE\SoD2_MOD_Dev\ReverseEngineering\Inputs\16535856\SoD2StaticFullUassetExportsFinal`，和源码同属总工作目录，但不在源码 Git 仓库内。本项目源码不能单独替代所有报告的原始输入；每个生成器的参数和报告中的 source/hash 决定复现要求。游戏文件与大规模资产导出不应加入对外 Mod 包。
 
