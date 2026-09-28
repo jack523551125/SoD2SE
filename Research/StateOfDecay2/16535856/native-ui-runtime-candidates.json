@@ -1,0 +1,153 @@
+{
+  "schema": 1,
+  "target_build": "16535856",
+  "target_executable_sha256": "EBF0A73E164BAA701F74655585F262F8E38A32B1F6DC5057303489BA5B333ECE",
+  "method": "Capstone x86-64 disassembly bounded by PE .pdata ranges; no execution or process attachment.",
+  "scope": "UI runtime candidate wrappers and their direct internal calls; not a complete call graph or parameter-contract recovery.",
+  "functions": {
+    "create_movie_player": {
+      "function_rva": "0xa9d3a0",
+      "function_end_exclusive_rva": "0xa9d430",
+      "function_size": 144,
+      "prologue_guard": "48895c240848896c2418488974242057",
+      "instruction_count": 37,
+      "decode_coverage": 1.0,
+      "direct_call_targets": [
+        "0x1207b40",
+        "0x1207b70",
+        "0x7cb060"
+      ],
+      "register_based_memory_displacements": [
+        "0x18",
+        "0x20",
+        "0x28",
+        "0x80"
+      ]
+    },
+    "create_movie_player_filter": {
+      "function_rva": "0x7cb060",
+      "function_end_exclusive_rva": "0x7cb0b7",
+      "function_size": 87,
+      "prologue_guard": "40534883ec20e875120000488bd84885",
+      "instruction_count": 25,
+      "decode_coverage": 1.0,
+      "direct_call_targets": [
+        "0x7cc2e0",
+        "0xa2f090"
+      ],
+      "register_based_memory_displacements": [
+        "0x8",
+        "0x10",
+        "0x88",
+        "0x90"
+      ]
+    },
+    "movie_player_class_helper": {
+      "function_rva": "0x7cc2e0",
+      "function_end_exclusive_rva": "0x7cc383",
+      "function_size": 163,
+      "prologue_guard": "48895c240848895424105556574883ec",
+      "instruction_count": 46,
+      "decode_coverage": 1.0,
+      "direct_call_targets": [
+        "0xa2f090",
+        "0x11f3b70",
+        "0x1204460"
+      ],
+      "register_based_memory_displacements": [
+        "0x30"
+      ]
+    },
+    "push_movie_player": {
+      "function_rva": "0xafc220",
+      "function_end_exclusive_rva": "0xafc2b0",
+      "function_size": 144,
+      "prologue_guard": "48895c240848896c2418488974242057",
+      "instruction_count": 37,
+      "decode_coverage": 1.0,
+      "direct_call_targets": [
+        "0x1207b40",
+        "0x1207b70",
+        "0x7dfb80"
+      ],
+      "register_based_memory_displacements": [
+        "0x18",
+        "0x20",
+        "0x28",
+        "0x80"
+      ]
+    },
+    "push_movie_player_internal": {
+      "function_rva": "0x7dfb80",
+      "function_end_exclusive_rva": "0x7dfd60",
+      "function_size": 480,
+      "prologue_guard": "48895c241048896c2418565741564883",
+      "instruction_count": 114,
+      "decode_coverage": 1.0,
+      "direct_call_targets": [
+        "0x7cc2e0",
+        "0xa2f090",
+        "0x143daf0",
+        "0x1135f40",
+        "0x377cb0",
+        "0x7c1120",
+        "0x7c1120",
+        "0x74c800",
+        "0x2bba10"
+      ],
+      "register_based_memory_displacements": [
+        "0x1",
+        "0x2",
+        "0x4",
+        "0x8",
+        "0x10",
+        "0x30",
+        "0x88",
+        "0x90",
+        "0xb0",
+        "0x120",
+        "0x228"
+      ]
+    },
+    "get_movie_source_path_info": {
+      "function_rva": "0xac1870",
+      "function_end_exclusive_rva": "0xac18b8",
+      "function_size": 72,
+      "prologue_guard": "40534883ec30488b42204533c94885c0",
+      "instruction_count": 21,
+      "decode_coverage": 1.0,
+      "direct_call_targets": [
+        "0x74cb20",
+        "0x1b540d0",
+        "0x10ab810"
+      ],
+      "register_based_memory_displacements": [
+        "0x20"
+      ]
+    },
+    "pass_input_to_iggy": {
+      "function_rva": "0xaf1d10",
+      "function_end_exclusive_rva": "0xaf1d86",
+      "function_size": 118,
+      "prologue_guard": "48895c2408574883ec2048837a200048",
+      "instruction_count": 31,
+      "decode_coverage": 1.0,
+      "direct_call_targets": [
+        "0x1207b40",
+        "0x1207b70",
+        "0x759c60"
+      ],
+      "register_based_memory_displacements": [
+        "0x18",
+        "0x20",
+        "0x28",
+        "0x80"
+      ]
+    }
+  },
+  "limits": [
+    "Direct call edges and memory offsets do not identify all argument types, ownership, or semantic predicates.",
+    "Undocumented internal targets remain unnamed unless independently resolved.",
+    "This static report does not prove that a custom Iggy or Blueprint asset can be loaded or displayed."
+  ]
+}

@@ -1,0 +1,247 @@
+{
+  "schema": 1,
+  "target_build": 16535856,
+  "source_asset": "Art/UI/settings.uasset",
+  "source_iggy_name": "settings.iggy",
+  "source_iggy_sha256": "e69875cd5421f8082cf4e0b66e8a2cd09ba81f8455b08243635695ea0b4bdb57",
+  "extraction": {
+    "movie_subfile_index": 0,
+    "movie_subfile_offset": 80,
+    "declaration_strings_movie_offset": 7351256,
+    "section_marker": 1,
+    "abc_sha256": "b87ec1df0229db246d189cc0f880ab78b25014f0daa08b043c4707526ce5f74c",
+    "section_offset": 7351336,
+    "section_end": 7535752,
+    "abc_offset": 7351348,
+    "abc_length": 184397,
+    "abc_end": 7535745,
+    "abc_minor_version": 16,
+    "abc_major_version": 46,
+    "padding_before_names_bytes": 7
+  },
+  "decompiler": {
+    "name": "JPEXS Free Flash Decompiler",
+    "version": "26.3.0",
+    "exported_script_file_count": 167,
+    "source_and_abc_retained_in_report": false
+  },
+  "settings_script": {
+    "class_name": "settings",
+    "base_class": "base_window",
+    "method_count": 127,
+    "public_method_names": [
+      "ApiAddBase",
+      "ApiAddCostToLastBase",
+      "ApiAddDifficulty",
+      "ApiAddDifficultySliderInfo",
+      "ApiAddDifficultySliderInfoItem",
+      "ApiAddFacilityToLastBase",
+      "ApiAddKeybinding",
+      "ApiAddKeybindingCategory",
+      "ApiAddMap",
+      "ApiAddResolution",
+      "ApiAddSlotToLastBase",
+      "ApiFinishBaseSetup",
+      "ApiHide",
+      "ApiHideBackdrop",
+      "ApiHideBasePicker",
+      "ApiHideDifficultyPicker",
+      "ApiHideGamma",
+      "ApiHideKeybindings",
+      "ApiHideMapPicker",
+      "ApiInit",
+      "ApiInput",
+      "ApiKeybindingCategoriesComplete",
+      "ApiKeybindingComplete",
+      "ApiKeybindingMessage",
+      "ApiRefreshKeybindings",
+      "ApiResetDifficultyPicker",
+      "ApiResetResolutions",
+      "ApiSetAccessibilitySettings",
+      "ApiSetAudioSettings",
+      "ApiSetControllerAttached",
+      "ApiSetControlsSettings",
+      "ApiSetDaybreakMultiplayerSettings",
+      "ApiSetDemoLockdown",
+      "ApiSetDesktopResolution",
+      "ApiSetDifficultyRewardInfo",
+      "ApiSetFieldOfViewDefaultValues",
+      "ApiSetFieldOfViewSettings",
+      "ApiSetGameplaySettings",
+      "ApiSetGammaSettings",
+      "ApiSetHudSettings",
+      "ApiSetMultiplayerSettings",
+      "ApiSetMultiplayerStatus",
+      "ApiSetScalabilitySettings",
+      "ApiSetScalabilitySettingsCommit",
+      "ApiSetScrollSpeed",
+      "ApiSetSubtitleScale",
+      "ApiSetSubtitleScaleLabel",
+      "ApiSetVideoSettings",
+      "ApiSetVoiceChatSettings",
+      "ApiShow",
+      "ApiShowBackdrop",
+      "ApiShowBasePicker",
+      "ApiShowDifficultyPicker",
+      "ApiShowGamma",
+      "ApiShowMapPicker",
+      "ApiUpdateKeybinding",
+      "ApiVideoCancelDialogDismissed",
+      "BlockScrim",
+      "EnableAllButtons",
+      "ForceSettingsHideInstant",
+      "GammaHideComplete",
+      "GetActiveCategorySettingsButtons",
+      "IsFirstTimeBrightnessShowing",
+      "IsUsingHDR",
+      "KeyBindingsClosed",
+      "SettingsHideComplete",
+      "UpdateHints",
+      "settings"
+    ],
+    "public_custom_registration_methods": [],
+    "category_constants": {
+      "CATEGORY_DEBUG": 0,
+      "CATEGORY_GAMEPLAY": 1,
+      "CATEGORY_MULTIPLAYER": 2,
+      "CATEGORY_CONTROLS": 3,
+      "CATEGORY_ACCESS": 4,
+      "CATEGORY_HUD": 5,
+      "CATEGORY_VIDEO": 6,
+      "CATEGORY_ADVANCED_VIDEO": 7,
+      "CATEGORY_AUDIO": 8,
+      "CATEGORY_HELP_SUPPORT": 9,
+      "CATEGORY_COUNT": 10
+    },
+    "initialized_category_calls": [
+      {
+        "category": "CATEGORY_GAMEPLAY",
+        "label": "ID_CATEGORY_GAMEPLAY"
+      },
+      {
+        "category": "CATEGORY_MULTIPLAYER",
+        "label": "ID_CATEGORY_MULTIPLAYER"
+      },
+      {
+        "category": "CATEGORY_CONTROLS",
+        "label": "ID_CATEGORY_CONTROLS"
+      },
+      {
+        "category": "CATEGORY_ACCESS",
+        "label": "ID_CATEGORY_ACCESS"
+      },
+      {
+        "category": "CATEGORY_HUD",
+        "label": "ID_CATEGORY_HUD"
+      },
+      {
+        "category": "CATEGORY_VIDEO",
+        "label": "ID_CATEGORY_VIDEO"
+      },
+      {
+        "category": "CATEGORY_ADVANCED_VIDEO",
+        "label": "ID_ADVANCED_VIDEO_CATEGORY"
+      },
+      {
+        "category": "CATEGORY_AUDIO",
+        "label": "ID_CATEGORY_AUDIO"
+      },
+      {
+        "category": "CATEGORY_HELP_SUPPORT",
+        "label": "ID_CATEGORY_HELP_SUPPORT"
+      }
+    ],
+    "key_method_access": {
+      "InitializeCategoryMenu": {
+        "visibility": "private",
+        "parameter_count": 0,
+        "return_type": "void"
+      },
+      "AddCategory": {
+        "visibility": "private",
+        "parameter_count": 3,
+        "return_type": "int"
+      },
+      "GetSettingsCategory": {
+        "visibility": "private",
+        "parameter_count": 1,
+        "return_type": "CategoryTracker"
+      },
+      "PopulateSettingsCategory": {
+        "visibility": "private",
+        "parameter_count": 1,
+        "return_type": "void"
+      },
+      "AddSettingToTracker": {
+        "visibility": "private",
+        "parameter_count": 2,
+        "return_type": "*"
+      },
+      "AddTextSetting": {
+        "visibility": "private",
+        "parameter_count": 4,
+        "return_type": "btn_setting_text"
+      },
+      "AddToggleSetting": {
+        "visibility": "private",
+        "parameter_count": 6,
+        "return_type": "btn_setting_toggle_class"
+      },
+      "AddSliderSetting": {
+        "visibility": "private",
+        "parameter_count": 10,
+        "return_type": "btn_setting_slider"
+      },
+      "AddSliderSettingWithValue": {
+        "visibility": "private",
+        "parameter_count": 10,
+        "return_type": "btn_setting_slider_value"
+      },
+      "AddDropdownSetting": {
+        "visibility": "private",
+        "parameter_count": 5,
+        "return_type": "btn_setting_dropdown"
+      },
+      "AddTextBlock": {
+        "visibility": "private",
+        "parameter_count": 2,
+        "return_type": "container_setting_status_description"
+      },
+      "AddSubHeader": {
+        "visibility": "private",
+        "parameter_count": 2,
+        "return_type": "container_setting_subheader"
+      },
+      "ApiInit": {
+        "visibility": "public",
+        "parameter_count": 11,
+        "return_type": "void"
+      },
+      "ApiShow": {
+        "visibility": "public",
+        "parameter_count": 0,
+        "return_type": "void"
+      }
+    },
+    "private_category_builder_attaches_button": true,
+    "private_setting_builder_attaches_control_and_focus_entry": true,
+    "public_dynamic_category_or_setting_registration_found": false,
+    "interpretation": "The movie contains a native ActionScript settings implementation with dynamic control builders, but category creation and setting registration helpers are private methods. The existing public API inventory has no custom Mod/category/setting registration entry point. This does not prove that IggyPlayerCallMethodRS can or cannot resolve private-namespace methods."
+  },
+  "external_primary_sources": [
+    {
+      "url": "https://www.radgametools.com/iggy.htm",
+      "supports": "Iggy runs Flash-authored interactive content and supports ActionScript 3."
+    },
+    {
+      "url": "https://www.radgametools.com/iggyhist.htm",
+      "supports": "The published API history describes IggyPlayerCallMethodRS for methods on objects addressed by IggyValuePath and arbitrary IggyValuePath arguments for IggyPlayerCallFunctionRS."
+    }
+  ],
+  "scope": "Offline extraction and decompilation of the pinned Settings movie's ABC; no game process, DLL loading, or runtime invocation.",
+  "limitations": [
+    "Decompiled method visibility is evidence from the embedded ABC; it does not prove the exact name-resolution rules used by IggyPlayerCallMethodRS.",
+    "No controls were created or attached, and the report does not prove that the game accepts a modified Settings movie.",
+    "The extracted ActionScript source and ABC bytes are intentionally not copied into the repository report."
+  ]
+}

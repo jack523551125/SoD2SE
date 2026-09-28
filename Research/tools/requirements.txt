@@ -1,0 +1,2 @@
+# Optional static instruction decoder used only by analyze_native_bodies.py.
+capstone==5.0.7

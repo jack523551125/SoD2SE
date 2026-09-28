@@ -1,0 +1,1023 @@
+{
+  "schema": 1,
+  "target": "target.json",
+  "target_sha256": "EBF0A73E164BAA701F74655585F262F8E38A32B1F6DC5057303489BA5B333ECE",
+  "method": "Raw E8/E9 bytes locate possible callers; Capstone must confirm an exact direct CALL/JMP immediate at that instruction boundary inside a .pdata-bounded executable function body.",
+  "limits": [
+    "Only direct relative CALL and tail-JMP edges are included; indirect, virtual, ProcessEvent, delegate, and data-driven dispatch are unresolved.",
+    "A complete direct-edge result does not prove call semantics, ownership, save/load behavior, or runtime reachability.",
+    "Raw opcode matches are candidate locations only and are excluded unless Capstone confirms the instruction and exact target."
+  ],
+  "statistics": {
+    "target_count": 9,
+    "decoded_candidate_caller_functions": 86,
+    "verified_direct_calls": 89,
+    "verified_tail_jumps": 1,
+    "raw_candidates_without_pdata_range": 0
+  },
+  "targets": [
+    {
+      "id": "can-add-character",
+      "name": "CanAddCharacter implementation",
+      "rva": 2581344,
+      "target_function_range_rva": {
+        "start": "0x276360",
+        "end_exclusive": "0x27639c"
+      },
+      "target_in_pdata_function": true,
+      "raw_e8_candidate_count": 3,
+      "verified_direct_call_count": 3,
+      "verified_direct_callers": [
+        {
+          "site_rva": "0x22e614",
+          "caller_range_rva": {
+            "start": "0x22e4dc",
+            "end_exclusive": "0x22e75e"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x230b41",
+          "caller_range_rva": {
+            "start": "0x230b23",
+            "end_exclusive": "0x230b62"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0xa8eaa4",
+          "caller_range_rva": {
+            "start": "0xa8ea30",
+            "end_exclusive": "0xa8eac0"
+          },
+          "caller_names_at_entry": [
+            "CanAddCharacter"
+          ],
+          "instruction": "call"
+        }
+      ],
+      "raw_e9_candidate_count": 0,
+      "verified_tail_jump_count": 0,
+      "verified_tail_jumps": [],
+      "raw_candidates_without_pdata_range": [],
+      "candidate_functions_skipped": [],
+      "complete_for_bounded_direct_edges": true
+    },
+    {
+      "id": "can-add-characters",
+      "name": "CanAddCharacters implementation",
+      "rva": 2581408,
+      "target_function_range_rva": {
+        "start": "0x2763a0",
+        "end_exclusive": "0x2763ec"
+      },
+      "target_in_pdata_function": true,
+      "raw_e8_candidate_count": 2,
+      "verified_direct_call_count": 2,
+      "verified_direct_callers": [
+        {
+          "site_rva": "0x5d75c6",
+          "caller_range_rva": {
+            "start": "0x5d7574",
+            "end_exclusive": "0x5d75d9"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0xa8eb6a",
+          "caller_range_rva": {
+            "start": "0xa8eac0",
+            "end_exclusive": "0xa8eb7e"
+          },
+          "caller_names_at_entry": [
+            "CanAddCharacters"
+          ],
+          "instruction": "call"
+        }
+      ],
+      "raw_e9_candidate_count": 0,
+      "verified_tail_jump_count": 0,
+      "verified_tail_jumps": [],
+      "raw_candidates_without_pdata_range": [],
+      "candidate_functions_skipped": [],
+      "complete_for_bounded_direct_edges": true
+    },
+    {
+      "id": "population-count-helper",
+      "name": "shared population-count helper",
+      "rva": 2609488,
+      "target_function_range_rva": {
+        "start": "0x27d150",
+        "end_exclusive": "0x27d1d1"
+      },
+      "target_in_pdata_function": true,
+      "raw_e8_candidate_count": 58,
+      "verified_direct_call_count": 58,
+      "verified_direct_callers": [
+        {
+          "site_rva": "0x1f5309",
+          "caller_range_rva": {
+            "start": "0x1f50f0",
+            "end_exclusive": "0x1f531b"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x2338fe",
+          "caller_range_rva": {
+            "start": "0x233349",
+            "end_exclusive": "0x233b8c"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x25b427",
+          "caller_range_rva": {
+            "start": "0x25b278",
+            "end_exclusive": "0x25b58d"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x25c8aa",
+          "caller_range_rva": {
+            "start": "0x25c776",
+            "end_exclusive": "0x25d05f"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x2731b1",
+          "caller_range_rva": {
+            "start": "0x272e9b",
+            "end_exclusive": "0x2733c0"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x27637a",
+          "caller_range_rva": {
+            "start": "0x276360",
+            "end_exclusive": "0x27639c"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x2763c6",
+          "caller_range_rva": {
+            "start": "0x2763a0",
+            "end_exclusive": "0x2763ec"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x276487",
+          "caller_range_rva": {
+            "start": "0x276462",
+            "end_exclusive": "0x2764c6"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x27957a",
+          "caller_range_rva": {
+            "start": "0x279572",
+            "end_exclusive": "0x2795b3"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x2797dd",
+          "caller_range_rva": {
+            "start": "0x279646",
+            "end_exclusive": "0x2798bc"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x27adc9",
+          "caller_range_rva": {
+            "start": "0x27adc0",
+            "end_exclusive": "0x27ade7"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x27c5ac",
+          "caller_range_rva": {
+            "start": "0x27c5a0",
+            "end_exclusive": "0x27c5bb"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x27e19d",
+          "caller_range_rva": {
+            "start": "0x27e177",
+            "end_exclusive": "0x27e224"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x27f799",
+          "caller_range_rva": {
+            "start": "0x27f390",
+            "end_exclusive": "0x27fd38"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x27f82c",
+          "caller_range_rva": {
+            "start": "0x27f390",
+            "end_exclusive": "0x27fd38"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x28143e",
+          "caller_range_rva": {
+            "start": "0x2813f0",
+            "end_exclusive": "0x28153c"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x281544",
+          "caller_range_rva": {
+            "start": "0x281540",
+            "end_exclusive": "0x281554"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x283dfe",
+          "caller_range_rva": {
+            "start": "0x283d56",
+            "end_exclusive": "0x283e0c"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x284256",
+          "caller_range_rva": {
+            "start": "0x284252",
+            "end_exclusive": "0x2842ee"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x28cba4",
+          "caller_range_rva": {
+            "start": "0x28cb90",
+            "end_exclusive": "0x28cbb3"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x28ed13",
+          "caller_range_rva": {
+            "start": "0x28ecf3",
+            "end_exclusive": "0x28ed6e"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x28fcdb",
+          "caller_range_rva": {
+            "start": "0x28fc91",
+            "end_exclusive": "0x28fd10"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x290660",
+          "caller_range_rva": {
+            "start": "0x290630",
+            "end_exclusive": "0x29067f"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x290736",
+          "caller_range_rva": {
+            "start": "0x290710",
+            "end_exclusive": "0x29075e"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x290f6c",
+          "caller_range_rva": {
+            "start": "0x290f50",
+            "end_exclusive": "0x290f92"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x291a09",
+          "caller_range_rva": {
+            "start": "0x2919d0",
+            "end_exclusive": "0x291a40"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x291a52",
+          "caller_range_rva": {
+            "start": "0x291a40",
+            "end_exclusive": "0x291bb9"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x291c13",
+          "caller_range_rva": {
+            "start": "0x291bcf",
+            "end_exclusive": "0x291c22"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x29e853",
+          "caller_range_rva": {
+            "start": "0x29e7df",
+            "end_exclusive": "0x29e897"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x2aa9c9",
+          "caller_range_rva": {
+            "start": "0x2aa9a1",
+            "end_exclusive": "0x2aa9d6"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x2aadd2",
+          "caller_range_rva": {
+            "start": "0x2aada0",
+            "end_exclusive": "0x2aae2f"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x2b5674",
+          "caller_range_rva": {
+            "start": "0x2b5513",
+            "end_exclusive": "0x2b5695"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x2b5c8a",
+          "caller_range_rva": {
+            "start": "0x2b5c6b",
+            "end_exclusive": "0x2b5d70"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x2d370b",
+          "caller_range_rva": {
+            "start": "0x2d36e9",
+            "end_exclusive": "0x2d379f"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x3eb56a",
+          "caller_range_rva": {
+            "start": "0x3eb397",
+            "end_exclusive": "0x3eb5e6"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x52ee00",
+          "caller_range_rva": {
+            "start": "0x52edb0",
+            "end_exclusive": "0x52ee0d"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x5449a8",
+          "caller_range_rva": {
+            "start": "0x544920",
+            "end_exclusive": "0x544a50"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x56cd59",
+          "caller_range_rva": {
+            "start": "0x56cd20",
+            "end_exclusive": "0x56cdf8"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x5cbe25",
+          "caller_range_rva": {
+            "start": "0x5cbd90",
+            "end_exclusive": "0x5cbfa4"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x5ce7d5",
+          "caller_range_rva": {
+            "start": "0x5ce310",
+            "end_exclusive": "0x5cebfb"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x5d65ae",
+          "caller_range_rva": {
+            "start": "0x5d657c",
+            "end_exclusive": "0x5d65eb"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x5d7475",
+          "caller_range_rva": {
+            "start": "0x5d73e3",
+            "end_exclusive": "0x5d748d"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x5d908e",
+          "caller_range_rva": {
+            "start": "0x5d905c",
+            "end_exclusive": "0x5d90cb"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x5e157c",
+          "caller_range_rva": {
+            "start": "0x5e1540",
+            "end_exclusive": "0x5e16d6"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x5f3f95",
+          "caller_range_rva": {
+            "start": "0x5f3ef0",
+            "end_exclusive": "0x5f3fac"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x600cb6",
+          "caller_range_rva": {
+            "start": "0x600c80",
+            "end_exclusive": "0x600cd8"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x60416f",
+          "caller_range_rva": {
+            "start": "0x604120",
+            "end_exclusive": "0x6041c3"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x6042bc",
+          "caller_range_rva": {
+            "start": "0x60423e",
+            "end_exclusive": "0x60436c"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x60e118",
+          "caller_range_rva": {
+            "start": "0x60e0cc",
+            "end_exclusive": "0x60e1b9"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x714ca7",
+          "caller_range_rva": {
+            "start": "0x714c8a",
+            "end_exclusive": "0x715138"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x7957bc",
+          "caller_range_rva": {
+            "start": "0x795776",
+            "end_exclusive": "0x795afb"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x79c17f",
+          "caller_range_rva": {
+            "start": "0x79bc7d",
+            "end_exclusive": "0x79caa2"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x7abdf8",
+          "caller_range_rva": {
+            "start": "0x7abdd9",
+            "end_exclusive": "0x7abe5d"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x7ac237",
+          "caller_range_rva": {
+            "start": "0x7abf23",
+            "end_exclusive": "0x7ac69a"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x80803b",
+          "caller_range_rva": {
+            "start": "0x807ef6",
+            "end_exclusive": "0x8083fd"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x8086e1",
+          "caller_range_rva": {
+            "start": "0x8083fd",
+            "end_exclusive": "0x808aec"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x81ebde",
+          "caller_range_rva": {
+            "start": "0x81e8d0",
+            "end_exclusive": "0x81ec36"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0xabec5e",
+          "caller_range_rva": {
+            "start": "0xabec40",
+            "end_exclusive": "0xabec6b"
+          },
+          "caller_names_at_entry": [
+            "GetLivingCharactersCount"
+          ],
+          "instruction": "call"
+        }
+      ],
+      "raw_e9_candidate_count": 0,
+      "verified_tail_jump_count": 0,
+      "verified_tail_jumps": [],
+      "raw_candidates_without_pdata_range": [],
+      "candidate_functions_skipped": [],
+      "complete_for_bounded_direct_edges": true
+    },
+    {
+      "id": "remaining-availability",
+      "name": "remaining recruitment availability",
+      "rva": 2600384,
+      "target_function_range_rva": {
+        "start": "0x27adc0",
+        "end_exclusive": "0x27ade7"
+      },
+      "target_in_pdata_function": true,
+      "raw_e8_candidate_count": 2,
+      "verified_direct_call_count": 2,
+      "verified_direct_callers": [
+        {
+          "site_rva": "0x62dfa8",
+          "caller_range_rva": {
+            "start": "0x62def0",
+            "end_exclusive": "0x62e034"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x63069c",
+          "caller_range_rva": {
+            "start": "0x630600",
+            "end_exclusive": "0x6306de"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        }
+      ],
+      "raw_e9_candidate_count": 0,
+      "verified_tail_jump_count": 0,
+      "verified_tail_jumps": [],
+      "raw_candidates_without_pdata_range": [],
+      "candidate_functions_skipped": [],
+      "complete_for_bounded_direct_edges": true
+    },
+    {
+      "id": "soft-cap-query",
+      "name": "population soft-cap query",
+      "rva": 2626880,
+      "target_function_range_rva": {
+        "start": "0x281540",
+        "end_exclusive": "0x281554"
+      },
+      "target_in_pdata_function": true,
+      "raw_e8_candidate_count": 2,
+      "verified_direct_call_count": 2,
+      "verified_direct_callers": [
+        {
+          "site_rva": "0x54e491",
+          "caller_range_rva": {
+            "start": "0x54d390",
+            "end_exclusive": "0x54e643"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0xad7c6e",
+          "caller_range_rva": {
+            "start": "0xad7c50",
+            "end_exclusive": "0xad7c7b"
+          },
+          "caller_names_at_entry": [
+            "IsPastPopulationSoftCap"
+          ],
+          "instruction": "call"
+        }
+      ],
+      "raw_e9_candidate_count": 0,
+      "verified_tail_jump_count": 0,
+      "verified_tail_jumps": [],
+      "raw_candidates_without_pdata_range": [],
+      "candidate_functions_skipped": [],
+      "complete_for_bounded_direct_edges": true
+    },
+    {
+      "id": "try-add-character",
+      "name": "TryAddCharacter append routine",
+      "rva": 2688560,
+      "target_function_range_rva": {
+        "start": "0x290630",
+        "end_exclusive": "0x29067f"
+      },
+      "target_in_pdata_function": true,
+      "raw_e8_candidate_count": 2,
+      "verified_direct_call_count": 2,
+      "verified_direct_callers": [
+        {
+          "site_rva": "0x291b73",
+          "caller_range_rva": {
+            "start": "0x291a40",
+            "end_exclusive": "0x291bb9"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0xb23df0",
+          "caller_range_rva": {
+            "start": "0xb23d00",
+            "end_exclusive": "0xb23e03"
+          },
+          "caller_names_at_entry": [
+            "TryAddCharacter"
+          ],
+          "instruction": "call"
+        }
+      ],
+      "raw_e9_candidate_count": 0,
+      "verified_tail_jump_count": 0,
+      "verified_tail_jumps": [],
+      "raw_candidates_without_pdata_range": [],
+      "candidate_functions_skipped": [],
+      "complete_for_bounded_direct_edges": true
+    },
+    {
+      "id": "try-add-character-record",
+      "name": "TryAddCharacterRecord append routine",
+      "rva": 2688784,
+      "target_function_range_rva": {
+        "start": "0x290710",
+        "end_exclusive": "0x29075e"
+      },
+      "target_in_pdata_function": true,
+      "raw_e8_candidate_count": 12,
+      "verified_direct_call_count": 12,
+      "verified_direct_callers": [
+        {
+          "site_rva": "0x2adb89",
+          "caller_range_rva": {
+            "start": "0x2adb30",
+            "end_exclusive": "0x2adbea"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x2ae413",
+          "caller_range_rva": {
+            "start": "0x2ae1b4",
+            "end_exclusive": "0x2aeb1d"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x2bf277",
+          "caller_range_rva": {
+            "start": "0x2be920",
+            "end_exclusive": "0x2bf934"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x3f2974",
+          "caller_range_rva": {
+            "start": "0x3f2280",
+            "end_exclusive": "0x3f2aba"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x5d0365",
+          "caller_range_rva": {
+            "start": "0x5cfd98",
+            "end_exclusive": "0x5d0787"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x755ede",
+          "caller_range_rva": {
+            "start": "0x755ad0",
+            "end_exclusive": "0x7566d6"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x758894",
+          "caller_range_rva": {
+            "start": "0x758828",
+            "end_exclusive": "0x758909"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x7f865a",
+          "caller_range_rva": {
+            "start": "0x7f8420",
+            "end_exclusive": "0x7f8761"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x83d9ec",
+          "caller_range_rva": {
+            "start": "0x83d97e",
+            "end_exclusive": "0x83da2c"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x848c17",
+          "caller_range_rva": {
+            "start": "0x848bd5",
+            "end_exclusive": "0x848c4c"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x848ebd",
+          "caller_range_rva": {
+            "start": "0x848e37",
+            "end_exclusive": "0x848ece"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0xb23ee8",
+          "caller_range_rva": {
+            "start": "0xb23e10",
+            "end_exclusive": "0xb23f12"
+          },
+          "caller_names_at_entry": [
+            "TryAddCharacterRecord"
+          ],
+          "instruction": "call"
+        }
+      ],
+      "raw_e9_candidate_count": 1,
+      "verified_tail_jump_count": 1,
+      "verified_tail_jumps": [
+        {
+          "site_rva": "0x4dca3d",
+          "caller_range_rva": {
+            "start": "0x4dca10",
+            "end_exclusive": "0x4dca48"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "jmp"
+        }
+      ],
+      "raw_candidates_without_pdata_range": [],
+      "candidate_functions_skipped": [],
+      "complete_for_bounded_direct_edges": true
+    },
+    {
+      "id": "restore-exiled-character",
+      "name": "restore exiled character routine",
+      "rva": 2690896,
+      "target_function_range_rva": {
+        "start": "0x290f50",
+        "end_exclusive": "0x290f92"
+      },
+      "target_in_pdata_function": true,
+      "raw_e8_candidate_count": 1,
+      "verified_direct_call_count": 1,
+      "verified_direct_callers": [
+        {
+          "site_rva": "0x54b5f2",
+          "caller_range_rva": {
+            "start": "0x54b29c",
+            "end_exclusive": "0x54b793"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        }
+      ],
+      "raw_e9_candidate_count": 0,
+      "verified_tail_jump_count": 0,
+      "verified_tail_jumps": [],
+      "raw_candidates_without_pdata_range": [],
+      "candidate_functions_skipped": [],
+      "complete_for_bounded_direct_edges": true
+    },
+    {
+      "id": "transfer-character",
+      "name": "transfer character routine",
+      "rva": 2693584,
+      "target_function_range_rva": {
+        "start": "0x2919d0",
+        "end_exclusive": "0x291a40"
+      },
+      "target_in_pdata_function": true,
+      "raw_e8_candidate_count": 7,
+      "verified_direct_call_count": 7,
+      "verified_direct_callers": [
+        {
+          "site_rva": "0x230c25",
+          "caller_range_rva": {
+            "start": "0x230b62",
+            "end_exclusive": "0x230cde"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x2730f8",
+          "caller_range_rva": {
+            "start": "0x272e9b",
+            "end_exclusive": "0x2733c0"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x2bf5ff",
+          "caller_range_rva": {
+            "start": "0x2be920",
+            "end_exclusive": "0x2bf934"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x5d73ac",
+          "caller_range_rva": {
+            "start": "0x5d72f9",
+            "end_exclusive": "0x5d73c1"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x5d7753",
+          "caller_range_rva": {
+            "start": "0x5d75fc",
+            "end_exclusive": "0x5d7789"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x8279d1",
+          "caller_range_rva": {
+            "start": "0x82773f",
+            "end_exclusive": "0x827d38"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        },
+        {
+          "site_rva": "0x829e3b",
+          "caller_range_rva": {
+            "start": "0x829d70",
+            "end_exclusive": "0x829e79"
+          },
+          "caller_names_at_entry": [],
+          "instruction": "call"
+        }
+      ],
+      "raw_e9_candidate_count": 0,
+      "verified_tail_jump_count": 0,
+      "verified_tail_jumps": [],
+      "raw_candidates_without_pdata_range": [],
+      "candidate_functions_skipped": [],
+      "complete_for_bounded_direct_edges": true
+    }
+  ]
+}

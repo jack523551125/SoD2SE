@@ -1,0 +1,2976 @@
+{
+  "schema": 1,
+  "target_build": 16535856,
+  "scope": "Offline structural inspection of Iggy payloads embedded in cooked IggyPlayer exports; no game launch or asset replacement",
+  "settings_asset": {
+    "asset": "Art/UI/settings.uasset",
+    "pak": "pakchunk000030-WindowsNoEditor.pak",
+    "sha256": "d8d320363be69ea9dfb39b5c20c8de5237c642841fe3ac86b00f8115050fe06e",
+    "size": 7618264,
+    "normal_export_extras_size": 7557310,
+    "payload_source": "NormalExport.Extras after the 20-byte Unreal/Iggy envelope",
+    "envelope": {
+      "size": 20,
+      "length_fields_offsets": [
+        4,
+        8
+      ],
+      "length_fields_equal_payload_size": true,
+      "iggy_signature_hex": "49670aed",
+      "iggy_signature_ascii": "Ig\\n\\xED"
+    }
+  },
+  "verified_settings_extraction": {
+    "tool": "Research/tools/native_settings_asset_writer",
+    "command": "extract-iggy",
+    "exit_code": 0,
+    "payload_size": 7557290,
+    "payload_sha256": "e69875cd5421f8082cf4e0b66e8a2cd09ba81f8455b08243635695ea0b4bdb57",
+    "version": "0x900",
+    "platform_bytes": [
+      1,
+      64,
+      1,
+      3
+    ],
+    "subfiles": [
+      {
+        "index": 0,
+        "kind": 1,
+        "size": 7535744,
+        "offset": 80,
+        "role": "movie"
+      },
+      {
+        "index": 1,
+        "kind": 0,
+        "size": 16321,
+        "offset": 7535824,
+        "role": "index"
+      },
+      {
+        "index": 2,
+        "kind": 0,
+        "size": 5145,
+        "offset": 7552145,
+        "role": "index"
+      }
+    ],
+    "subfile_type_evidence": {
+      "source_file": "libsrc/ffdec_lib/src/com/jpexs/decompiler/flash/iggy/IggySubFileEntry.java",
+      "source_commit": "b2ef2d3d3f44291a4bdfa899c986bc39a89fa6aa",
+      "type_0": "TYPE_INDEX",
+      "type_1": "TYPE_FLASH"
+    },
+    "index_subfile_summaries": [
+      {
+        "subfile_index": 1,
+        "size": 16321,
+        "sha256": "90577433d351b8db2fdc5c032c7a5d766c3d9ab4304000c6d5ea52e7ecc7557a",
+        "index_table_entry_count": 35,
+        "index_metadata_descriptor_count": 331,
+        "command_count": 14084,
+        "final_cumulative_offset": 4369624,
+        "maximum_cumulative_offset": 4369624,
+        "bytes_consumed": 16321,
+        "object_start_match_count": 389,
+        "distinct_object_start_match_count": 389,
+        "object_start_matches_by_kind": {
+          "1": 35,
+          "3": 271,
+          "4": 24,
+          "6": 59
+        },
+        "object_start_layout_usage_by_kind": {
+          "1": {
+            "24": {
+              "count": 35,
+              "declared_size": 80
+            }
+          },
+          "3": {
+            "14": {
+              "count": 271,
+              "declared_size": 72
+            }
+          },
+          "4": {
+            "25": {
+              "count": 24,
+              "declared_size": 88
+            }
+          },
+          "6": {
+            "21": {
+              "count": 59,
+              "declared_size": 104
+            }
+          }
+        }
+      },
+      {
+        "subfile_index": 2,
+        "size": 5145,
+        "sha256": "aeabdfac57d59d26924639299699b046d48f14df932f8e53b7fd1717bc5c82d0",
+        "index_table_entry_count": 35,
+        "index_metadata_descriptor_count": 331,
+        "command_count": 3807,
+        "final_cumulative_offset": 7535744,
+        "maximum_cumulative_offset": 7535744,
+        "bytes_consumed": 5145,
+        "object_start_match_count": 119,
+        "distinct_object_start_match_count": 119,
+        "object_start_matches_by_kind": {
+          "1": 14,
+          "3": 82,
+          "4": 9,
+          "6": 14
+        },
+        "object_start_layout_usage_by_kind": {
+          "1": {
+            "24": {
+              "count": 14,
+              "declared_size": 80
+            }
+          },
+          "3": {
+            "14": {
+              "count": 82,
+              "declared_size": 72
+            }
+          },
+          "4": {
+            "25": {
+              "count": 9,
+              "declared_size": 88
+            }
+          },
+          "6": {
+            "21": {
+              "count": 14,
+              "declared_size": 104
+            }
+          }
+        }
+      }
+    ],
+    "movie": {
+      "movie_subfile_size": 7535744,
+      "object_pointer_count": 508,
+      "object_kind_counts": {
+        "1": 49,
+        "3": 353,
+        "4": 33,
+        "6": 73
+      },
+      "kind_6_text_objects": 73,
+      "font_count_header_value": 123,
+      "header_value_at_movie_offset_0x40": 512,
+      "header_pointer_model_source": {
+        "source_file": "libsrc/ffdec_lib/src/com/jpexs/decompiler/flash/iggy/IggyFlashHeader64.java",
+        "source_commit": "b2ef2d3d3f44291a4bdfa899c986bc39a89fa6aa"
+      },
+      "header_relative_pointer_targets": {
+        "base": 184,
+        "sequence_end": 7340720,
+        "font_end": 7339088,
+        "sequence_start_1": 7340672,
+        "sequence_start_2": null,
+        "sequence_start_3": 7340688,
+        "names": 7535672,
+        "unknown_0x78": null,
+        "last_section": 7535728,
+        "flash_filename": null,
+        "declaration_strings": 7351256,
+        "font_types": 7340728
+      },
+      "imported_guid_header_value": 1,
+      "object_pointer_tables": {
+        "primary_count": 508,
+        "additional_count": 0,
+        "additional_pointer_field_movie_offset": 4264,
+        "additional_pointer_value": 1,
+        "additional_table_movie_offset": null
+      },
+      "object_index_correspondence": {
+        "object_pointer_count": 508,
+        "distinct_object_starts_matched": 508,
+        "unmatched_object_start_count": 0,
+        "duplicate_match_count": 0,
+        "every_object_start_matches_exactly_once": true
+      },
+      "object_start_layout_correspondence": {
+        "object_pointer_count": 508,
+        "command_start_match_count": 508,
+        "distinct_object_starts_matched": 508,
+        "unmatched_object_start_count": 0,
+        "duplicate_match_count": 0,
+        "object_start_count_by_kind": {
+          "1": 49,
+          "3": 353,
+          "4": 33,
+          "6": 73
+        },
+        "layout_match_count_by_kind_and_table_entry": {
+          "1": {
+            "24": 49
+          },
+          "3": {
+            "14": 353
+          },
+          "4": {
+            "25": 33
+          },
+          "6": {
+            "21": 73
+          }
+        },
+        "consistent_record_layout_per_kind": true,
+        "every_object_start_has_exactly_one_layout_command": true
+      },
+      "object_start_layouts_by_kind": {
+        "1": {
+          "object_count": 49,
+          "record_size": 80,
+          "metadata_descriptors": [
+            {
+              "local_offset": 1,
+              "type_code": 12
+            },
+            {
+              "local_offset": 2,
+              "type_code": 4
+            },
+            {
+              "local_offset": 8,
+              "type_code": 5
+            },
+            {
+              "local_offset": 16,
+              "type_code": 2
+            },
+            {
+              "local_offset": 32,
+              "type_code": 5
+            },
+            {
+              "local_offset": 36,
+              "type_code": 5
+            },
+            {
+              "local_offset": 40,
+              "type_code": 5
+            },
+            {
+              "local_offset": 44,
+              "type_code": 5
+            },
+            {
+              "local_offset": 56,
+              "type_code": 4
+            },
+            {
+              "local_offset": 64,
+              "type_code": 8
+            },
+            {
+              "local_offset": 72,
+              "type_code": 2
+            }
+          ],
+          "index_table_entries_by_subfile": {
+            "1": [
+              24
+            ],
+            "2": [
+              24
+            ]
+          }
+        },
+        "3": {
+          "object_count": 353,
+          "record_size": 72,
+          "metadata_descriptors": [
+            {
+              "local_offset": 1,
+              "type_code": 12
+            },
+            {
+              "local_offset": 2,
+              "type_code": 4
+            },
+            {
+              "local_offset": 8,
+              "type_code": 5
+            },
+            {
+              "local_offset": 16,
+              "type_code": 2
+            },
+            {
+              "local_offset": 32,
+              "type_code": 2
+            },
+            {
+              "local_offset": 40,
+              "type_code": 4
+            },
+            {
+              "local_offset": 42,
+              "type_code": 4
+            },
+            {
+              "local_offset": 56,
+              "type_code": 2
+            },
+            {
+              "local_offset": 64,
+              "type_code": 2
+            }
+          ],
+          "index_table_entries_by_subfile": {
+            "1": [
+              14
+            ],
+            "2": [
+              14
+            ]
+          }
+        },
+        "4": {
+          "object_count": 33,
+          "record_size": 88,
+          "metadata_descriptors": [
+            {
+              "local_offset": 1,
+              "type_code": 12
+            },
+            {
+              "local_offset": 2,
+              "type_code": 4
+            },
+            {
+              "local_offset": 8,
+              "type_code": 5
+            },
+            {
+              "local_offset": 16,
+              "type_code": 2
+            },
+            {
+              "local_offset": 32,
+              "type_code": 4
+            },
+            {
+              "local_offset": 34,
+              "type_code": 4
+            },
+            {
+              "local_offset": 39,
+              "type_code": 3
+            },
+            {
+              "local_offset": 48,
+              "type_code": 5
+            },
+            {
+              "local_offset": 52,
+              "type_code": 5
+            },
+            {
+              "local_offset": 56,
+              "type_code": 5
+            },
+            {
+              "local_offset": 60,
+              "type_code": 5
+            },
+            {
+              "local_offset": 72,
+              "type_code": 2
+            },
+            {
+              "local_offset": 80,
+              "type_code": 5
+            }
+          ],
+          "index_table_entries_by_subfile": {
+            "1": [
+              25
+            ],
+            "2": [
+              25
+            ]
+          }
+        },
+        "6": {
+          "object_count": 73,
+          "record_size": 104,
+          "metadata_descriptors": [
+            {
+              "local_offset": 1,
+              "type_code": 12
+            },
+            {
+              "local_offset": 2,
+              "type_code": 4
+            },
+            {
+              "local_offset": 8,
+              "type_code": 5
+            },
+            {
+              "local_offset": 16,
+              "type_code": 2
+            },
+            {
+              "local_offset": 32,
+              "type_code": 5
+            },
+            {
+              "local_offset": 36,
+              "type_code": 5
+            },
+            {
+              "local_offset": 40,
+              "type_code": 5
+            },
+            {
+              "local_offset": 44,
+              "type_code": 5
+            },
+            {
+              "local_offset": 48,
+              "type_code": 4
+            },
+            {
+              "local_offset": 50,
+              "type_code": 4
+            },
+            {
+              "local_offset": 56,
+              "type_code": 2
+            },
+            {
+              "local_offset": 68,
+              "type_code": 4
+            },
+            {
+              "local_offset": 70,
+              "type_code": 4
+            },
+            {
+              "local_offset": 72,
+              "type_code": 4
+            },
+            {
+              "local_offset": 74,
+              "type_code": 4
+            },
+            {
+              "local_offset": 76,
+              "type_code": 4
+            },
+            {
+              "local_offset": 78,
+              "type_code": 4
+            },
+            {
+              "local_offset": 96,
+              "type_code": 2
+            }
+          ],
+          "index_table_entries_by_subfile": {
+            "1": [
+              21
+            ],
+            "2": [
+              21
+            ]
+          }
+        }
+      },
+      "object_directory_layout": {
+        "object_count": 508,
+        "pointer_targets_in_file_order": true,
+        "known_record_layout_count": 508,
+        "all_records_have_known_layout": true,
+        "candidate_records_non_overlapping": true,
+        "candidate_record_overlap_count": 0
+      },
+      "field_relative_target_observations": {
+        "4": {
+          "0x10": {
+            "metadata_type_code": 2,
+            "objects_checked": 33,
+            "sentinel_one": 33
+          },
+          "0x48": {
+            "metadata_type_code": 2,
+            "objects_checked": 33,
+            "record_end": 33
+          }
+        },
+        "6": {
+          "0x10": {
+            "metadata_type_code": 2,
+            "objects_checked": 73,
+            "sentinel_one": 73
+          },
+          "0x38": {
+            "metadata_type_code": 2,
+            "objects_checked": 73,
+            "interrecord_tail": 73
+          },
+          "0x60": {
+            "metadata_type_code": 2,
+            "objects_checked": 73,
+            "record_end": 73
+          }
+        },
+        "3": {
+          "0x10": {
+            "metadata_type_code": 2,
+            "objects_checked": 353,
+            "sentinel_one": 353
+          },
+          "0x20": {
+            "metadata_type_code": 2,
+            "objects_checked": 353,
+            "sentinel_one": 353
+          },
+          "0x38": {
+            "metadata_type_code": 2,
+            "objects_checked": 353,
+            "record_end": 353
+          },
+          "0x40": {
+            "metadata_type_code": 2,
+            "objects_checked": 353,
+            "interrecord_tail": 346,
+            "record_end": 7
+          }
+        },
+        "1": {
+          "0x10": {
+            "metadata_type_code": 2,
+            "objects_checked": 49,
+            "sentinel_one": 49
+          },
+          "0x48": {
+            "metadata_type_code": 2,
+            "objects_checked": 49,
+            "record_end": 49
+          }
+        }
+      },
+      "kind_6_string_pointer_summary": {
+        "objects_checked": 73,
+        "object_relative_target_offset_counts": {
+          "104": 73
+        },
+        "all_targets_at_104_byte_text_record_end": true
+      },
+      "candidate_field_target_payload_observations": {
+        "3": {
+          "0x40": {
+            "metadata_type_code": 2,
+            "objects_checked": 353,
+            "target_location_counts": {
+              "interrecord_tail": 346,
+              "record_end": 7
+            },
+            "target_to_next_object_start_distance_counts": {
+              "16": 352,
+              "196672": 1
+            },
+            "target_prefix_u64_pair_counts": {
+              "1,1": 353
+            }
+          }
+        }
+      },
+      "candidate_payload_format_observations": {
+        "4": {
+          "0x48": {
+            "metadata_type_code": 2,
+            "objects_checked": 33,
+            "target_format_counts": {
+              "zlib_complete": 26,
+              "length_prefixed_jpeg": 7
+            }
+          }
+        }
+      },
+      "index_stream_relationship": {
+        "stream_count": 2,
+        "object_start_matches_disjoint": true,
+        "object_start_match_ranges_sequential": true,
+        "index_table_definitions_identical": true,
+        "object_start_match_count": 508,
+        "distinct_object_start_match_count": 508,
+        "segments": [
+          {
+            "subfile_index": 1,
+            "index_table_sha256": "0ec4af9dfc69cc0d7e4c1db9e34bb8e609358b986c93079d8c483d89852e046c",
+            "first_command_end_offset": 184,
+            "first_object_start_offset": 4280,
+            "last_object_start_offset": 4367392,
+            "final_cumulative_offset": 4369624,
+            "first_command_end_delta_from_previous_final": null
+          },
+          {
+            "subfile_index": 2,
+            "index_table_sha256": "0ec4af9dfc69cc0d7e4c1db9e34bb8e609358b986c93079d8c483d89852e046c",
+            "first_command_end_offset": 4369624,
+            "first_object_start_offset": 4377856,
+            "last_object_start_offset": 7324632,
+            "final_cumulative_offset": 7535744,
+            "first_command_end_delta_from_previous_final": 0
+          }
+        ]
+      },
+      "index_subfile_first_command_summaries": [
+        {
+          "subfile_index": 1,
+          "index_table_sha256": "0ec4af9dfc69cc0d7e4c1db9e34bb8e609358b986c93079d8c483d89852e046c",
+          "first_command_delta": 184,
+          "first_command_end_offset": 184,
+          "first_object_start_match_offset": 4280,
+          "last_object_start_match_offset": 4367392,
+          "final_cumulative_offset": 4369624
+        },
+        {
+          "subfile_index": 2,
+          "index_table_sha256": "0ec4af9dfc69cc0d7e4c1db9e34bb8e609358b986c93079d8c483d89852e046c",
+          "first_command_delta": 4369624,
+          "first_command_end_offset": 4369624,
+          "first_object_start_match_offset": 4377856,
+          "last_object_start_match_offset": 7324632,
+          "final_cumulative_offset": 7535744
+        }
+      ],
+      "candidate_record_end_region_observations": {
+        "1": {
+          "0x48": {
+            "metadata_type_code": 2,
+            "objects_checked": 49,
+            "target_location_counts": {
+              "record_end": 49
+            },
+            "region_byte_length_counts": {
+              "376": 32,
+              "696": 2,
+              "288": 6,
+              "384": 3,
+              "688": 1,
+              "336": 1,
+              "216": 3,
+              "816": 1
+            },
+            "region_byte_length_mod_8_counts": {
+              "0": 49
+            },
+            "region_start_mod_8_counts": {
+              "0": 49
+            },
+            "region_envelope_counts": {
+              "opaque_nonzero": 49
+            },
+            "distinct_non_sentinel_region_sha256_count": 49,
+            "all_non_sentinel_regions_8_byte_aligned": true
+          }
+        }
+      },
+      "candidate_dual_pointer_observations": {
+        "3": {
+          "0x38_to_0x40": {
+            "objects_checked": 353,
+            "first_pointer_target_location_counts": {
+              "record_end": 353
+            },
+            "second_pointer_target_location_counts": {
+              "interrecord_tail": 346,
+              "record_end": 7
+            },
+            "joint_target_location_counts": {
+              "record_end->interrecord_tail": 346,
+              "record_end->record_end": 7
+            },
+            "first_to_second_span_byte_length_counts": {
+              "112": 68,
+              "160": 25,
+              "10496": 1,
+              "0": 7,
+              "448": 1,
+              "96": 44,
+              "6864": 1,
+              "144": 17,
+              "4800": 1,
+              "152": 20,
+              "11976": 1,
+              "264": 7,
+              "11032": 1,
+              "248": 4,
+              "880": 1,
+              "600": 1,
+              "10256": 1,
+              "11696": 2,
+              "752": 1,
+              "320": 1,
+              "688": 1,
+              "168": 16,
+              "648": 1,
+              "1504": 1,
+              "120": 2,
+              "984": 1,
+              "464": 2,
+              "136": 8,
+              "944": 2,
+              "8304": 1,
+              "7448": 1,
+              "8672": 1,
+              "992": 3,
+              "408": 1,
+              "296": 1,
+              "1304": 1,
+              "416": 4,
+              "12416": 1,
+              "2160": 1,
+              "312": 1,
+              "800": 1,
+              "3080": 1,
+              "32384": 1,
+              "12152": 1,
+              "272": 1,
+              "544": 1,
+              "928": 1,
+              "11352": 1,
+              "760": 1,
+              "12288": 2,
+              "11912": 1,
+              "288": 3,
+              "12408": 1,
+              "776": 3,
+              "12296": 1,
+              "336": 1,
+              "256": 2,
+              "224": 1,
+              "400": 1,
+              "848": 1,
+              "1480": 1,
+              "1216": 1,
+              "2152": 1,
+              "1680": 1,
+              "1816": 2,
+              "1424": 1,
+              "504": 1,
+              "1048": 3,
+              "912": 2,
+              "2680": 2,
+              "1352": 1,
+              "2592": 1,
+              "83760": 1,
+              "5712": 1,
+              "1752": 1,
+              "4888": 1,
+              "1120": 4,
+              "936": 2,
+              "768": 3,
+              "1232": 1,
+              "98384": 1,
+              "4880": 1,
+              "11000": 1,
+              "1008": 5,
+              "624": 1,
+              "7344": 1,
+              "4376": 1,
+              "10392": 1,
+              "5856": 1,
+              "7328": 1,
+              "672": 2,
+              "640": 1,
+              "6600": 1,
+              "1264": 1,
+              "2856": 1,
+              "2408": 1,
+              "94424": 1,
+              "10376": 2,
+              "2392": 2,
+              "680": 1,
+              "1152": 1,
+              "2400": 1,
+              "27632": 1,
+              "424": 2,
+              "656": 1,
+              "14208": 1,
+              "15464": 1,
+              "12944": 1,
+              "128": 1,
+              "10168": 1,
+              "3240": 1,
+              "1912": 1,
+              "14368": 1
+            },
+            "first_to_second_span_byte_length_mod_8_counts": {
+              "0": 353
+            },
+            "first_target_mod_8_counts": {
+              "0": 353
+            },
+            "first_target_delta_from_record_end_counts": {
+              "0": 353
+            },
+            "first_target_to_next_object_start_distance_counts": {
+              "128": 68,
+              "176": 25,
+              "10512": 1,
+              "16": 7,
+              "464": 1,
+              "112": 44,
+              "6880": 1,
+              "160": 17,
+              "4816": 1,
+              "168": 20,
+              "11992": 1,
+              "280": 7,
+              "11048": 1,
+              "264": 4,
+              "896": 1,
+              "616": 1,
+              "10272": 1,
+              "11712": 2,
+              "768": 1,
+              "336": 1,
+              "704": 1,
+              "184": 16,
+              "664": 1,
+              "1520": 1,
+              "136": 2,
+              "1000": 1,
+              "480": 2,
+              "152": 8,
+              "960": 2,
+              "8320": 1,
+              "7464": 1,
+              "8688": 1,
+              "1008": 3,
+              "424": 1,
+              "312": 1,
+              "1320": 1,
+              "432": 4,
+              "12432": 1,
+              "2176": 1,
+              "328": 1,
+              "816": 1,
+              "3096": 1,
+              "32400": 1,
+              "12168": 1,
+              "288": 1,
+              "560": 1,
+              "944": 1,
+              "11368": 1,
+              "776": 1,
+              "12304": 2,
+              "11928": 1,
+              "304": 3,
+              "12424": 1,
+              "792": 3,
+              "12312": 1,
+              "352": 1,
+              "272": 2,
+              "240": 1,
+              "416": 1,
+              "864": 1,
+              "1496": 1,
+              "1232": 1,
+              "2168": 1,
+              "1696": 1,
+              "1832": 2,
+              "1440": 1,
+              "520": 1,
+              "1064": 3,
+              "928": 2,
+              "2696": 2,
+              "1368": 1,
+              "2608": 1,
+              "83776": 1,
+              "5728": 1,
+              "1768": 1,
+              "4904": 1,
+              "1136": 4,
+              "952": 2,
+              "784": 3,
+              "1248": 1,
+              "98400": 1,
+              "4896": 1,
+              "11016": 1,
+              "1024": 5,
+              "640": 1,
+              "7360": 1,
+              "4392": 1,
+              "10408": 1,
+              "5872": 1,
+              "7344": 1,
+              "688": 2,
+              "656": 1,
+              "6616": 1,
+              "1280": 1,
+              "2872": 1,
+              "2424": 1,
+              "94440": 1,
+              "10392": 2,
+              "2408": 2,
+              "696": 1,
+              "1168": 1,
+              "2416": 1,
+              "27648": 1,
+              "440": 2,
+              "672": 1,
+              "14224": 1,
+              "15480": 1,
+              "12960": 1,
+              "144": 1,
+              "10184": 1,
+              "3256": 1,
+              "1928": 1,
+              "211040": 1
+            },
+            "second_target_delta_from_record_end_counts": {
+              "112": 68,
+              "160": 25,
+              "10496": 1,
+              "0": 7,
+              "448": 1,
+              "96": 44,
+              "6864": 1,
+              "144": 17,
+              "4800": 1,
+              "152": 20,
+              "11976": 1,
+              "264": 7,
+              "11032": 1,
+              "248": 4,
+              "880": 1,
+              "600": 1,
+              "10256": 1,
+              "11696": 2,
+              "752": 1,
+              "320": 1,
+              "688": 1,
+              "168": 16,
+              "648": 1,
+              "1504": 1,
+              "120": 2,
+              "984": 1,
+              "464": 2,
+              "136": 8,
+              "944": 2,
+              "8304": 1,
+              "7448": 1,
+              "8672": 1,
+              "992": 3,
+              "408": 1,
+              "296": 1,
+              "1304": 1,
+              "416": 4,
+              "12416": 1,
+              "2160": 1,
+              "312": 1,
+              "800": 1,
+              "3080": 1,
+              "32384": 1,
+              "12152": 1,
+              "272": 1,
+              "544": 1,
+              "928": 1,
+              "11352": 1,
+              "760": 1,
+              "12288": 2,
+              "11912": 1,
+              "288": 3,
+              "12408": 1,
+              "776": 3,
+              "12296": 1,
+              "336": 1,
+              "256": 2,
+              "224": 1,
+              "400": 1,
+              "848": 1,
+              "1480": 1,
+              "1216": 1,
+              "2152": 1,
+              "1680": 1,
+              "1816": 2,
+              "1424": 1,
+              "504": 1,
+              "1048": 3,
+              "912": 2,
+              "2680": 2,
+              "1352": 1,
+              "2592": 1,
+              "83760": 1,
+              "5712": 1,
+              "1752": 1,
+              "4888": 1,
+              "1120": 4,
+              "936": 2,
+              "768": 3,
+              "1232": 1,
+              "98384": 1,
+              "4880": 1,
+              "11000": 1,
+              "1008": 5,
+              "624": 1,
+              "7344": 1,
+              "4376": 1,
+              "10392": 1,
+              "5856": 1,
+              "7328": 1,
+              "672": 2,
+              "640": 1,
+              "6600": 1,
+              "1264": 1,
+              "2856": 1,
+              "2408": 1,
+              "94424": 1,
+              "10376": 2,
+              "2392": 2,
+              "680": 1,
+              "1152": 1,
+              "2400": 1,
+              "27632": 1,
+              "424": 2,
+              "656": 1,
+              "14208": 1,
+              "15464": 1,
+              "12944": 1,
+              "128": 1,
+              "10168": 1,
+              "3240": 1,
+              "1912": 1,
+              "14368": 1
+            },
+            "second_target_to_next_object_start_distance_counts": {
+              "16": 352,
+              "196672": 1
+            },
+            "second_target_prefix_u64_pair_counts": {
+              "1,1": 353
+            },
+            "span_envelope_counts": {
+              "opaque_nonzero": 343,
+              "empty": 7,
+              "zlib_invalid": 3
+            },
+            "distinct_nonempty_span_sha256_count": 303,
+            "all_valid_spans_8_byte_aligned": true
+          }
+        }
+      }
+    }
+  },
+  "comparison_assets": [
+    {
+      "asset": "Art/UI/character.uasset",
+      "pak": "pakchunk000030-WindowsNoEditor.pak",
+      "sha256": "941e57905b698214e7e962a613e486ef512eaa0a48ba09f40abbf1522f58cd70",
+      "size": 2554832,
+      "extraction_verified": true,
+      "extraction_command": "NativeSettingsAssetWriter extract-iggy",
+      "iggy_payload_sha256": "d134758ed784ac6beb64cc8494acc315b1f30591541fecaacdf3532109fb188d",
+      "iggy_payload_size": 2478531,
+      "movie_subfile_size": 2460464,
+      "version": "0x900",
+      "platform_bytes": [
+        1,
+        64,
+        1,
+        3
+      ],
+      "object_pointer_count": 541,
+      "object_kind_counts": {
+        "1": 37,
+        "3": 386,
+        "4": 29,
+        "6": 89
+      },
+      "kind_6_text_objects": 89,
+      "font_count_header_value": 161,
+      "index_subfile_summaries": [
+        {
+          "subfile_index": 1,
+          "size": 16322,
+          "sha256": "464e01df9b88f64fc206e6970077104a5430da75a3fdbe511a53d6ccb054ec54",
+          "index_table_entry_count": 35,
+          "index_metadata_descriptor_count": 323,
+          "command_count": 13792,
+          "final_cumulative_offset": 1925812,
+          "maximum_cumulative_offset": 1925812,
+          "bytes_consumed": 16322,
+          "object_start_match_count": 527,
+          "distinct_object_start_match_count": 527,
+          "object_start_matches_by_kind": {
+            "1": 34,
+            "3": 378,
+            "4": 26,
+            "6": 89
+          },
+          "object_start_layout_usage_by_kind": {
+            "1": {
+              "23": {
+                "count": 34,
+                "declared_size": 80
+              }
+            },
+            "3": {
+              "15": {
+                "count": 378,
+                "declared_size": 72
+              }
+            },
+            "4": {
+              "25": {
+                "count": 26,
+                "declared_size": 88
+              }
+            },
+            "6": {
+              "20": {
+                "count": 89,
+                "declared_size": 104
+              }
+            }
+          }
+        },
+        {
+          "subfile_index": 2,
+          "size": 1665,
+          "sha256": "e95164d5515fc72fb54d1ed9ab34f68ab5d05aa9a6bfe4597f792d10ed1e8f57",
+          "index_table_entry_count": 35,
+          "index_metadata_descriptor_count": 323,
+          "command_count": 690,
+          "final_cumulative_offset": 2460464,
+          "maximum_cumulative_offset": 2460464,
+          "bytes_consumed": 1665,
+          "object_start_match_count": 14,
+          "distinct_object_start_match_count": 14,
+          "object_start_matches_by_kind": {
+            "1": 3,
+            "3": 8,
+            "4": 3
+          },
+          "object_start_layout_usage_by_kind": {
+            "1": {
+              "23": {
+                "count": 3,
+                "declared_size": 80
+              }
+            },
+            "3": {
+              "15": {
+                "count": 8,
+                "declared_size": 72
+              }
+            },
+            "4": {
+              "25": {
+                "count": 3,
+                "declared_size": 88
+              }
+            }
+          }
+        }
+      ],
+      "imported_guid_header_value": 1,
+      "object_pointer_tables": {
+        "primary_count": 541,
+        "additional_count": 0,
+        "additional_pointer_field_movie_offset": 4528,
+        "additional_pointer_value": 1,
+        "additional_table_movie_offset": null
+      },
+      "object_index_correspondence": {
+        "object_pointer_count": 541,
+        "distinct_object_starts_matched": 541,
+        "unmatched_object_start_count": 0,
+        "duplicate_match_count": 0,
+        "every_object_start_matches_exactly_once": true
+      },
+      "object_start_layout_correspondence": {
+        "object_pointer_count": 541,
+        "command_start_match_count": 541,
+        "distinct_object_starts_matched": 541,
+        "unmatched_object_start_count": 0,
+        "duplicate_match_count": 0,
+        "object_start_count_by_kind": {
+          "1": 37,
+          "3": 386,
+          "4": 29,
+          "6": 89
+        },
+        "layout_match_count_by_kind_and_table_entry": {
+          "1": {
+            "23": 37
+          },
+          "3": {
+            "15": 386
+          },
+          "4": {
+            "25": 29
+          },
+          "6": {
+            "20": 89
+          }
+        },
+        "consistent_record_layout_per_kind": true,
+        "every_object_start_has_exactly_one_layout_command": true
+      },
+      "object_start_layouts_by_kind": {
+        "1": {
+          "object_count": 37,
+          "record_size": 80,
+          "metadata_descriptors": [
+            {
+              "local_offset": 1,
+              "type_code": 12
+            },
+            {
+              "local_offset": 2,
+              "type_code": 4
+            },
+            {
+              "local_offset": 8,
+              "type_code": 5
+            },
+            {
+              "local_offset": 16,
+              "type_code": 2
+            },
+            {
+              "local_offset": 32,
+              "type_code": 5
+            },
+            {
+              "local_offset": 36,
+              "type_code": 5
+            },
+            {
+              "local_offset": 40,
+              "type_code": 5
+            },
+            {
+              "local_offset": 44,
+              "type_code": 5
+            },
+            {
+              "local_offset": 56,
+              "type_code": 4
+            },
+            {
+              "local_offset": 64,
+              "type_code": 8
+            },
+            {
+              "local_offset": 72,
+              "type_code": 2
+            }
+          ],
+          "index_table_entries_by_subfile": {
+            "1": [
+              23
+            ],
+            "2": [
+              23
+            ]
+          }
+        },
+        "3": {
+          "object_count": 386,
+          "record_size": 72,
+          "metadata_descriptors": [
+            {
+              "local_offset": 1,
+              "type_code": 12
+            },
+            {
+              "local_offset": 2,
+              "type_code": 4
+            },
+            {
+              "local_offset": 8,
+              "type_code": 5
+            },
+            {
+              "local_offset": 16,
+              "type_code": 2
+            },
+            {
+              "local_offset": 32,
+              "type_code": 2
+            },
+            {
+              "local_offset": 40,
+              "type_code": 4
+            },
+            {
+              "local_offset": 42,
+              "type_code": 4
+            },
+            {
+              "local_offset": 56,
+              "type_code": 2
+            },
+            {
+              "local_offset": 64,
+              "type_code": 2
+            }
+          ],
+          "index_table_entries_by_subfile": {
+            "1": [
+              15
+            ],
+            "2": [
+              15
+            ]
+          }
+        },
+        "4": {
+          "object_count": 29,
+          "record_size": 88,
+          "metadata_descriptors": [
+            {
+              "local_offset": 1,
+              "type_code": 12
+            },
+            {
+              "local_offset": 2,
+              "type_code": 4
+            },
+            {
+              "local_offset": 8,
+              "type_code": 5
+            },
+            {
+              "local_offset": 16,
+              "type_code": 2
+            },
+            {
+              "local_offset": 32,
+              "type_code": 4
+            },
+            {
+              "local_offset": 34,
+              "type_code": 4
+            },
+            {
+              "local_offset": 39,
+              "type_code": 3
+            },
+            {
+              "local_offset": 48,
+              "type_code": 5
+            },
+            {
+              "local_offset": 52,
+              "type_code": 5
+            },
+            {
+              "local_offset": 56,
+              "type_code": 5
+            },
+            {
+              "local_offset": 60,
+              "type_code": 5
+            },
+            {
+              "local_offset": 72,
+              "type_code": 2
+            },
+            {
+              "local_offset": 80,
+              "type_code": 5
+            }
+          ],
+          "index_table_entries_by_subfile": {
+            "1": [
+              25
+            ],
+            "2": [
+              25
+            ]
+          }
+        },
+        "6": {
+          "object_count": 89,
+          "record_size": 104,
+          "metadata_descriptors": [
+            {
+              "local_offset": 1,
+              "type_code": 12
+            },
+            {
+              "local_offset": 2,
+              "type_code": 4
+            },
+            {
+              "local_offset": 8,
+              "type_code": 5
+            },
+            {
+              "local_offset": 16,
+              "type_code": 2
+            },
+            {
+              "local_offset": 32,
+              "type_code": 5
+            },
+            {
+              "local_offset": 36,
+              "type_code": 5
+            },
+            {
+              "local_offset": 40,
+              "type_code": 5
+            },
+            {
+              "local_offset": 44,
+              "type_code": 5
+            },
+            {
+              "local_offset": 48,
+              "type_code": 4
+            },
+            {
+              "local_offset": 50,
+              "type_code": 4
+            },
+            {
+              "local_offset": 56,
+              "type_code": 2
+            },
+            {
+              "local_offset": 68,
+              "type_code": 4
+            },
+            {
+              "local_offset": 70,
+              "type_code": 4
+            },
+            {
+              "local_offset": 72,
+              "type_code": 4
+            },
+            {
+              "local_offset": 74,
+              "type_code": 4
+            },
+            {
+              "local_offset": 76,
+              "type_code": 4
+            },
+            {
+              "local_offset": 78,
+              "type_code": 4
+            },
+            {
+              "local_offset": 96,
+              "type_code": 2
+            }
+          ],
+          "index_table_entries_by_subfile": {
+            "1": [
+              20
+            ]
+          }
+        }
+      },
+      "object_directory_layout": {
+        "object_count": 541,
+        "pointer_targets_in_file_order": true,
+        "known_record_layout_count": 541,
+        "all_records_have_known_layout": true,
+        "candidate_records_non_overlapping": true,
+        "candidate_record_overlap_count": 0
+      },
+      "field_relative_target_observations": {
+        "6": {
+          "0x10": {
+            "metadata_type_code": 2,
+            "objects_checked": 89,
+            "sentinel_one": 89
+          },
+          "0x38": {
+            "metadata_type_code": 2,
+            "objects_checked": 89,
+            "interrecord_tail": 89
+          },
+          "0x60": {
+            "metadata_type_code": 2,
+            "objects_checked": 89,
+            "record_end": 89
+          }
+        },
+        "3": {
+          "0x10": {
+            "metadata_type_code": 2,
+            "objects_checked": 386,
+            "sentinel_one": 386
+          },
+          "0x20": {
+            "metadata_type_code": 2,
+            "objects_checked": 386,
+            "sentinel_one": 384,
+            "record_end": 2
+          },
+          "0x38": {
+            "metadata_type_code": 2,
+            "objects_checked": 386,
+            "record_end": 384,
+            "interrecord_tail": 2
+          },
+          "0x40": {
+            "metadata_type_code": 2,
+            "objects_checked": 386,
+            "interrecord_tail": 381,
+            "record_end": 5
+          }
+        },
+        "4": {
+          "0x10": {
+            "metadata_type_code": 2,
+            "objects_checked": 29,
+            "sentinel_one": 29
+          },
+          "0x48": {
+            "metadata_type_code": 2,
+            "objects_checked": 29,
+            "record_end": 29
+          }
+        },
+        "1": {
+          "0x10": {
+            "metadata_type_code": 2,
+            "objects_checked": 37,
+            "sentinel_one": 37
+          },
+          "0x48": {
+            "metadata_type_code": 2,
+            "objects_checked": 37,
+            "record_end": 37
+          }
+        }
+      },
+      "kind_6_string_pointer_summary": {
+        "objects_checked": 89,
+        "object_relative_target_offset_counts": {
+          "104": 89
+        },
+        "all_targets_at_104_byte_text_record_end": true
+      },
+      "candidate_field_target_payload_observations": {
+        "3": {
+          "0x40": {
+            "metadata_type_code": 2,
+            "objects_checked": 386,
+            "target_location_counts": {
+              "interrecord_tail": 381,
+              "record_end": 5
+            },
+            "target_to_next_object_start_distance_counts": {
+              "16": 385,
+              "260632": 1
+            },
+            "target_prefix_u64_pair_counts": {
+              "1,1": 386
+            }
+          }
+        }
+      },
+      "candidate_payload_format_observations": {
+        "4": {
+          "0x48": {
+            "metadata_type_code": 2,
+            "objects_checked": 29,
+            "target_format_counts": {
+              "zlib_complete": 28,
+              "length_prefixed_jpeg": 1
+            }
+          }
+        }
+      },
+      "index_stream_relationship": {
+        "stream_count": 2,
+        "object_start_matches_disjoint": true,
+        "object_start_match_ranges_sequential": true,
+        "index_table_definitions_identical": true,
+        "object_start_match_count": 541,
+        "distinct_object_start_match_count": 541,
+        "segments": [
+          {
+            "subfile_index": 1,
+            "index_table_sha256": "46b31b86bdd0156095e6ee176dc50876bf968a0d383a21eb49b22907042bee63",
+            "first_command_end_offset": 184,
+            "first_object_start_offset": 8376,
+            "last_object_start_offset": 1924456,
+            "final_cumulative_offset": 1925812,
+            "first_command_end_delta_from_previous_final": null
+          },
+          {
+            "subfile_index": 2,
+            "index_table_sha256": "46b31b86bdd0156095e6ee176dc50876bf968a0d383a21eb49b22907042bee63",
+            "first_command_end_offset": 1925816,
+            "first_object_start_offset": 1934720,
+            "last_object_start_offset": 2189096,
+            "final_cumulative_offset": 2460464,
+            "first_command_end_delta_from_previous_final": 4
+          }
+        ]
+      },
+      "index_subfile_first_command_summaries": [
+        {
+          "subfile_index": 1,
+          "index_table_sha256": "46b31b86bdd0156095e6ee176dc50876bf968a0d383a21eb49b22907042bee63",
+          "first_command_delta": 184,
+          "first_command_end_offset": 184,
+          "first_object_start_match_offset": 8376,
+          "last_object_start_match_offset": 1924456,
+          "final_cumulative_offset": 1925812
+        },
+        {
+          "subfile_index": 2,
+          "index_table_sha256": "46b31b86bdd0156095e6ee176dc50876bf968a0d383a21eb49b22907042bee63",
+          "first_command_delta": 1925816,
+          "first_command_end_offset": 1925816,
+          "first_object_start_match_offset": 1934720,
+          "last_object_start_match_offset": 2189096,
+          "final_cumulative_offset": 2460464
+        }
+      ],
+      "candidate_record_end_region_observations": {
+        "1": {
+          "0x48": {
+            "metadata_type_code": 2,
+            "objects_checked": 37,
+            "target_location_counts": {
+              "record_end": 37
+            },
+            "region_byte_length_counts": {
+              "376": 26,
+              "3360": 2,
+              "288": 7,
+              "696": 2
+            },
+            "region_byte_length_mod_8_counts": {
+              "0": 37
+            },
+            "region_start_mod_8_counts": {
+              "0": 37
+            },
+            "region_envelope_counts": {
+              "opaque_nonzero": 37
+            },
+            "distinct_non_sentinel_region_sha256_count": 37,
+            "all_non_sentinel_regions_8_byte_aligned": true
+          }
+        }
+      },
+      "candidate_dual_pointer_observations": {
+        "3": {
+          "0x38_to_0x40": {
+            "objects_checked": 386,
+            "first_pointer_target_location_counts": {
+              "record_end": 384,
+              "interrecord_tail": 2
+            },
+            "second_pointer_target_location_counts": {
+              "interrecord_tail": 381,
+              "record_end": 5
+            },
+            "joint_target_location_counts": {
+              "record_end->interrecord_tail": 379,
+              "record_end->record_end": 5,
+              "interrecord_tail->interrecord_tail": 2
+            },
+            "first_to_second_span_byte_length_counts": {
+              "112": 89,
+              "136": 15,
+              "128": 3,
+              "0": 5,
+              "152": 32,
+              "144": 19,
+              "536": 1,
+              "224": 1,
+              "1000": 3,
+              "160": 20,
+              "688": 2,
+              "2024": 1,
+              "408": 1,
+              "2712": 1,
+              "712": 1,
+              "2016": 2,
+              "592": 2,
+              "296": 4,
+              "848": 1,
+              "1344": 1,
+              "560": 1,
+              "3960": 1,
+              "544": 1,
+              "168": 15,
+              "864": 2,
+              "984": 2,
+              "880": 3,
+              "280": 5,
+              "96": 36,
+              "776": 1,
+              "5720": 1,
+              "2896": 1,
+              "272": 1,
+              "1648": 1,
+              "648": 1,
+              "2736": 1,
+              "4312": 1,
+              "2352": 1,
+              "952": 1,
+              "21248": 1,
+              "3784": 1,
+              "3640": 1,
+              "10064": 1,
+              "13232": 1,
+              "2120": 1,
+              "1776": 1,
+              "4352": 1,
+              "5064": 1,
+              "1464": 1,
+              "424": 2,
+              "440": 1,
+              "400": 2,
+              "464": 1,
+              "392": 2,
+              "1400": 1,
+              "176": 4,
+              "456": 1,
+              "320": 2,
+              "1552": 1,
+              "304": 1,
+              "336": 1,
+              "680": 2,
+              "184": 2,
+              "728": 1,
+              "576": 1,
+              "1600": 1,
+              "672": 3,
+              "5784": 1,
+              "624": 2,
+              "28568": 1,
+              "28448": 1,
+              "616": 2,
+              "12064": 1,
+              "35928": 1,
+              "992": 5,
+              "2704": 1,
+              "1104": 1,
+              "608": 1,
+              "12160": 1,
+              "656": 2,
+              "840": 2,
+              "640": 1,
+              "6464": 1,
+              "6184": 1,
+              "4832": 1,
+              "18288": 1,
+              "13448": 2,
+              "664": 1,
+              "11024": 1,
+              "832": 1,
+              "896": 1,
+              "1096": 1,
+              "4896": 1,
+              "3632": 1,
+              "824": 1,
+              "1016": 1,
+              "7664": 1,
+              "264": 3,
+              "10640": 1,
+              "1656": 1,
+              "16080": 1,
+              "1160": 1,
+              "12808": 1,
+              "416": 2,
+              "768": 2,
+              "1136": 1,
+              "496": 1,
+              "50016": 1,
+              "5336": 1,
+              "12584": 1,
+              "704": 1,
+              "30912": 1,
+              "248": 1,
+              "2056": 1,
+              "792": 1,
+              "2576": 1,
+              "6080": 1,
+              "10176": 1,
+              "584": 1,
+              "1824": 1,
+              "10664": 1
+            },
+            "first_to_second_span_byte_length_mod_8_counts": {
+              "0": 386
+            },
+            "first_target_mod_8_counts": {
+              "0": 386
+            },
+            "first_target_delta_from_record_end_counts": {
+              "0": 384,
+              "16": 2
+            },
+            "first_target_to_next_object_start_distance_counts": {
+              "128": 89,
+              "152": 15,
+              "144": 3,
+              "16": 5,
+              "168": 32,
+              "160": 19,
+              "552": 1,
+              "240": 1,
+              "1016": 3,
+              "176": 20,
+              "704": 2,
+              "2040": 1,
+              "424": 1,
+              "2728": 1,
+              "728": 1,
+              "2032": 2,
+              "608": 2,
+              "312": 4,
+              "864": 1,
+              "1360": 1,
+              "576": 1,
+              "3976": 1,
+              "560": 1,
+              "184": 15,
+              "880": 2,
+              "1000": 2,
+              "896": 3,
+              "296": 5,
+              "112": 36,
+              "792": 1,
+              "5736": 1,
+              "2912": 1,
+              "288": 1,
+              "1664": 1,
+              "664": 1,
+              "2752": 1,
+              "4328": 1,
+              "2368": 1,
+              "968": 1,
+              "21264": 1,
+              "3800": 1,
+              "3656": 1,
+              "10080": 1,
+              "13248": 1,
+              "2136": 1,
+              "1792": 1,
+              "4368": 1,
+              "5080": 1,
+              "1480": 1,
+              "440": 2,
+              "456": 1,
+              "416": 2,
+              "480": 1,
+              "408": 2,
+              "1416": 1,
+              "192": 4,
+              "472": 1,
+              "336": 2,
+              "1568": 1,
+              "320": 1,
+              "352": 1,
+              "696": 2,
+              "200": 2,
+              "744": 1,
+              "592": 1,
+              "1616": 1,
+              "688": 3,
+              "5800": 1,
+              "640": 2,
+              "28584": 1,
+              "28464": 1,
+              "632": 2,
+              "12080": 1,
+              "35944": 1,
+              "1008": 5,
+              "2720": 1,
+              "1120": 1,
+              "624": 1,
+              "12176": 1,
+              "672": 2,
+              "856": 2,
+              "656": 1,
+              "6480": 1,
+              "6200": 1,
+              "4848": 1,
+              "18304": 1,
+              "13464": 2,
+              "680": 1,
+              "11040": 1,
+              "848": 1,
+              "912": 1,
+              "1112": 1,
+              "4912": 1,
+              "3648": 1,
+              "840": 1,
+              "1032": 1,
+              "7680": 1,
+              "280": 3,
+              "10656": 1,
+              "1672": 1,
+              "16096": 1,
+              "1176": 1,
+              "12824": 1,
+              "432": 2,
+              "784": 2,
+              "1152": 1,
+              "512": 1,
+              "50032": 1,
+              "5352": 1,
+              "12600": 1,
+              "720": 1,
+              "30928": 1,
+              "264": 1,
+              "2072": 1,
+              "808": 1,
+              "2592": 1,
+              "6096": 1,
+              "10192": 1,
+              "600": 1,
+              "1840": 1,
+              "271296": 1
+            },
+            "second_target_delta_from_record_end_counts": {
+              "112": 91,
+              "136": 15,
+              "128": 3,
+              "0": 5,
+              "152": 32,
+              "144": 19,
+              "536": 1,
+              "224": 1,
+              "1000": 3,
+              "160": 20,
+              "688": 2,
+              "2024": 1,
+              "408": 1,
+              "2712": 1,
+              "712": 1,
+              "2016": 2,
+              "592": 2,
+              "296": 4,
+              "848": 1,
+              "1344": 1,
+              "560": 1,
+              "3960": 1,
+              "544": 1,
+              "168": 15,
+              "864": 2,
+              "984": 2,
+              "880": 3,
+              "280": 5,
+              "776": 1,
+              "5720": 1,
+              "96": 34,
+              "2896": 1,
+              "272": 1,
+              "1648": 1,
+              "648": 1,
+              "2736": 1,
+              "4312": 1,
+              "2352": 1,
+              "952": 1,
+              "21248": 1,
+              "3784": 1,
+              "3640": 1,
+              "10064": 1,
+              "13232": 1,
+              "2120": 1,
+              "1776": 1,
+              "4352": 1,
+              "5064": 1,
+              "1464": 1,
+              "424": 2,
+              "440": 1,
+              "400": 2,
+              "464": 1,
+              "392": 2,
+              "1400": 1,
+              "176": 4,
+              "456": 1,
+              "320": 2,
+              "1552": 1,
+              "304": 1,
+              "336": 1,
+              "680": 2,
+              "184": 2,
+              "728": 1,
+              "576": 1,
+              "1600": 1,
+              "672": 3,
+              "5784": 1,
+              "624": 2,
+              "28568": 1,
+              "28448": 1,
+              "616": 2,
+              "12064": 1,
+              "35928": 1,
+              "992": 5,
+              "2704": 1,
+              "1104": 1,
+              "608": 1,
+              "12160": 1,
+              "656": 2,
+              "840": 2,
+              "640": 1,
+              "6464": 1,
+              "6184": 1,
+              "4832": 1,
+              "18288": 1,
+              "13448": 2,
+              "664": 1,
+              "11024": 1,
+              "832": 1,
+              "896": 1,
+              "1096": 1,
+              "4896": 1,
+              "3632": 1,
+              "824": 1,
+              "1016": 1,
+              "7664": 1,
+              "264": 3,
+              "10640": 1,
+              "1656": 1,
+              "16080": 1,
+              "1160": 1,
+              "12808": 1,
+              "416": 2,
+              "768": 2,
+              "1136": 1,
+              "496": 1,
+              "50016": 1,
+              "5336": 1,
+              "12584": 1,
+              "704": 1,
+              "30912": 1,
+              "248": 1,
+              "2056": 1,
+              "792": 1,
+              "2576": 1,
+              "6080": 1,
+              "10176": 1,
+              "584": 1,
+              "1824": 1,
+              "10664": 1
+            },
+            "second_target_to_next_object_start_distance_counts": {
+              "16": 385,
+              "260632": 1
+            },
+            "second_target_prefix_u64_pair_counts": {
+              "1,1": 386
+            },
+            "span_envelope_counts": {
+              "opaque_nonzero": 378,
+              "empty": 5,
+              "zlib_invalid": 3
+            },
+            "distinct_nonempty_span_sha256_count": 329,
+            "all_valid_spans_8_byte_aligned": true
+          }
+        }
+      }
+    },
+    {
+      "asset": "Art/UI/pause.uasset",
+      "pak": "pakchunk000030-WindowsNoEditor.pak",
+      "sha256": "00b46a42a6fc83645ace9f7068b8fc3b34ed7c9abd0c185580abbfb5a7d53ab6",
+      "size": 1038425,
+      "extraction_verified": true,
+      "extraction_command": "NativeSettingsAssetWriter extract-iggy",
+      "iggy_payload_sha256": "0f8607960fceedee1aa594fa699dc7eb7557b574f1e290b18a72440fa5e6ba33",
+      "iggy_payload_size": 1019164,
+      "movie_subfile_size": 1012616,
+      "version": "0x900",
+      "platform_bytes": [
+        1,
+        64,
+        1,
+        3
+      ],
+      "object_pointer_count": 156,
+      "object_kind_counts": {
+        "1": 11,
+        "3": 110,
+        "4": 8,
+        "6": 27
+      },
+      "kind_6_text_objects": 27,
+      "font_count_header_value": 44,
+      "index_subfile_summaries": [
+        {
+          "subfile_index": 1,
+          "size": 6484,
+          "sha256": "96ccbf32f2b9933cbb9c657b502f2497f260accccc1d7802d65e8e75ed7accc6",
+          "index_table_entry_count": 29,
+          "index_metadata_descriptor_count": 261,
+          "command_count": 5175,
+          "final_cumulative_offset": 1012616,
+          "maximum_cumulative_offset": 1012616,
+          "bytes_consumed": 6484,
+          "object_start_match_count": 156,
+          "distinct_object_start_match_count": 156,
+          "object_start_matches_by_kind": {
+            "1": 11,
+            "3": 110,
+            "4": 8,
+            "6": 27
+          },
+          "object_start_layout_usage_by_kind": {
+            "1": {
+              "22": {
+                "count": 11,
+                "declared_size": 80
+              }
+            },
+            "3": {
+              "14": {
+                "count": 110,
+                "declared_size": 72
+              }
+            },
+            "4": {
+              "24": {
+                "count": 8,
+                "declared_size": 88
+              }
+            },
+            "6": {
+              "19": {
+                "count": 27,
+                "declared_size": 104
+              }
+            }
+          }
+        }
+      ],
+      "imported_guid_header_value": 1,
+      "object_pointer_tables": {
+        "primary_count": 156,
+        "additional_count": 0,
+        "additional_pointer_field_movie_offset": 1448,
+        "additional_pointer_value": 1,
+        "additional_table_movie_offset": null
+      },
+      "object_index_correspondence": {
+        "object_pointer_count": 156,
+        "distinct_object_starts_matched": 156,
+        "unmatched_object_start_count": 0,
+        "duplicate_match_count": 0,
+        "every_object_start_matches_exactly_once": true
+      },
+      "object_start_layout_correspondence": {
+        "object_pointer_count": 156,
+        "command_start_match_count": 156,
+        "distinct_object_starts_matched": 156,
+        "unmatched_object_start_count": 0,
+        "duplicate_match_count": 0,
+        "object_start_count_by_kind": {
+          "1": 11,
+          "3": 110,
+          "4": 8,
+          "6": 27
+        },
+        "layout_match_count_by_kind_and_table_entry": {
+          "1": {
+            "22": 11
+          },
+          "3": {
+            "14": 110
+          },
+          "4": {
+            "24": 8
+          },
+          "6": {
+            "19": 27
+          }
+        },
+        "consistent_record_layout_per_kind": true,
+        "every_object_start_has_exactly_one_layout_command": true
+      },
+      "object_start_layouts_by_kind": {
+        "1": {
+          "object_count": 11,
+          "record_size": 80,
+          "metadata_descriptors": [
+            {
+              "local_offset": 1,
+              "type_code": 12
+            },
+            {
+              "local_offset": 2,
+              "type_code": 4
+            },
+            {
+              "local_offset": 8,
+              "type_code": 5
+            },
+            {
+              "local_offset": 16,
+              "type_code": 2
+            },
+            {
+              "local_offset": 32,
+              "type_code": 5
+            },
+            {
+              "local_offset": 36,
+              "type_code": 5
+            },
+            {
+              "local_offset": 40,
+              "type_code": 5
+            },
+            {
+              "local_offset": 44,
+              "type_code": 5
+            },
+            {
+              "local_offset": 56,
+              "type_code": 4
+            },
+            {
+              "local_offset": 64,
+              "type_code": 8
+            },
+            {
+              "local_offset": 72,
+              "type_code": 2
+            }
+          ],
+          "index_table_entries_by_subfile": {
+            "1": [
+              22
+            ]
+          }
+        },
+        "3": {
+          "object_count": 110,
+          "record_size": 72,
+          "metadata_descriptors": [
+            {
+              "local_offset": 1,
+              "type_code": 12
+            },
+            {
+              "local_offset": 2,
+              "type_code": 4
+            },
+            {
+              "local_offset": 8,
+              "type_code": 5
+            },
+            {
+              "local_offset": 16,
+              "type_code": 2
+            },
+            {
+              "local_offset": 32,
+              "type_code": 2
+            },
+            {
+              "local_offset": 40,
+              "type_code": 4
+            },
+            {
+              "local_offset": 42,
+              "type_code": 4
+            },
+            {
+              "local_offset": 56,
+              "type_code": 2
+            },
+            {
+              "local_offset": 64,
+              "type_code": 2
+            }
+          ],
+          "index_table_entries_by_subfile": {
+            "1": [
+              14
+            ]
+          }
+        },
+        "4": {
+          "object_count": 8,
+          "record_size": 88,
+          "metadata_descriptors": [
+            {
+              "local_offset": 1,
+              "type_code": 12
+            },
+            {
+              "local_offset": 2,
+              "type_code": 4
+            },
+            {
+              "local_offset": 8,
+              "type_code": 5
+            },
+            {
+              "local_offset": 16,
+              "type_code": 2
+            },
+            {
+              "local_offset": 32,
+              "type_code": 4
+            },
+            {
+              "local_offset": 34,
+              "type_code": 4
+            },
+            {
+              "local_offset": 39,
+              "type_code": 3
+            },
+            {
+              "local_offset": 48,
+              "type_code": 5
+            },
+            {
+              "local_offset": 52,
+              "type_code": 5
+            },
+            {
+              "local_offset": 56,
+              "type_code": 5
+            },
+            {
+              "local_offset": 60,
+              "type_code": 5
+            },
+            {
+              "local_offset": 72,
+              "type_code": 2
+            },
+            {
+              "local_offset": 80,
+              "type_code": 5
+            }
+          ],
+          "index_table_entries_by_subfile": {
+            "1": [
+              24
+            ]
+          }
+        },
+        "6": {
+          "object_count": 27,
+          "record_size": 104,
+          "metadata_descriptors": [
+            {
+              "local_offset": 1,
+              "type_code": 12
+            },
+            {
+              "local_offset": 2,
+              "type_code": 4
+            },
+            {
+              "local_offset": 8,
+              "type_code": 5
+            },
+            {
+              "local_offset": 16,
+              "type_code": 2
+            },
+            {
+              "local_offset": 32,
+              "type_code": 5
+            },
+            {
+              "local_offset": 36,
+              "type_code": 5
+            },
+            {
+              "local_offset": 40,
+              "type_code": 5
+            },
+            {
+              "local_offset": 44,
+              "type_code": 5
+            },
+            {
+              "local_offset": 48,
+              "type_code": 4
+            },
+            {
+              "local_offset": 50,
+              "type_code": 4
+            },
+            {
+              "local_offset": 56,
+              "type_code": 2
+            },
+            {
+              "local_offset": 68,
+              "type_code": 4
+            },
+            {
+              "local_offset": 70,
+              "type_code": 4
+            },
+            {
+              "local_offset": 72,
+              "type_code": 4
+            },
+            {
+              "local_offset": 74,
+              "type_code": 4
+            },
+            {
+              "local_offset": 76,
+              "type_code": 4
+            },
+            {
+              "local_offset": 78,
+              "type_code": 4
+            },
+            {
+              "local_offset": 96,
+              "type_code": 2
+            }
+          ],
+          "index_table_entries_by_subfile": {
+            "1": [
+              19
+            ]
+          }
+        }
+      },
+      "object_directory_layout": {
+        "object_count": 156,
+        "pointer_targets_in_file_order": true,
+        "known_record_layout_count": 156,
+        "all_records_have_known_layout": true,
+        "candidate_records_non_overlapping": true,
+        "candidate_record_overlap_count": 0
+      },
+      "field_relative_target_observations": {
+        "1": {
+          "0x10": {
+            "metadata_type_code": 2,
+            "objects_checked": 11,
+            "sentinel_one": 11
+          },
+          "0x48": {
+            "metadata_type_code": 2,
+            "objects_checked": 11,
+            "record_end": 11
+          }
+        },
+        "3": {
+          "0x10": {
+            "metadata_type_code": 2,
+            "objects_checked": 110,
+            "sentinel_one": 110
+          },
+          "0x20": {
+            "metadata_type_code": 2,
+            "objects_checked": 110,
+            "sentinel_one": 110
+          },
+          "0x38": {
+            "metadata_type_code": 2,
+            "objects_checked": 110,
+            "record_end": 110
+          },
+          "0x40": {
+            "metadata_type_code": 2,
+            "objects_checked": 110,
+            "interrecord_tail": 107,
+            "record_end": 3
+          }
+        },
+        "6": {
+          "0x10": {
+            "metadata_type_code": 2,
+            "objects_checked": 27,
+            "sentinel_one": 27
+          },
+          "0x38": {
+            "metadata_type_code": 2,
+            "objects_checked": 27,
+            "interrecord_tail": 27
+          },
+          "0x60": {
+            "metadata_type_code": 2,
+            "objects_checked": 27,
+            "record_end": 27
+          }
+        },
+        "4": {
+          "0x10": {
+            "metadata_type_code": 2,
+            "objects_checked": 8,
+            "sentinel_one": 8
+          },
+          "0x48": {
+            "metadata_type_code": 2,
+            "objects_checked": 8,
+            "record_end": 8
+          }
+        }
+      },
+      "kind_6_string_pointer_summary": {
+        "objects_checked": 27,
+        "object_relative_target_offset_counts": {
+          "104": 27
+        },
+        "all_targets_at_104_byte_text_record_end": true
+      },
+      "candidate_field_target_payload_observations": {
+        "3": {
+          "0x40": {
+            "metadata_type_code": 2,
+            "objects_checked": 110,
+            "target_location_counts": {
+              "interrecord_tail": 107,
+              "record_end": 3
+            },
+            "target_to_next_object_start_distance_counts": {
+              "16": 109,
+              "120512": 1
+            },
+            "target_prefix_u64_pair_counts": {
+              "1,1": 110
+            }
+          }
+        }
+      },
+      "candidate_payload_format_observations": {
+        "4": {
+          "0x48": {
+            "metadata_type_code": 2,
+            "objects_checked": 8,
+            "target_format_counts": {
+              "zlib_complete": 7,
+              "length_prefixed_jpeg": 1
+            }
+          }
+        }
+      },
+      "index_stream_relationship": {
+        "stream_count": 1,
+        "object_start_matches_disjoint": true,
+        "object_start_match_ranges_sequential": true,
+        "index_table_definitions_identical": true,
+        "object_start_match_count": 156,
+        "distinct_object_start_match_count": 156,
+        "segments": [
+          {
+            "subfile_index": 1,
+            "index_table_sha256": "615a08dcddb15b17d6bf61a9ca17ddda8dabe9b9b267e7a348104702830cc7b6",
+            "first_command_end_offset": 184,
+            "first_object_start_offset": 2232,
+            "last_object_start_offset": 886304,
+            "final_cumulative_offset": 1012616,
+            "first_command_end_delta_from_previous_final": null
+          }
+        ]
+      },
+      "index_subfile_first_command_summaries": [
+        {
+          "subfile_index": 1,
+          "index_table_sha256": "615a08dcddb15b17d6bf61a9ca17ddda8dabe9b9b267e7a348104702830cc7b6",
+          "first_command_delta": 184,
+          "first_command_end_offset": 184,
+          "first_object_start_match_offset": 2232,
+          "last_object_start_match_offset": 886304,
+          "final_cumulative_offset": 1012616
+        }
+      ],
+      "candidate_record_end_region_observations": {
+        "1": {
+          "0x48": {
+            "metadata_type_code": 2,
+            "objects_checked": 11,
+            "target_location_counts": {
+              "record_end": 11
+            },
+            "region_byte_length_counts": {
+              "288": 3,
+              "376": 7,
+              "696": 1
+            },
+            "region_byte_length_mod_8_counts": {
+              "0": 11
+            },
+            "region_start_mod_8_counts": {
+              "0": 11
+            },
+            "region_envelope_counts": {
+              "opaque_nonzero": 11
+            },
+            "distinct_non_sentinel_region_sha256_count": 11,
+            "all_non_sentinel_regions_8_byte_aligned": true
+          }
+        }
+      },
+      "candidate_dual_pointer_observations": {
+        "3": {
+          "0x38_to_0x40": {
+            "objects_checked": 110,
+            "first_pointer_target_location_counts": {
+              "record_end": 110
+            },
+            "second_pointer_target_location_counts": {
+              "interrecord_tail": 107,
+              "record_end": 3
+            },
+            "joint_target_location_counts": {
+              "record_end->interrecord_tail": 107,
+              "record_end->record_end": 3
+            },
+            "first_to_second_span_byte_length_counts": {
+              "96": 4,
+              "112": 25,
+              "152": 9,
+              "160": 5,
+              "1040": 1,
+              "0": 3,
+              "264": 4,
+              "144": 10,
+              "400": 1,
+              "136": 5,
+              "128": 1,
+              "464": 1,
+              "760": 1,
+              "10064": 1,
+              "2248": 1,
+              "11456": 1,
+              "2080": 1,
+              "11304": 1,
+              "4768": 1,
+              "1736": 1,
+              "11600": 1,
+              "1096": 1,
+              "168": 4,
+              "1136": 1,
+              "2272": 1,
+              "824": 1,
+              "992": 1,
+              "4760": 1,
+              "13296": 1,
+              "896": 1,
+              "11752": 1,
+              "11728": 1,
+              "2144": 1,
+              "12480": 1,
+              "11192": 1,
+              "120": 1,
+              "768": 1,
+              "976": 1,
+              "192": 1,
+              "22088": 1,
+              "10424": 1,
+              "952": 1,
+              "1544": 1,
+              "944": 1,
+              "4648": 1,
+              "1128": 1,
+              "240": 1,
+              "9728": 1,
+              "968": 1,
+              "5728": 1
+            },
+            "first_to_second_span_byte_length_mod_8_counts": {
+              "0": 110
+            },
+            "first_target_mod_8_counts": {
+              "0": 110
+            },
+            "first_target_delta_from_record_end_counts": {
+              "0": 110
+            },
+            "first_target_to_next_object_start_distance_counts": {
+              "112": 4,
+              "128": 25,
+              "168": 9,
+              "176": 5,
+              "1056": 1,
+              "16": 3,
+              "280": 4,
+              "160": 10,
+              "416": 1,
+              "152": 5,
+              "144": 1,
+              "480": 1,
+              "776": 1,
+              "10080": 1,
+              "2264": 1,
+              "11472": 1,
+              "2096": 1,
+              "11320": 1,
+              "4784": 1,
+              "1752": 1,
+              "11616": 1,
+              "1112": 1,
+              "184": 4,
+              "1152": 1,
+              "2288": 1,
+              "840": 1,
+              "1008": 1,
+              "4776": 1,
+              "13312": 1,
+              "912": 1,
+              "11768": 1,
+              "11744": 1,
+              "2160": 1,
+              "12496": 1,
+              "11208": 1,
+              "136": 1,
+              "784": 1,
+              "992": 1,
+              "208": 1,
+              "22104": 1,
+              "10440": 1,
+              "968": 1,
+              "1560": 1,
+              "960": 1,
+              "4664": 1,
+              "1144": 1,
+              "256": 1,
+              "9744": 1,
+              "984": 1,
+              "126240": 1
+            },
+            "second_target_delta_from_record_end_counts": {
+              "96": 4,
+              "112": 25,
+              "152": 9,
+              "160": 5,
+              "1040": 1,
+              "0": 3,
+              "264": 4,
+              "144": 10,
+              "400": 1,
+              "136": 5,
+              "128": 1,
+              "464": 1,
+              "760": 1,
+              "10064": 1,
+              "2248": 1,
+              "11456": 1,
+              "2080": 1,
+              "11304": 1,
+              "4768": 1,
+              "1736": 1,
+              "11600": 1,
+              "1096": 1,
+              "168": 4,
+              "1136": 1,
+              "2272": 1,
+              "824": 1,
+              "992": 1,
+              "4760": 1,
+              "13296": 1,
+              "896": 1,
+              "11752": 1,
+              "11728": 1,
+              "2144": 1,
+              "12480": 1,
+              "11192": 1,
+              "120": 1,
+              "768": 1,
+              "976": 1,
+              "192": 1,
+              "22088": 1,
+              "10424": 1,
+              "952": 1,
+              "1544": 1,
+              "944": 1,
+              "4648": 1,
+              "1128": 1,
+              "240": 1,
+              "9728": 1,
+              "968": 1,
+              "5728": 1
+            },
+            "second_target_to_next_object_start_distance_counts": {
+              "16": 109,
+              "120512": 1
+            },
+            "second_target_prefix_u64_pair_counts": {
+              "1,1": 110
+            },
+            "span_envelope_counts": {
+              "opaque_nonzero": 104,
+              "empty": 3,
+              "zlib_invalid": 3
+            },
+            "distinct_nonempty_span_sha256_count": 106,
+            "all_valid_spans_8_byte_aligned": true
+          }
+        }
+      }
+    }
+  ],
+  "inspector": {
+    "tool": "Research/tools/inspect_iggy_movie.py",
+    "output_policy": "Parses bounded type-0 index streams, maps every object start to a candidate layout, verifies physical ordering/non-overlap, summarizes stream boundaries and relative fields, records kind-3 dual-pointer candidate spans and their boundary markers, profiles kind-1 record-end regions and kind-4 compressed/image envelopes, and validates kind-6 string pointers without retaining source text or payload bytes. A separate bounded side-block scan records only signed-i32 candidate references that resolve to aligned object starts.",
+    "automated_tests": 23,
+    "limitations": [
+      "Object kinds 1, 3, and 4 remain semantically unnamed; candidate field layouts and target locations do not decode their structures or references.",
+      "No display-list, MovieClip, button, event, script, focus, or navigation graph has been reconstructed.",
+      "The semantic meaning of type-0 stream partitions and opaque metadata type codes is not yet known.",
+      "Successful payload extraction and structural parsing do not prove that the game loads a modified loose asset.",
+      "Kind-1 candidate regions are bounded from field 0x48 target to the next object pointer; their ownership and internal structure are not established, and opaque-region classification is not semantic decoding.",
+      "Kind-3 fields 0x38/0x40 delimit candidate byte spans in most objects and field 0x40 targets a repeated two-u64 marker; this is a structural relationship only, not a decoded array/schema or proven display reference.",
+      "Signed-i32 values in kind-1/kind-3 side blocks that land on object starts are candidate links only; they do not prove parent-child, shape, bitmap, or script semantics."
+    ],
+    "layout_interpretation": "A command beginning exactly at an object pointer start selects an index-table entry whose declared size and local-offset/type-code metadata form a candidate record layout. These layouts are proven consistent per kind in the three fixed-build movies; kinds 1, 3, and 4 remain semantically unnamed.",
+    "relative_field_method": "For each index metadata type-code-2 field, classify field_offset + u64_value against the candidate record end, next object start, and movie bounds. Kind-6 field 0x60 is separately verified by decoding its target as bounded UTF-16. Kind-3 field 0x40 records only the first two u64 values and distance to the next object start; kind-4 field 0x48 recognizes bounded complete zlib streams or length-prefixed JPEG data. These are byte-level payload observations, not semantic names or proof of display-reference meaning.",
+    "index_stream_interpretation": "In the three fixed-build movies, matched object starts are disjoint and monotonically ordered by type-0 subfile; settings/character streams reuse the same table definition within each movie. The next stream first command begins at the previous stream final offset for settings and 4 bytes later for character. This establishes address ordering and boundary relationships, not the intended runtime meaning of the stream split.",
+    "related_static_reports": [
+      "native-settings-iggy-object-catalog.json",
+      "native-settings-iggy-object-links.json",
+      "native-settings-iggy-runtime-api.json"
+    ]
+  },
+  "iggy_text_edit_experiment": {
+    "tool": "Research/tools/patch_iggy_text.py",
+    "source_asset": "Art/UI/settings.uasset",
+    "input_payload_sha256": "e69875cd5421f8082cf4e0b66e8a2cd09ba81f8455b08243635695ea0b4bdb57",
+    "output_payload_sha256": "c8caf94d51ab6e11d44af159f5c6be3bace91201c3cc830ef8f50921ae7babc8",
+    "text_index": 82,
+    "expected_original_text_sha256": "24c852fb8c99d4802cb5731f31e20d26ccb5a76d1e1ca92d7dfc75bf273caef1",
+    "replacement_text_sha256": "f3c9bf8d81b3252158cb3833f89d798f6a101d05f48e4833576ef448b6e006ed",
+    "string_payload_offset": 821840,
+    "utf16_code_units": 17,
+    "patched_span_byte_count": 34,
+    "changed_byte_count": 17,
+    "payload_size_unchanged": true,
+    "independent_reparse_succeeded": true,
+    "all_other_bytes_and_layouts_preserved": true,
+    "status": "offline same-size text replacement reparsed by the independent structural parser; does not create or alter display objects and does not prove that the game loads the modified resource"
+  },
+  "jpexs_26_3_0_source_check": {
+    "release_tag": "version26.3.0",
+    "source_commit": "b2ef2d3d3f44291a4bdfa899c986bc39a89fa6aa",
+    "downloaded_archive_sha256": "35f4930eb7c380afe66f2117f90b006deac0631473ad7500bb39c78f68645ecd",
+    "source_file": "libsrc/ffdec_lib/src/com/jpexs/decompiler/flash/iggy/IggySwf.java",
+    "top_level_object_kinds_accepted_by_parser": {
+      "6": "TEXT",
+      "22": "FONT"
+    },
+    "other_kind_behavior": "Throws RuntimeException: Unknown item kind",
+    "target_game_object_kinds_not_supported_by_that_parser": [
+      1,
+      3,
+      4
+    ],
+    "conversion_source_findings": {
+      "iggy_to_swf_source": "libsrc/ffdec_lib/src/com/jpexs/decompiler/flash/iggy/conversion/IggyToSwfConvertor.java",
+      "swf_to_iggy_source": "libsrc/ffdec_lib/src/com/jpexs/decompiler/flash/iggy/conversion/SwfToIggyConvertor.java",
+      "iggy_file_writer_source": "libsrc/ffdec_lib/src/com/jpexs/decompiler/flash/iggy/IggyFile.java",
+      "index_writer_source": "libsrc/ffdec_lib/src/com/jpexs/decompiler/flash/iggy/streams/IggyIndexBuilder.java",
+      "index_read_write_findings": {
+        "reader_parse_entries": "IggyFile.parseEntries() locates the type-1 movie; its IggyIndexParser.parseIndex call for type-0 entries is commented out.",
+        "writer_update_flash_entry": "IggyFile.updateFlashEntry() serializes a replacement movie with IggyIndexBuilder, removes all original type-0 entries, then appends one newly generated type-0 entry.",
+        "builder_semantics": "Index commands encode lengths, padding and typed arrays while advancing a cumulative serialized write position.",
+        "target_mapping_proven": false
+      },
+      "exported_swf_object_families": [
+        "DefineFont2",
+        "DefineEditText",
+        "DoABC2"
+      ],
+      "exporter_frame_count": 1,
+      "exporter_frame_count_marked_fixme": true,
+      "importer_updates_existing_fonts_and_texts": true,
+      "importer_rejects_font_or_text_count_changes": true,
+      "writer_replaces_movie_stream_and_regenerates_index": true,
+      "unknown_game_movie_objects_preserved_by_writer": false
+    },
+    "conclusion": "JPEXS 26.3.0 is not a complete editor/rebuilder for the Iggy display data used by these target assets; its general 64-bit Iggy support is insufficient for adding controls to this movie.",
+    "index_metadata_findings": {
+      "source_commit": "b2ef2d3d3f44291a4bdfa899c986bc39a89fa6aa",
+      "parser_source": "libsrc/ffdec_lib/src/com/jpexs/decompiler/flash/iggy/streams/IggyIndexParser.java",
+      "builder_source": "libsrc/ffdec_lib/src/com/jpexs/decompiler/flash/iggy/streams/IggyIndexBuilder.java",
+      "text_source": "libsrc/ffdec_lib/src/com/jpexs/decompiler/flash/iggy/IggyText.java",
+      "parser_reads_index_metadata_as": "local-offset/type-code byte pairs attached to each table entry",
+      "builder_known_text_layout": {
+        "size": 104,
+        "local_offsets": [
+          1,
+          2,
+          8,
+          16,
+          32,
+          36,
+          40,
+          44,
+          48,
+          50,
+          56,
+          68,
+          70,
+          72,
+          74,
+          76,
+          78,
+          96
+        ],
+        "type_codes": [
+          12,
+          4,
+          5,
+          2,
+          5,
+          5,
+          5,
+          5,
+          4,
+          4,
+          2,
+          4,
+          4,
+          4,
+          4,
+          4,
+          4,
+          2
+        ]
+      },
+      "target_kind_6_exact_layout_match": true,
+      "target_kinds_1_3_4_semantics_proven": false
+    }
+  },
+  "next_static_research": [
+    "Trace the pinned Iggy DLL's parser/object-construction paths that consume kind-1/kind-3 side blocks; determine whether the 8-byte-aligned signed-i32 candidates are runtime relocations or resource references, and do not call them display-tree edges without that evidence.",
+    "Decode kind-3 candidate spans and their repeated end marker into field-level records, comparing same-length patterns across settings, character, and pause movies; preserve unnamed status until independent evidence confirms a schema.",
+    "Decode kind-1 auxiliary regions and connect validated object references to type-3/type-4/type-6 records; distinguish resource dependency links from display parent-child relationships.",
+    "Determine the binary meaning of the two type-0 index-stream partitions and relate non-object boundaries to object record regions; object starts are already mapped one-to-one.",
+    "Build a no-op read/write fixture and require byte-equivalent preservation of all unedited objects before attempting a single controlled structural edit.",
+    "Continue tracing cooked-resource override resolution and UIManagerComponent class validation; do not claim a loadable Mod page until an offline package and supported runtime path are both demonstrated."
+  ],
+  "reproduction": [
+    "dotnet run --project Research/tools/native_settings_asset_writer/NativeSettingsAssetWriter.csproj -- extract-iggy <settings.uasset> <new-output.iggy>",
+    "dotnet run --project Research/tools/native_settings_asset_writer/NativeSettingsAssetWriter.csproj -- extract-iggy <character.uasset> <new-output.iggy>",
+    "dotnet run --project Research/tools/native_settings_asset_writer/NativeSettingsAssetWriter.csproj -- extract-iggy <pause.uasset> <new-output.iggy>",
+    "python Research/tools/inspect_iggy_movie.py <new-output.iggy> --report <new-report.json>",
+    "python -m unittest discover -s Research/tools -p 'test_iggy_movie_inspector.py' -v",
+    "python Research/tools/export_iggy_object_catalog.py --settings <settings.iggy> --character <character.iggy> --pause <pause.iggy> --output <catalog.json>",
+    "python Research/tools/analyze_iggy_object_links.py --settings <settings.iggy> --character <character.iggy> --pause <pause.iggy> --output <object-links.json>",
+    "python Research/tools/analyze_iggy_runtime_api.py --dll <iggy_w64.dll> --report <native-settings-iggy-runtime-api.json>"
+  ]
+}

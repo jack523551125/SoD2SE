@@ -1,0 +1,196 @@
+{
+  "schema": 1,
+  "target": "target.json",
+  "target_sha256": "EBF0A73E164BAA701F74655585F262F8E38A32B1F6DC5057303489BA5B333ECE",
+  "method": "Search the exact executable image for ASCII FName strings, qword pointers in non-executable PE sections, and decoded immediate/RIP-relative operands in executable .pdata bodies.",
+  "scope": {
+    "game_process_started_or_attached": false,
+    "executable_name": "StateOfDecay2-Win64-Shipping.exe",
+    "enum_name": "EMissionConditionComparison",
+    "enum_value_count": 6
+  },
+  "enum_name_string_occurrences": {
+    "EMissionConditionComparison::Equal": [
+      "0x37d4c48"
+    ],
+    "EMissionConditionComparison::Greater": [
+      "0x37d4d28"
+    ],
+    "EMissionConditionComparison::GreaterOrEqual": [
+      "0x37d4e00"
+    ],
+    "EMissionConditionComparison::Less": [
+      "0x37d4ea0"
+    ],
+    "EMissionConditionComparison::LessOrEqual": [
+      "0x37d4f20"
+    ],
+    "EMissionConditionComparison::NotEqual": [
+      "0x37d5030"
+    ],
+    "EMissionConditionComparison::EMissionConditionComparison_MAX": [
+      "0x37d5120"
+    ],
+    "EMissionConditionComparison": [
+      "0x37d5608"
+    ]
+  },
+  "raw_qword_pointer_slots": {
+    "EMissionConditionComparison::Equal": [
+      {
+        "section": ".rdata",
+        "slot_rva": "0x37d8500",
+        "slot_file_offset": "0x37d7300"
+      }
+    ],
+    "EMissionConditionComparison::Greater": [
+      {
+        "section": ".rdata",
+        "slot_rva": "0x37d8508",
+        "slot_file_offset": "0x37d7308"
+      }
+    ],
+    "EMissionConditionComparison::GreaterOrEqual": [
+      {
+        "section": ".rdata",
+        "slot_rva": "0x37d8510",
+        "slot_file_offset": "0x37d7310"
+      }
+    ],
+    "EMissionConditionComparison::Less": [
+      {
+        "section": ".rdata",
+        "slot_rva": "0x37d8518",
+        "slot_file_offset": "0x37d7318"
+      }
+    ],
+    "EMissionConditionComparison::LessOrEqual": [
+      {
+        "section": ".rdata",
+        "slot_rva": "0x37d8520",
+        "slot_file_offset": "0x37d7320"
+      }
+    ],
+    "EMissionConditionComparison::NotEqual": [
+      {
+        "section": ".rdata",
+        "slot_rva": "0x37d8528",
+        "slot_file_offset": "0x37d7328"
+      }
+    ],
+    "EMissionConditionComparison::EMissionConditionComparison_MAX": [
+      {
+        "section": ".rdata",
+        "slot_rva": "0x37d8530",
+        "slot_file_offset": "0x37d7330"
+      }
+    ],
+    "EMissionConditionComparison": []
+  },
+  "executable_instruction_references": {
+    "EMissionConditionComparison::Equal": [],
+    "EMissionConditionComparison::Greater": [],
+    "EMissionConditionComparison::GreaterOrEqual": [],
+    "EMissionConditionComparison::Less": [],
+    "EMissionConditionComparison::LessOrEqual": [],
+    "EMissionConditionComparison::NotEqual": [],
+    "EMissionConditionComparison::EMissionConditionComparison_MAX": [],
+    "EMissionConditionComparison": [
+      {
+        "site_rva": "0xf65dcf",
+        "function_start_rva": "0xf65d90",
+        "instruction": "lea r9, [rip + 0x286f832]",
+        "operand_index": 1,
+        "reference_kind": "rip-relative-address",
+        "target_rva": "0x37d5608"
+      }
+    ]
+  },
+  "ordered_enum_name_pointer_group_candidate": {
+    "complete": true,
+    "contiguous_qword_pointer_group": true,
+    "entries": [
+      {
+        "name": "EMissionConditionComparison::Equal",
+        "section": ".rdata",
+        "slot_rva": "0x37d8500",
+        "slot_file_offset": "0x37d7300"
+      },
+      {
+        "name": "EMissionConditionComparison::Greater",
+        "section": ".rdata",
+        "slot_rva": "0x37d8508",
+        "slot_file_offset": "0x37d7308"
+      },
+      {
+        "name": "EMissionConditionComparison::GreaterOrEqual",
+        "section": ".rdata",
+        "slot_rva": "0x37d8510",
+        "slot_file_offset": "0x37d7310"
+      },
+      {
+        "name": "EMissionConditionComparison::Less",
+        "section": ".rdata",
+        "slot_rva": "0x37d8518",
+        "slot_file_offset": "0x37d7318"
+      },
+      {
+        "name": "EMissionConditionComparison::LessOrEqual",
+        "section": ".rdata",
+        "slot_rva": "0x37d8520",
+        "slot_file_offset": "0x37d7320"
+      },
+      {
+        "name": "EMissionConditionComparison::NotEqual",
+        "section": ".rdata",
+        "slot_rva": "0x37d8528",
+        "slot_file_offset": "0x37d7328"
+      }
+    ],
+    "reason": null
+  },
+  "maximum_sentinel_pointer_slots": [
+    {
+      "section": ".rdata",
+      "slot_rva": "0x37d8530",
+      "slot_file_offset": "0x37d7330"
+    }
+  ],
+  "ordinal_mapping_candidates": [
+    {
+      "candidate_ordinal": 0,
+      "candidate_name": "Equal",
+      "pointer_slot_rva": "0x37d8500"
+    },
+    {
+      "candidate_ordinal": 1,
+      "candidate_name": "Greater",
+      "pointer_slot_rva": "0x37d8508"
+    },
+    {
+      "candidate_ordinal": 2,
+      "candidate_name": "GreaterOrEqual",
+      "pointer_slot_rva": "0x37d8510"
+    },
+    {
+      "candidate_ordinal": 3,
+      "candidate_name": "Less",
+      "pointer_slot_rva": "0x37d8518"
+    },
+    {
+      "candidate_ordinal": 4,
+      "candidate_name": "LessOrEqual",
+      "pointer_slot_rva": "0x37d8520"
+    },
+    {
+      "candidate_ordinal": 5,
+      "candidate_name": "NotEqual",
+      "pointer_slot_rva": "0x37d8528"
+    }
+  ],
+  "limits": [
+    "The contiguous qword group is raw name-pointer evidence, not an extracted UEnum numeric-value array or executable use site.",
+    "The candidate ordinal order does not prove the field's default value for omitted CommunityMissionCondition properties.",
+    "No live game process or memory was accessed."
+  ]
+}

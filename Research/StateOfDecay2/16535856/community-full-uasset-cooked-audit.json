@@ -1,0 +1,49 @@
+{
+  "schema": 1,
+  "target": "target.json",
+  "target_sha256": "EBF0A73E164BAA701F74655585F262F8E38A32B1F6DC5057303489BA5B333ECE",
+  "method": "Offline Ue4Export wildcard [Text] export of all provider-visible *.uasset packages, followed by BOM-aware JSON decoding and serialized Blueprint call-reference census.",
+  "scope": {
+    "game_build": "Update 38.2 / Steam Build 16535856",
+    "game_process_started_or_attached": false,
+    "pak_index_source": "../../../../asset_index.json",
+    "pak_index_uasset_entries": 105357,
+    "asset_pattern": "*.uasset",
+    "provider_asset_matches": 105357,
+    "json_output_files": 105357,
+    "json_decode_errors": 0,
+    "json_decoder": "Python json.load with encoding=utf-8-sig",
+    "exporter_exit_code": 0,
+    "exporter_warning_asset_count": 0,
+    "exporter_warning_unique_asset_path_count": 0,
+    "exporter_warning_exception_type_counts": {},
+    "warning_assets": [],
+    "decoded_object_count": 494268,
+    "function_count": 16579,
+    "function_bytecode_count": 16579,
+    "top_level_bytecode_expression_count": 209339,
+    "filtered_community_call_reference_count": 654,
+    "filtered_community_call_target_count": 167,
+    "capacity_native_wrapper_reference_counts": {
+      "CanAddCharacter": 0,
+      "CanAddCharacters": 0,
+      "TryAddCharacter": 0,
+      "TryAddCharacterRecord": 3
+    },
+    "full_blueprint_call_report": "community-full-uasset-blueprint-call-analysis.json",
+    "output_directory_is_external_temporary_data": true,
+    "output_directory_contents_retained_in_research": false,
+    "run_log_is_external_temporary_data": true
+  },
+  "parser_provenance": {
+    "exporter_revision": "cf112ad366842f09f43e269914dab5f4d2ee3fcc",
+    "parser_revision": "cb6fba1bed6d2feaba7e1972b6b5fade9d49fb7b",
+    "configuration": "ReadScriptData=true; temporary null-safe UEnum.WriteJson and UAssetImportData.SourceData guards; Ue4Export bin/Release/net8.0 x64 build",
+    "input_assets_are_external_local_game_data": true
+  },
+  "limitations": [
+    "Serialized call references prove only that a call token is present in an exported Blueprint expression tree; they do not prove runtime reachability, execution order, ownership, or caller completeness.",
+    "The census does not resolve EX_VirtualFunction implementations, native virtual/indirect calls, ProcessEvent or delegate dispatch, or save/load invariants.",
+    "The parser null-safety edits were local to the temporary analysis checkout and are not part of any mod or shipped framework."
+  ]
+}

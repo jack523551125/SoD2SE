@@ -1,0 +1,27 @@
+# Generated builds and caches
+/compiled*/
+/Native/build/
+/Native/out/
+/Research/tools/**/bin/
+/Research/tools/**/obj/
+**/__pycache__/
+*.py[cod]
+*.log
+*.dmp
+*.pdb
+*.obj
+*.ilk
+
+# Runtime packages and game-owned data
+*.dll
+*.exe
+*.zip
+*.7z
+*.rar
+*.pak
+*.uasset
+*.uexp
+*.ubulk
+*.iggy
+*.sav
+*.tmp

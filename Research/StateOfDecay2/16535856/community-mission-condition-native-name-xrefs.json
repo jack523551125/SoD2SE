@@ -1,0 +1,249 @@
+{
+  "schema": 1,
+  "target": "target.json",
+  "target_sha256": "EBF0A73E164BAA701F74655585F262F8E38A32B1F6DC5057303489BA5B333ECE",
+  "scope": {
+    "game_process_started_or_attached": false,
+    "executable_name": "StateOfDecay2-Win64-Shipping.exe",
+    "executable_pdata_ranges_scanned": 259728,
+    "searched_name_occurrence_count": 30,
+    "searched_wide_name_occurrence_count": 6
+  },
+  "method": "For each exact ASCII occurrence, scan aligned qword pointers in non-executable sections and decode executable .pdata bodies for immediate/RIP-relative operands that resolve to that occurrence.",
+  "string_occurrences_ascii": {
+    "MissionCondition": [
+      "0x359f2f0",
+      "0x36ce900",
+      "0x3cda2d0",
+      "0x3ce2638"
+    ],
+    "Comparison": [
+      "0x369fa48",
+      "0x36ab5b8",
+      "0x36b2f88",
+      "0x36c2d47",
+      "0x36d74fb",
+      "0x3745d64",
+      "0x3781008",
+      "0x37c2ed9",
+      "0x37c4910",
+      "0x37d5619",
+      "0x37d7438",
+      "0x3a2e828"
+    ],
+    "ComparisonStat": [
+      "0x37c19d9",
+      "0x37d3e19",
+      "0x37dbdc0"
+    ],
+    "CommunityMembers": [
+      "0x35cf383",
+      "0x36b9bfb",
+      "0x36cd2d6",
+      "0x376be63",
+      "0x3779b3b",
+      "0x37c0f59",
+      "0x37d38f1",
+      "0x37da4d1"
+    ],
+    "CommunityOutposts": [
+      "0x36cd3b6",
+      "0x37da589"
+    ],
+    "EMissionConditionComparison": [
+      "0x37d5608"
+    ]
+  },
+  "string_occurrences_utf16le": {
+    "UCommunityMissionCondition": [
+      "0x35c0398",
+      "0x35c18b8",
+      "0x37dbf70"
+    ],
+    "CommunityMissionCondition": [
+      "0x35c039a",
+      "0x35c18ba",
+      "0x37dbf72"
+    ]
+  },
+  "raw_qword_pointer_slots": {
+    "ascii:MissionCondition#0": [],
+    "ascii:MissionCondition#1": [],
+    "ascii:MissionCondition#2": [],
+    "ascii:MissionCondition#3": [],
+    "ascii:Comparison#0": [],
+    "ascii:Comparison#1": [],
+    "ascii:Comparison#2": [],
+    "ascii:Comparison#3": [],
+    "ascii:Comparison#4": [],
+    "ascii:Comparison#5": [],
+    "ascii:Comparison#6": [],
+    "ascii:Comparison#7": [],
+    "ascii:Comparison#8": [],
+    "ascii:Comparison#9": [],
+    "ascii:Comparison#10": [],
+    "ascii:Comparison#11": [],
+    "ascii:ComparisonStat#0": [],
+    "ascii:ComparisonStat#1": [],
+    "ascii:ComparisonStat#2": [],
+    "ascii:CommunityMembers#0": [],
+    "ascii:CommunityMembers#1": [],
+    "ascii:CommunityMembers#2": [],
+    "ascii:CommunityMembers#3": [],
+    "ascii:CommunityMembers#4": [],
+    "ascii:CommunityMembers#5": [],
+    "ascii:CommunityMembers#6": [],
+    "ascii:CommunityMembers#7": [],
+    "ascii:CommunityOutposts#0": [],
+    "ascii:CommunityOutposts#1": [],
+    "ascii:EMissionConditionComparison#0": [],
+    "utf16le:UCommunityMissionCondition#0": [],
+    "utf16le:UCommunityMissionCondition#1": [],
+    "utf16le:UCommunityMissionCondition#2": [],
+    "utf16le:CommunityMissionCondition#0": [],
+    "utf16le:CommunityMissionCondition#1": [],
+    "utf16le:CommunityMissionCondition#2": []
+  },
+  "executable_instruction_references": {
+    "ascii:MissionCondition#0": [],
+    "ascii:MissionCondition#1": [],
+    "ascii:MissionCondition#2": [],
+    "ascii:MissionCondition#3": [
+      {
+        "site_rva": "0x253004f",
+        "function_start_rva": "0x2530020",
+        "instruction": "lea rcx, [rip + 0x17b25e2]",
+        "operand_index": 1,
+        "reference_kind": "rip-relative-address",
+        "target_rva": "0x3ce2638"
+      },
+      {
+        "site_rva": "0x25301a4",
+        "function_start_rva": "0x253009a",
+        "instruction": "lea r12, [rip + 0x17b248d]",
+        "operand_index": 1,
+        "reference_kind": "rip-relative-address",
+        "target_rva": "0x3ce2638"
+      }
+    ],
+    "ascii:Comparison#0": [
+      {
+        "site_rva": "0xb5701d",
+        "function_start_rva": "0xb56f6e",
+        "instruction": "lea r9, [rip + 0x2b48a24]",
+        "operand_index": 1,
+        "reference_kind": "rip-relative-address",
+        "target_rva": "0x369fa48"
+      }
+    ],
+    "ascii:Comparison#1": [
+      {
+        "site_rva": "0xbc3814",
+        "function_start_rva": "0xbc3569",
+        "instruction": "lea r9, [rip + 0x2ae7d9d]",
+        "operand_index": 1,
+        "reference_kind": "rip-relative-address",
+        "target_rva": "0x36ab5b8"
+      }
+    ],
+    "ascii:Comparison#2": [
+      {
+        "site_rva": "0xbb5935",
+        "function_start_rva": "0xbb5769",
+        "instruction": "lea r9, [rip + 0x2afd64c]",
+        "operand_index": 1,
+        "reference_kind": "rip-relative-address",
+        "target_rva": "0x36b2f88"
+      }
+    ],
+    "ascii:Comparison#3": [],
+    "ascii:Comparison#4": [],
+    "ascii:Comparison#5": [],
+    "ascii:Comparison#6": [
+      {
+        "site_rva": "0xe6c776",
+        "function_start_rva": "0xe6c629",
+        "instruction": "lea r9, [rip + 0x291488b]",
+        "operand_index": 1,
+        "reference_kind": "rip-relative-address",
+        "target_rva": "0x3781008"
+      }
+    ],
+    "ascii:Comparison#7": [],
+    "ascii:Comparison#8": [
+      {
+        "site_rva": "0xf3209d",
+        "function_start_rva": "0xf31fee",
+        "instruction": "lea r9, [rip + 0x289286c]",
+        "operand_index": 1,
+        "reference_kind": "rip-relative-address",
+        "target_rva": "0x37c4910"
+      }
+    ],
+    "ascii:Comparison#9": [],
+    "ascii:Comparison#10": [
+      {
+        "site_rva": "0xf3226d",
+        "function_start_rva": "0xf321be",
+        "instruction": "lea r9, [rip + 0x28a51c4]",
+        "operand_index": 1,
+        "reference_kind": "rip-relative-address",
+        "target_rva": "0x37d7438"
+      }
+    ],
+    "ascii:Comparison#11": [],
+    "ascii:ComparisonStat#0": [],
+    "ascii:ComparisonStat#1": [],
+    "ascii:ComparisonStat#2": [
+      {
+        "site_rva": "0xfc7cb5",
+        "function_start_rva": "0xfc7ca1",
+        "instruction": "lea r9, [rip + 0x2814104]",
+        "operand_index": 1,
+        "reference_kind": "rip-relative-address",
+        "target_rva": "0x37dbdc0"
+      }
+    ],
+    "ascii:CommunityMembers#0": [],
+    "ascii:CommunityMembers#1": [],
+    "ascii:CommunityMembers#2": [],
+    "ascii:CommunityMembers#3": [],
+    "ascii:CommunityMembers#4": [],
+    "ascii:CommunityMembers#5": [],
+    "ascii:CommunityMembers#6": [],
+    "ascii:CommunityMembers#7": [],
+    "ascii:CommunityOutposts#0": [],
+    "ascii:CommunityOutposts#1": [],
+    "ascii:EMissionConditionComparison#0": [
+      {
+        "site_rva": "0xf65dcf",
+        "function_start_rva": "0xf65d90",
+        "instruction": "lea r9, [rip + 0x286f832]",
+        "operand_index": 1,
+        "reference_kind": "rip-relative-address",
+        "target_rva": "0x37d5608"
+      }
+    ],
+    "utf16le:UCommunityMissionCondition#0": [],
+    "utf16le:UCommunityMissionCondition#1": [],
+    "utf16le:UCommunityMissionCondition#2": [],
+    "utf16le:CommunityMissionCondition#0": [],
+    "utf16le:CommunityMissionCondition#1": [
+      {
+        "site_rva": "0xa2f92b",
+        "function_start_rva": "0xa2f8f0",
+        "instruction": "lea rdx, [rip + 0x2b91f88]",
+        "operand_index": 1,
+        "reference_kind": "rip-relative-address",
+        "target_rva": "0x35c18ba"
+      }
+    ],
+    "utf16le:CommunityMissionCondition#2": []
+  },
+  "limits": [
+    "The report only covers exact ASCII strings, aligned qword pointer slots, and directly decoded immediate/RIP-relative code operands.",
+    "It does not resolve FName hashes, relocation records, pointer tables with other encodings, property metadata accessed through reflection, or serialized/default object construction.",
+    "No direct code reference or raw pointer match does not prove a name or field is unused.",
+    "No live game process or memory was accessed."
+  ]
+}

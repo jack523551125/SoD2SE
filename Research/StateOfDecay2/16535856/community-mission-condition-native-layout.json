@@ -1,0 +1,145 @@
+{
+  "schema": 1,
+  "target": "target.json",
+  "target_sha256": "EBF0A73E164BAA701F74655585F262F8E38A32B1F6DC5057303489BA5B333ECE",
+  "scope": {
+    "game_process_started_or_attached": false,
+    "executable_name": "StateOfDecay2-Win64-Shipping.exe"
+  },
+  "method": "Decode the fixed-build class initializer, native class-name registration stubs, and field property-offset construction calls over CHAININFO-linked .pdata ranges.",
+  "community_initializer": {
+    "root_rva": "0xfc7c40",
+    "direct_dependency_calls": [
+      {
+        "site_rva": "0xfc7c71",
+        "target_rva": "0xf32160",
+        "instruction": "call 0xf32160"
+      },
+      {
+        "site_rva": "0xfc7c82",
+        "target_rva": "0xa2f8f0",
+        "instruction": "call 0xa2f8f0"
+      }
+    ],
+    "association_note": "The initializer calls the Value/Comparison property initializer before registering UCommunityMissionCondition, then registers ComparisonStat in the same body. The source does not expose a symbolic field-owner token for the first two descriptors, so their association is a static initializer-chain inference."
+  },
+  "class_registrations": {
+    "UMissionCondition": {
+      "root_rva": "0xa42df0",
+      "class_name": "UMissionCondition",
+      "class_name_reference": {
+        "site_rva": "0xa42e24",
+        "name_rva": "0x355f2b2",
+        "referenced_suffix": "MissionCondition",
+        "instruction": "lea rdx, [rip + 0x2b1c487]"
+      },
+      "registered_size_argument_candidate": 40,
+      "class_flags_argument_candidate": 268435457,
+      "helper_call": {
+        "site_rva": "0xa42e6f",
+        "target_rva": "0x11a4680",
+        "instruction": "call 0x11a4680"
+      }
+    },
+    "UCommunityMissionCondition": {
+      "root_rva": "0xa2f8f0",
+      "class_name": "UCommunityMissionCondition",
+      "class_name_reference": {
+        "site_rva": "0xa2f92b",
+        "name_rva": "0x35c18ba",
+        "referenced_suffix": "CommunityMissionCondition",
+        "instruction": "lea rdx, [rip + 0x2b91f88]"
+      },
+      "registered_size_argument_candidate": 56,
+      "class_flags_argument_candidate": 268435456,
+      "helper_call": {
+        "site_rva": "0xa2f976",
+        "target_rva": "0x11a4680",
+        "instruction": "call 0x11a4680"
+      }
+    }
+  },
+  "field_layout_candidates": [
+    {
+      "name": "Value",
+      "name_reference": {
+        "site_rva": "0xf321e5",
+        "name_rva": "0x37d6ca4",
+        "instruction": "lea r9, [rip + 0x28a4ab8]"
+      },
+      "offset_candidate": 44,
+      "offset_setup": {
+        "site_rva": "0xf32226",
+        "instruction": "lea r9d, [rdi + 0x2c]"
+      },
+      "property_offset_attach_call": {
+        "site_rva": "0xf32238",
+        "target_rva": "0x11d27c0",
+        "instruction": "call 0x11d27c0"
+      }
+    },
+    {
+      "name": "Comparison",
+      "name_reference": {
+        "site_rva": "0xf3226d",
+        "name_rva": "0x37d7438",
+        "instruction": "lea r9, [rip + 0x28a51c4]"
+      },
+      "offset_candidate": 40,
+      "offset_setup": {
+        "site_rva": "0xf322a7",
+        "instruction": "mov r9d, 0x28"
+      },
+      "property_offset_attach_call": {
+        "site_rva": "0xf322bb",
+        "target_rva": "0x11d27c0",
+        "instruction": "call 0x11d27c0"
+      },
+      "enum_initializer_call": {
+        "site_rva": "0xf32292",
+        "target_rva": "0xf65d90",
+        "instruction": "call 0xf65d90"
+      }
+    },
+    {
+      "name": "ComparisonStat",
+      "name_reference": {
+        "site_rva": "0xfc7cb5",
+        "name_rva": "0x37dbdc0",
+        "instruction": "lea r9, [rip + 0x2814104]"
+      },
+      "offset_candidate": 48,
+      "offset_setup": {
+        "site_rva": "0xfc7d06",
+        "instruction": "lea r9d, [rdi + 0x30]"
+      },
+      "property_offset_attach_call": {
+        "site_rva": "0xfc7d18",
+        "target_rva": "0x11d27c0",
+        "instruction": "call 0x11d27c0"
+      }
+    }
+  ],
+  "layout_inference": {
+    "candidate_class": "UCommunityMissionCondition",
+    "candidate_size_argument": 56,
+    "field_offsets_by_name": {
+      "Value": 44,
+      "Comparison": 40,
+      "ComparisonStat": 48
+    },
+    "confidence": "strong-static-initializer-chain-inference",
+    "reason": "The named Comparison, Value, and ComparisonStat registrations attach at offsets 0x28, 0x2c, and 0x30; the same initializer prepares the first two descriptors, registers UCommunityMissionCondition, and attaches ComparisonStat; the class-registration size argument is 0x38."
+  },
+  "default_value_status": {
+    "Comparison": "unresolved",
+    "reason": "Property offset and enum type registration do not reveal a CDO value. This report does not identify the CDO constructor callback semantics or decode a default object value."
+  },
+  "limits": [
+    "The generic class-registration helper is identified by its direct instruction target, but C++ type hierarchy and constructor callback roles are not reconstructed here.",
+    "The property owner of Value and Comparison is associated with UCommunityMissionCondition by initializer composition; the serialized property descriptors do not provide a symbolic owner label in this report.",
+    "The class-size immediate is recorded as a registration argument candidate, not a runtime sizeof observation.",
+    "No class-default object value is recovered; the omitted Comparison semantics remain unresolved.",
+    "No live game process or memory was accessed."
+  ]
+}

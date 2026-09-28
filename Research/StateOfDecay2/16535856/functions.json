@@ -1,0 +1,3117 @@
+{
+  "schema": 1,
+  "target": "target.json",
+  "description": "Curated native routines, globals, patch sites, and UE4 native registrations recovered for the fixed executable. RVAs are module-relative and only valid for this target hash. Decoded direct-call evidence is maintained in native-body-analysis.json with explicit provenance; absence of an edge there does not rule out reflected or indirect dispatch.",
+  "functions": [
+    {
+      "id": "melee.attitude",
+      "plugin": "melee-speed",
+      "kind": "engine-call",
+      "symbol": "AI attitude query",
+      "rva": "0x14FE90",
+      "calling_convention": "x64 __fastcall",
+      "parameters": [
+        "AI controller",
+        "local pawn"
+      ],
+      "return": "unsigned byte; zero means friendly in the verified target",
+      "confidence": "verified-native-test"
+    },
+    {
+      "id": "melee.action-tick",
+      "plugin": "melee-speed",
+      "kind": "native-hook",
+      "symbol": "ActionTick",
+      "rva": "0x341320",
+      "prologue_guard": "40555357488d6c24d04881ec30010000",
+      "calling_convention": "x64 __fastcall",
+      "parameters": [
+        "action object",
+        "float delta",
+        "int action type",
+        "tick function"
+      ],
+      "behavior": "Scales the action update delta after classification; forwards all other ABI arguments unchanged.",
+      "confidence": "verified-native-test-and-static-guard"
+    },
+    {
+      "id": "melee.animation-tick",
+      "plugin": "melee-speed",
+      "kind": "native-hook",
+      "symbol": "AnimationTick",
+      "rva": "0x1C88F50",
+      "prologue_guard": "40564883ec304883b97806000000",
+      "calling_convention": "x64 __fastcall",
+      "parameters": [
+        "animation object",
+        "float delta",
+        "bool root motion"
+      ],
+      "behavior": "Scales the matching animation update delta so action and animation clocks stay synchronized.",
+      "confidence": "verified-native-test-and-static-guard"
+    },
+    {
+      "id": "melee.local-player-global",
+      "plugin": "melee-speed",
+      "kind": "global",
+      "symbol": "DaytonLocalPlayer global",
+      "rva": "0x470C690",
+      "behavior": "Resolves the local pawn and separates local player, friendly AI, and other humans.",
+      "confidence": "verified-native-test"
+    },
+    {
+      "id": "melee.fname-index-table",
+      "plugin": "melee-speed",
+      "kind": "global",
+      "symbol": "FName index table",
+      "rva": "0x4629460",
+      "behavior": "Used by the verified UObject/FName classifier.",
+      "confidence": "verified-native-test"
+    },
+    {
+      "id": "melee.fname-pool",
+      "plugin": "melee-speed",
+      "kind": "global",
+      "symbol": "FName pool",
+      "rva": "0x4629DC8",
+      "behavior": "Used by the verified UObject/FName classifier.",
+      "confidence": "verified-native-test"
+    },
+    {
+      "id": "mission-events.check-mission-phase",
+      "plugin": "research-mission-events",
+      "kind": "native-ufunction",
+      "symbol": "CheckMissionPhase",
+      "rva": "0xA8A740",
+      "patch_ids": [],
+      "behavior": "Mission phase check entry; shares an RVA with UpdateMissionState in the native registration table.",
+      "confidence": "candidate-static"
+    },
+    {
+      "id": "mission-events.create-adjust-spawns",
+      "plugin": "research-mission-events",
+      "kind": "native-ufunction",
+      "symbol": "CreateAdjustSpawnsMissionEvent",
+      "rva": "0xA9BD50",
+      "patch_ids": [],
+      "behavior": "Mission event factory candidate; serialized callers initialize the returned event.",
+      "confidence": "candidate-static"
+    },
+    {
+      "id": "mission-events.create-demo-timer",
+      "plugin": "research-mission-events",
+      "kind": "native-ufunction",
+      "symbol": "CreateDemoVanillaStartDemoTimerMissionEvent",
+      "rva": "0xA9C380",
+      "patch_ids": [],
+      "behavior": "Mission event factory candidate; serialized callers initialize the returned event.",
+      "confidence": "candidate-static"
+    },
+    {
+      "id": "mission-events.create-give-standing",
+      "plugin": "research-mission-events",
+      "kind": "native-ufunction",
+      "symbol": "CreateGiveStandingMissionEvent",
+      "rva": "0xA9C5D0",
+      "patch_ids": [],
+      "behavior": "Mission event factory candidate; serialized callers initialize the returned event.",
+      "confidence": "candidate-static"
+    },
+    {
+      "id": "mission-events.create-mission",
+      "plugin": "research-mission-events",
+      "kind": "native-ufunction",
+      "symbol": "CreateMission",
+      "rva": "0xA9D380",
+      "patch_ids": [],
+      "behavior": "Mission creation registration; no usable .pdata range was recovered for this entry.",
+      "confidence": "candidate-static"
+    },
+    {
+      "id": "mission-events.create-prohibit-spawns",
+      "plugin": "research-mission-events",
+      "kind": "native-ufunction",
+      "symbol": "CreateProhibitSpawnsMissionEvent",
+      "rva": "0xA9D870",
+      "patch_ids": [],
+      "behavior": "Mission event factory candidate; serialized callers initialize the returned event.",
+      "confidence": "candidate-static"
+    },
+    {
+      "id": "mission-events.create-zombie-stasis",
+      "plugin": "research-mission-events",
+      "kind": "native-ufunction",
+      "symbol": "CreateSetZombieStasisMissionEvent",
+      "rva": "0xA9DE90",
+      "patch_ids": [],
+      "behavior": "Mission event factory candidate; serialized callers initialize the returned event.",
+      "confidence": "candidate-static"
+    },
+    {
+      "id": "mission-events.create-spawn-zombie",
+      "plugin": "research-mission-events",
+      "kind": "native-ufunction",
+      "symbol": "CreateSpawnZombieMissionEvent",
+      "rva": "0xA9E030",
+      "patch_ids": [],
+      "behavior": "Mission event factory candidate; serialized callers initialize the returned event.",
+      "confidence": "candidate-static"
+    },
+    {
+      "id": "mission-events.create-turn-character-zombie",
+      "plugin": "research-mission-events",
+      "kind": "native-ufunction",
+      "symbol": "CreateTurnCharacterToZombieMissionEvent",
+      "rva": "0xA9E130",
+      "patch_ids": [],
+      "behavior": "Mission event factory candidate; serialized callers initialize the returned event.",
+      "confidence": "candidate-static"
+    },
+    {
+      "id": "mission-events.finish-condition-check",
+      "plugin": "research-mission-events",
+      "kind": "native-ufunction",
+      "symbol": "FinishConditionCheck",
+      "rva": "0xA9FA90",
+      "patch_ids": [],
+      "behavior": "Mission condition completion-check entry; invocation ordering and condition ownership remain unresolved.",
+      "confidence": "candidate-static"
+    },
+    {
+      "id": "mission-events.initialize-event",
+      "plugin": "research-mission-events",
+      "kind": "native-ufunction",
+      "symbol": "InitializeEvent",
+      "rva": "0xAD2A40",
+      "patch_ids": [],
+      "behavior": "Creates/initializes a mission event instance; EventName dispatch semantics remain unresolved.",
+      "confidence": "candidate-static"
+    },
+    {
+      "id": "mission-events.mission-cancelled",
+      "plugin": "research-mission-events",
+      "kind": "native-ufunction",
+      "symbol": "MissionCancelled",
+      "rva": "0xADC500",
+      "patch_ids": [],
+      "behavior": "Mission-cancellation notification candidate; ordering and replay behavior remain unresolved.",
+      "confidence": "candidate-static"
+    },
+    {
+      "id": "mission-events.mission-complete",
+      "plugin": "research-mission-events",
+      "kind": "native-ufunction",
+      "symbol": "MissionComplete",
+      "rva": "0xADC580",
+      "patch_ids": [],
+      "behavior": "Mission-completion notification candidate; authority and one-shot semantics remain unresolved.",
+      "confidence": "candidate-static"
+    },
+    {
+      "id": "mission-events.multicast-fire-event",
+      "plugin": "research-mission-events",
+      "kind": "native-ufunction",
+      "symbol": "MulticastFireEvent",
+      "rva": "0xADE3D0",
+      "patch_ids": [],
+      "behavior": "Replicated event-name dispatch candidate; ownership and mission relationship remain unverified.",
+      "confidence": "candidate-static"
+    },
+    {
+      "id": "mission-events.async-creation-complete",
+      "plugin": "research-mission-events",
+      "kind": "native-ufunction",
+      "symbol": "OnAsyncMissionCreationComplete",
+      "rva": "0xAE60B0",
+      "patch_ids": [],
+      "behavior": "Mission creation callback candidate; ordering and one-shot semantics remain unresolved.",
+      "confidence": "candidate-static"
+    },
+    {
+      "id": "mission-events.send-mission-to-state",
+      "plugin": "research-mission-events",
+      "kind": "native-ufunction",
+      "symbol": "SendMissionToState",
+      "rva": "0xB03780",
+      "patch_ids": [],
+      "behavior": "Mission state transition candidate; transition ordering and persistence semantics remain unresolved.",
+      "confidence": "candidate-static"
+    },
+    {
+      "id": "mission-events.try-spawn-mission",
+      "plugin": "research-mission-events",
+      "kind": "native-ufunction",
+      "symbol": "TrySpawnMission",
+      "rva": "0xB28720",
+      "patch_ids": [],
+      "behavior": "Mission scheduling/spawn candidate; selection and activation semantics remain unresolved.",
+      "confidence": "candidate-static"
+    },
+    {
+      "id": "mission-events.try-spawn-mission-async",
+      "plugin": "research-mission-events",
+      "kind": "native-ufunction",
+      "symbol": "TrySpawnMissionAsync",
+      "rva": "0xB28810",
+      "patch_ids": [],
+      "behavior": "Asynchronous mission creation candidate; callback ordering remains unresolved.",
+      "confidence": "candidate-static"
+    },
+    {
+      "id": "mission-events.legacy-popup-fire-event",
+      "plugin": "research-mission-events",
+      "kind": "native-ufunction",
+      "symbol": "ULPopupLegacyMissionFireEvent",
+      "rva": "0xB33B70",
+      "patch_ids": [],
+      "behavior": "Legacy mission event hook candidate; no usable .pdata range was recovered for this entry.",
+      "confidence": "candidate-static"
+    },
+    {
+      "id": "mission-events.update-mission-state",
+      "plugin": "research-mission-events",
+      "kind": "native-ufunction",
+      "symbol": "UpdateMissionState",
+      "rva": "0xA8A740",
+      "patch_ids": [],
+      "behavior": "Mission state update registration alias at the same native RVA as CheckMissionPhase.",
+      "confidence": "candidate-static"
+    },
+    {
+      "id": "roguelite-damage.add-damage-listener",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "AddDamageListener",
+      "rva": "0xA80FC0",
+      "prologue_guard": "48895C2408574883EC4048837A20000F57C0488BF9488BDAF30F7F442420488B",
+      "registration_rva": "0x3694C30",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "注册伤害监听。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-damage.add-or-update-attacker",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "AddOrUpdateAttacker",
+      "rva": "0xA82090",
+      "prologue_guard": "48895C24084889742418574883EC2033FF488BF1488BDA48897C2438488BCA48",
+      "registration_rva": "0x36933E0",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "记录或更新攻击者归属。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-progression.add-skills",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "AddSkills",
+      "rva": "0xA829A0",
+      "prologue_guard": "48895C24084889742410574881EC70020000488BF1488BDA488D4C2420E88E1B",
+      "registration_rva": "0x3696B80",
+      "capabilities": [
+        "sod2.survivor.progression"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "批量增加技能。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-progression.add-trait",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "AddTrait",
+      "rva": "0xA832D0",
+      "prologue_guard": "48895C240848896C24184889742420574883EC2033FF488BE9498BF0488BDA48",
+      "registration_rva": "0x368EAC0",
+      "capabilities": [
+        "sod2.survivor.progression"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "增加角色特性。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-progression.add-traits",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "AddTraits",
+      "rva": "0xA83360",
+      "prologue_guard": "48895C24084889742410574881EC70020000488BF1488BDA488D4C2420E8CE11",
+      "registration_rva": "0x3696BA0",
+      "capabilities": [
+        "sod2.survivor.progression"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "批量增加角色特性。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-kill.add-zombie-killed",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "AddZombieKilled",
+      "rva": "0xA835C0",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E82D",
+      "registration_rva": "0x368EAE0",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "累加丧尸击杀计数。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-damage.apply-damage",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "ApplyDamage",
+      "rva": "0xA88230",
+      "prologue_guard": "48895C2408574883EC2048837A20000F57C0488BF9F30F11442438488BDA488B",
+      "registration_rva": "0x3697C90",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "伤害应用入口。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-damage.apply-damage-244db50",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "ApplyDamage",
+      "rva": "0x244DB50",
+      "prologue_guard": "488BC44889580848896818565741564883EC5048837A20004C8BF1488BCAC740",
+      "registration_rva": "0x3CBC350",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "Engine",
+      "unwind_info_entry": true,
+      "behavior": "伤害应用入口。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-damage.apply-damage-244dcc0",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "ApplyDamage",
+      "rva": "0x244DCC0",
+      "prologue_guard": "48895C2408574883EC5033FF488BDA488BCA48897C244048397A207410488B52",
+      "registration_rva": "0x3CBDE90",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "Engine",
+      "unwind_info_entry": true,
+      "behavior": "伤害应用入口。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-damage.apply-damage-from-attached-character",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "ApplyDamageFromAttachedCharacter",
+      "rva": "0xA882B0",
+      "prologue_guard": "48895C2408555657488BEC4883EC6033FF488BF1488BDA48897DD8488BCA4839",
+      "registration_rva": "0x3694E50",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "来自附着角色的伤害应用。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-damage.apply-damage-to-human-native",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "ApplyDamageToHuman_Native",
+      "rva": "0xA88430",
+      "prologue_guard": "48895C2408574883EC3033FF488BDA488BCA48897C242048397A207410488B52",
+      "registration_rva": "0x3693F40",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "对人类角色应用伤害的原生实现。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-damage.apply-dynamic-hit-reacts",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "ApplyDynamicHitReacts",
+      "rva": "0xA88660",
+      "prologue_guard": "48895C24084889742410574883EC3033FF488BF1488BDA48897C2420488BCA48",
+      "registration_rva": "0x368F890",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "动态受击反应应用。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-damage.apply-fall-injury",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "ApplyFallInjury",
+      "rva": "0xA88710",
+      "prologue_guard": "48895C24084889742418574883EC2033FF488BF1488BDA897C2438488BCA4839",
+      "registration_rva": "0x368EAF0",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "坠落创伤应用。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-attributes.apply-stamina-loss",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "ApplyStaminaLoss",
+      "rva": "0xA893E0",
+      "prologue_guard": "48895C2408574883EC2048837A20000F57C0488BF9F30F11442438488BDA488B",
+      "registration_rva": "0x36949A0",
+      "capabilities": [
+        "sod2.survivor.attributes"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "体力扣减应用。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-damage.attacker-add",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "AttackerAdd",
+      "rva": "0xA8AA80",
+      "prologue_guard": "48895C24084889742418574883EC2033FF488BF1488BDA48897C2438488BCA48",
+      "registration_rva": "0x368C480",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "增加攻击者记录。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-damage.attacker-remove",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "AttackerRemove",
+      "rva": "0xA8AB00",
+      "prologue_guard": "48895C24084889742418574883EC2033FF488BF1488BDA48897C2438488BCA48",
+      "registration_rva": "0x368C490",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "移除攻击者记录。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-progression.auth-award-experience",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "AuthAwardExperience",
+      "rva": "0xA8AFD0",
+      "prologue_guard": "48895C2408574883EC2033FF488BDA488BCA48897C244848397A207410488B52",
+      "registration_rva": "0x3694800",
+      "capabilities": [
+        "sod2.survivor.progression"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "服务器侧授予经验。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-kill.auth-on-zombie-killed",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "AuthOnZombieKilled",
+      "rva": "0xA8B590",
+      "prologue_guard": "48895C24084889742418574883EC2048837A2000488BF1488BCAC64424380048",
+      "registration_rva": "0x3696300",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "服务器侧丧尸击杀授权处理。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-progression.award-experience",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "AwardExperience",
+      "rva": "0xA8C600",
+      "prologue_guard": "48895C2408574883EC2048837A20000F57C0488BF9F30F11442438488BDA488B",
+      "registration_rva": "0x368B8E0",
+      "capabilities": [
+        "sod2.survivor.progression"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "授予角色经验。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-progression.award-experience-a8c680",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "AwardExperience",
+      "rva": "0xA8C680",
+      "prologue_guard": "48895C24084889742418574883EC2033FF488BF1488BDA48897C2438488BCA48",
+      "registration_rva": "0x368EB10",
+      "capabilities": [
+        "sod2.survivor.progression"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "授予角色经验。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-attributes.begin-stamina-drain-untyped",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "BeginStaminaDrainUntyped",
+      "rva": "0xA8CF00",
+      "prologue_guard": "48895C2408574883EC2048837A2000488BF9488BCAC644243800488BDA741048",
+      "registration_rva": "0x36949B0",
+      "capabilities": [
+        "sod2.survivor.attributes"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "开始体力消耗。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-progression.can-gain-experience",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "CanGainExperience",
+      "rva": "0xA8F480",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E8CD",
+      "registration_rva": "0x368B8F0",
+      "capabilities": [
+        "sod2.survivor.progression"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "能否获得经验判定。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-pause.can-pause",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "CanPause",
+      "rva": "0x24D2750",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E8FD",
+      "registration_rva": "0x3CC47E0",
+      "capabilities": [
+        "sod2.session.single-player-pause"
+      ],
+      "origin": "Engine",
+      "unwind_info_entry": true,
+      "behavior": "是否允许暂停。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-pause.can-pause-29a26d0",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "CanPause",
+      "rva": "0x29A26D0",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E8FD",
+      "registration_rva": "0x3E0D210",
+      "capabilities": [
+        "sod2.session.single-player-pause"
+      ],
+      "origin": "Engine",
+      "unwind_info_entry": true,
+      "behavior": "是否允许暂停。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-attributes.chance-apply-injury",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "ChanceApplyInjury",
+      "rva": "0xA90910",
+      "prologue_guard": "48895C24085556574883EC2033FF488BE9498BF0488BDA488BCA48897C245048",
+      "registration_rva": "0x368EB30",
+      "capabilities": [
+        "sod2.survivor.attributes"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "按概率施加创伤。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-attributes.chance-apply-injury-to-character",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "ChanceApplyInjuryToCharacter",
+      "rva": "0xA909E0",
+      "prologue_guard": "48895C24184889742420574883EC2033FF488BF1488BDA48897C2438488BCA48",
+      "registration_rva": "0x368F940",
+      "capabilities": [
+        "sod2.survivor.attributes"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "按概率对角色施加创伤。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-attributes.chance-apply-plague-to-character",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "ChanceApplyPlagueToCharacter",
+      "rva": "0xA90AB0",
+      "prologue_guard": "48895C2418574883EC2048837A2000488BF9488BCAC744243800000000488BDA",
+      "registration_rva": "0x368F950",
+      "capabilities": [
+        "sod2.survivor.attributes"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "按概率对角色施加血疫。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-progression.clamp-level",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "ClampLevel",
+      "rva": "0xA930D0",
+      "prologue_guard": "48895C2408574883EC2048837A2000498BF8488BDAC644243800488BCA741048",
+      "registration_rva": "0x368B8A0",
+      "capabilities": [
+        "sod2.survivor.progression"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "等级取值约束。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-damage.client-character-was-hit",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "ClientCharacterWasHit",
+      "rva": "0xA94110",
+      "prologue_guard": "48895C2418555657488D6C24B94881ECD000000033FF488BF1488BDA897D6F48",
+      "registration_rva": "0x368C1E0",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "客户端角色被命中回调。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-identity.client-clear-current-survivor-id",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "ClientClearCurrentSurvivorID",
+      "rva": "0xA8BE30",
+      "prologue_guard": "488B42204533C04885C0410F95C04C03C04C894220488B0148FFA098030000CC",
+      "registration_rva": "0x368C1F0",
+      "capabilities": [
+        "sod2.survivor.identity"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": false,
+      "behavior": "客户端清除当前幸存者 ID。",
+      "confidence": "static-registration-mid-function"
+    },
+    {
+      "id": "roguelite-damage.client-owner-was-hit",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "ClientOwnerWasHit",
+      "rva": "0xA975F0",
+      "prologue_guard": "48895C2418555657488D6C24B04881EC5001000033FF488BF1488BDA4889BD88",
+      "registration_rva": "0x368C780",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "客户端所有者被命中回调。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-identity.client-set-current-survivor-id",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "ClientSetCurrentSurvivorID",
+      "rva": "0xA977A0",
+      "prologue_guard": "48895C24104889742418574883EC2033FF488BF1488BDA897C2430488BCA4839",
+      "registration_rva": "0x368C200",
+      "capabilities": [
+        "sod2.survivor.identity"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "客户端设置当前幸存者 ID。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "survivor-ui.close-all-movie-players",
+      "plugin": "survivor-roguelite",
+      "kind": "ui-native-candidate",
+      "symbol": "CloseAllMoviePlayers",
+      "rva": "0xA99B90",
+      "prologue_guard": "488B42204533C04885C0410F95C04C03C04C894220E9F609D3FFCCCCCCCCCCCC",
+      "registration_rva": "0x369DFC0",
+      "capabilities": [
+        "sod2.ui.native-progression"
+      ],
+      "unwind_info_entry": false,
+      "behavior": "Iggy 播放器关闭相关反射注册；当前映射落在共享分发桩，未确认具体对象范围或可安全调用方式。",
+      "confidence": "static-registration-wrapper"
+    },
+    {
+      "id": "survivor-ui.close-character-ui",
+      "plugin": "survivor-roguelite",
+      "kind": "ui-native-candidate",
+      "symbol": "CloseCharacterUI",
+      "rva": "0xA99C20",
+      "prologue_guard": "488B42204533C04885C0410F95C04C03C04C894220488B0148FF6008CCCCCCCC",
+      "registration_rva": "0x3694B10",
+      "capabilities": [
+        "sod2.ui.native-progression"
+      ],
+      "unwind_info_entry": false,
+      "behavior": "Character UI 关闭相关静态注册符号；地址为反射分发桩，不能据此推断安全的 UI 扩展点。",
+      "confidence": "static-registration-wrapper"
+    },
+    {
+      "id": "survivor-ui.close-character-ui-native",
+      "plugin": "survivor-roguelite",
+      "kind": "ui-native-candidate",
+      "symbol": "CloseCharacterUI_Native",
+      "rva": "0xA99C40",
+      "prologue_guard": "488B42204533C04885C0410F95C04C03C04C894220E986A5C6FFCCCCCCCCCCCC",
+      "registration_rva": "0x3695810",
+      "capabilities": [
+        "sod2.ui.native-progression"
+      ],
+      "unwind_info_entry": false,
+      "behavior": "Character UI 关闭相关反射分发桩；尚未证明该函数可安全用于插入自定义页面。",
+      "confidence": "static-registration-wrapper"
+    },
+    {
+      "id": "roguelite-enemy.contains-blood-plague-node",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "ContainsBloodPlagueNode",
+      "rva": "0xA9AB10",
+      "prologue_guard": "48895C240848896C24104889742418574883EC3033FF488BE9498BF0488BDA48",
+      "registration_rva": "0x368E5B0",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "是否包含血疫节点。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "survivor-ui.create-movie-player",
+      "plugin": "survivor-roguelite",
+      "kind": "ui-native-candidate",
+      "symbol": "CreateMoviePlayer",
+      "rva": "0xA9D3A0",
+      "prologue_guard": "48895C240848896C24184889742420574883EC2033FF488BE9498BF0488BDA48",
+      "registration_rva": "0x369DFD0",
+      "capabilities": [
+        "sod2.ui.native-progression"
+      ],
+      "unwind_info_entry": true,
+      "behavior": "电影播放器创建相关反射注册；静态函数体读取参数帧并调用内部类检查助手，参数布局、创建语义和自定义资源路径均未确认。",
+      "confidence": "static-registration-only"
+    },
+    {
+      "id": "roguelite-pause.dayton-input-action-debug-pause-toggle",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "DaytonInputAction_Debug_Pause_Toggle",
+      "rva": "0xA9FB80",
+      "prologue_guard": "48895C24084889742410574883EC5033FF0F57C0488BF1488BDA488BCA48897C",
+      "registration_rva": "0x3696F70",
+      "capabilities": [
+        "sod2.session.single-player-pause"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "调试用暂停切换输入动作。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-kill.death-over",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "DeathOver",
+      "rva": "0xAA17C0",
+      "prologue_guard": "488B42204533C04885C0410F95C04C03C04C894220E9F60773FFCCCCCCCCCCCC",
+      "registration_rva": "0x3698230",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": false,
+      "behavior": "死亡流程结束回调。",
+      "confidence": "static-registration-mid-function"
+    },
+    {
+      "id": "roguelite-kill.die",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "Die",
+      "rva": "0xAA3370",
+      "prologue_guard": "488B42204533C04885C0410F95C04C03C04C894220E936F372FFCCCCCCCCCCCC",
+      "registration_rva": "0x3698250",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": false,
+      "behavior": "角色死亡流程入口。",
+      "confidence": "static-registration-mid-function"
+    },
+    {
+      "id": "roguelite-attributes.end-stamina-drain",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "EndStaminaDrain",
+      "rva": "0xAA5EF0",
+      "prologue_guard": "488B42204533C04885C0410F95C04C03C04C894220E946F46FFFCCCCCCCCCCCC",
+      "registration_rva": "0x36949C0",
+      "capabilities": [
+        "sod2.survivor.attributes"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": false,
+      "behavior": "结束体力消耗。",
+      "confidence": "static-registration-mid-function"
+    },
+    {
+      "id": "roguelite-progression.find-skill",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "FindSkill",
+      "rva": "0xAA97B0",
+      "prologue_guard": "48895C240848896C24184889742420574883EC2033FF488BE9498BF0488BDA48",
+      "registration_rva": "0x368EC30",
+      "capabilities": [
+        "sod2.survivor.progression"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "查找技能。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-progression.find-trait",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "FindTrait",
+      "rva": "0xAA9B70",
+      "prologue_guard": "48895C240848896C24184889742420574883EC2033FF488BE9498BF0488BDA48",
+      "registration_rva": "0x368EC40",
+      "capabilities": [
+        "sod2.survivor.progression"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "查找角色特性。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-pause.flush-level-streaming",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "FlushLevelStreaming",
+      "rva": "0x246DD10",
+      "prologue_guard": "48895C2408574883EC2033FF488BDA488BCA48897C243848397A207410488B52",
+      "registration_rva": "0x3CBE020",
+      "capabilities": [
+        "sod2.session.single-player-pause"
+      ],
+      "origin": "Engine",
+      "unwind_info_entry": true,
+      "behavior": "关卡流送刷新。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-identity.generate-character-record-from-schema",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GenerateCharacterRecordFromSchema",
+      "rva": "0xAABD80",
+      "prologue_guard": "48895C241848894C24085556574154415541564157488DAC2420FEFFFF4881EC",
+      "registration_rva": "0x368C190",
+      "capabilities": [
+        "sod2.survivor.identity"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "从 schema 生成角色记录。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-damage.get-accumulated-damage",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetAccumulatedDamage",
+      "rva": "0xABBCD0",
+      "prologue_guard": "488B42204533C94885C0410F95C14C03C84C894A208B8130020000418900C3CC",
+      "registration_rva": "0x3697CB0",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": false,
+      "behavior": "累计伤害查询。",
+      "confidence": "static-registration-mid-function"
+    },
+    {
+      "id": "survivor-ui.get-all-movie-players",
+      "plugin": "survivor-roguelite",
+      "kind": "ui-native-candidate",
+      "symbol": "GetAllMoviePlayers",
+      "rva": "0xAADBC0",
+      "prologue_guard": "488B42204533C94885C0410F95C14C03C84C894A20488D91F8000000498BC8E9",
+      "registration_rva": "0x369DFE0",
+      "capabilities": [
+        "sod2.ui.native-progression"
+      ],
+      "unwind_info_entry": false,
+      "behavior": "电影播放器列表查询相关反射注册；当前地址是共享分发代码，尚未验证返回数组与生命周期。",
+      "confidence": "static-registration-wrapper"
+    },
+    {
+      "id": "roguelite-progression.get-base-skill",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetBaseSkill",
+      "rva": "0xAAF850",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E8CD",
+      "registration_rva": "0x368B910",
+      "capabilities": [
+        "sod2.survivor.progression"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "基础技能查询。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-identity.get-character-record-bp",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetCharacterRecord_BP",
+      "rva": "0xAB2AD0",
+      "prologue_guard": "40534881EC70020000488B42204533C94885C0498BD8410F95C14C03C84C894A",
+      "registration_rva": "0x368EC80",
+      "capabilities": [
+        "sod2.survivor.identity"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "取得角色记录，蓝图可调用。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-progression.get-character-skill-library",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetCharacterSkillLibrary",
+      "rva": "0xAB2D60",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E86D",
+      "registration_rva": "0x3692A20",
+      "capabilities": [
+        "sod2.survivor.progression"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "取得角色技能库。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "survivor-ui.get-character-ui",
+      "plugin": "survivor-roguelite",
+      "kind": "ui-native-candidate",
+      "symbol": "GetCharacterUI",
+      "rva": "0xAB2F00",
+      "prologue_guard": "48895C240848896C24184889742420574883EC2033FF488BE9498BF0488BDA48",
+      "registration_rva": "0x36902D0",
+      "capabilities": [
+        "sod2.ui.native-progression"
+      ],
+      "unwind_info_entry": true,
+      "behavior": "Character UI 相关静态注册符号；尚未确认返回对象的生命周期、所有者或调用时机。",
+      "confidence": "static-registration-only"
+    },
+    {
+      "id": "roguelite-damage.get-character-who-hit-most",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetCharacterWhoHitMost",
+      "rva": "0xAB30C0",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E8FD",
+      "registration_rva": "0x3693430",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "命中次数最多的角色查询。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-damage.get-current-attackers",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetCurrentAttackers",
+      "rva": "0xAB5C30",
+      "prologue_guard": "48895C240848896C24104889742418574883EC3033FF488BE9498BF0488BDA48",
+      "registration_rva": "0x3697CC0",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "当前攻击者列表查询。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-progression.get-current-level",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetCurrentLevel",
+      "rva": "0xAB5FC0",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E80D",
+      "registration_rva": "0x368B940",
+      "capabilities": [
+        "sod2.survivor.progression"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "当前等级查询。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-attributes.get-death-handler-component",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetDeathHandlerComponent",
+      "rva": "0xAB6B80",
+      "prologue_guard": "488B42204533C94885C0410F95C14C03C84C894A20488B8190070000498900C3",
+      "registration_rva": "0x3690310",
+      "capabilities": [
+        "sod2.survivor.attributes"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": false,
+      "behavior": "取得死亡处理组件。",
+      "confidence": "static-registration-mid-function"
+    },
+    {
+      "id": "roguelite-attributes.get-effective-health-percentage",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetEffectiveHealthPercentage",
+      "rva": "0xAB83E0",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E8CD",
+      "registration_rva": "0x369E720",
+      "capabilities": [
+        "sod2.survivor.attributes"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "有效生命百分比查询。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-attributes.get-effective-level-buff-resources",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetEffectiveLevelBuffResources",
+      "rva": "0xAB8410",
+      "prologue_guard": "48895C24084889742418574883EC3048837A2000488BF1488BCAC64424480049",
+      "registration_rva": "0x368B970",
+      "capabilities": [
+        "sod2.survivor.attributes"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "角色等级增益资源查询。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-attributes.get-effective-level-community-buff-resources",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetEffectiveLevelCommunityBuffResources",
+      "rva": "0xAB84B0",
+      "prologue_guard": "48895C24084889742418574883EC3048837A2000488BF1488BCAC64424480049",
+      "registration_rva": "0x368B980",
+      "capabilities": [
+        "sod2.survivor.attributes"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "社区等级增益资源查询。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-progression.get-experience-fraction",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetExperienceFraction",
+      "rva": "0xAB96D0",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E86D",
+      "registration_rva": "0x368B990",
+      "capabilities": [
+        "sod2.survivor.progression"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "经验进度比例查询。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-attributes.get-fatigue-rate",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetFatigueRate",
+      "rva": "0xAB9BE0",
+      "prologue_guard": "48895C24104889742418574883EC2048837A2000488BF9488BCAC64424300049",
+      "registration_rva": "0x36949D0",
+      "capabilities": [
+        "sod2.survivor.attributes"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "疲劳增长速率查询。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-enemy.get-has-blood-plague",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetHasBloodPlague",
+      "rva": "0xABAF70",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E87D",
+      "registration_rva": "0x368ECD0",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "是否携带血疫查询。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-enemy.get-has-plague",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetHasPlague",
+      "rva": "0xABAFA0",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E89D",
+      "registration_rva": "0x368FA80",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "是否感染血疫查询。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-attributes.get-health",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetHealth",
+      "rva": "0xABB360",
+      "prologue_guard": "488B42204533C94885C0410F95C14C03C84C894A208B81B8140000418900C3CC",
+      "registration_rva": "0x3699320",
+      "capabilities": [
+        "sod2.survivor.attributes"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": false,
+      "behavior": "生命值查询。",
+      "confidence": "static-registration-mid-function"
+    },
+    {
+      "id": "roguelite-attributes.get-health-current",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetHealthCurrent",
+      "rva": "0xABB380",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E89D",
+      "registration_rva": "0x368ECE0",
+      "capabilities": [
+        "sod2.survivor.attributes"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "当前生命值查询。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-attributes.get-health-max",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetHealthMax",
+      "rva": "0xABB3B0",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E84D",
+      "registration_rva": "0x368ECF0",
+      "capabilities": [
+        "sod2.survivor.attributes"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "最大生命值查询。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-attributes.get-health-peak",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetHealthPeak",
+      "rva": "0xABB3E0",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E8ED",
+      "registration_rva": "0x368ED00",
+      "capabilities": [
+        "sod2.survivor.attributes"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "生命值峰值查询。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-progression.get-highest-level",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetHighestLevel",
+      "rva": "0xABB640",
+      "prologue_guard": "40534883EC20488B422033C94885C0498BD80F95C14803C848894A20E89F2DB7",
+      "registration_rva": "0x368B8B0",
+      "capabilities": [
+        "sod2.survivor.progression"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "最高等级查询。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-identity.get-incoming-character-record-from-id",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetIncomingCharacterRecordFromId",
+      "rva": "0xABBEA0",
+      "prologue_guard": "488BC4488958084889681848897020574881EC7002000033FF488BE9498BF048",
+      "registration_rva": "0x3696BC0",
+      "capabilities": [
+        "sod2.survivor.identity"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "按 ID 取得传入角色记录。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-identity.get-legacy-character-record-from-id",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetLegacyCharacterRecordFromId",
+      "rva": "0xABEA60",
+      "prologue_guard": "488BC4488958084889681848897020574881EC7002000033FF488BE9498BF048",
+      "registration_rva": "0x3696BD0",
+      "capabilities": [
+        "sod2.survivor.identity"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "按 ID 取得遗产角色记录。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-progression.get-max-level",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetMaxLevel",
+      "rva": "0xABFFE0",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E8ED",
+      "registration_rva": "0x368B9B0",
+      "capabilities": [
+        "sod2.survivor.progression"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "等级上限查询。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-attributes.get-maximum-health",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetMaximumHealth",
+      "rva": "0xAC0110",
+      "prologue_guard": "488B42204533C94885C0410F95C14C03C84C894A208B81DC140000418900C3CC",
+      "registration_rva": "0x3699470",
+      "capabilities": [
+        "sod2.survivor.attributes"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": false,
+      "behavior": "最大生命值计算入口。",
+      "confidence": "static-registration-mid-function"
+    },
+    {
+      "id": "survivor-ui.get-movie-player-by-class",
+      "plugin": "survivor-roguelite",
+      "kind": "ui-native-candidate",
+      "symbol": "GetMoviePlayerByClass",
+      "rva": "0xAC17E0",
+      "prologue_guard": "48895C240848896C24184889742420574883EC2033FF488BE9498BF0488BDA48",
+      "registration_rva": "0x369DFF0",
+      "capabilities": [
+        "sod2.ui.native-progression"
+      ],
+      "unwind_info_entry": true,
+      "behavior": "播放器按类查询相关反射注册；函数体把参数传给内部查找例程，尚未确认可用类或自定义播放器扩展方式。",
+      "confidence": "static-registration-only"
+    },
+    {
+      "id": "survivor-ui.get-movie-source-path-info",
+      "plugin": "survivor-roguelite",
+      "kind": "ui-native-candidate",
+      "symbol": "GetMovieSourcePathInfo",
+      "rva": "0xAC1870",
+      "prologue_guard": "40534883EC30488B42204533C94885C0498BD8410F95C14C03C84C894A20488D",
+      "registration_rva": "0x368B0A0",
+      "capabilities": [
+        "sod2.ui.native-progression"
+      ],
+      "unwind_info_entry": true,
+      "behavior": "电影资源路径信息查询相关反射注册；尚未证明可加载外部或 Mod 提供的电影资源。",
+      "confidence": "static-registration-only"
+    },
+    {
+      "id": "roguelite-damage.get-num-attackers",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetNumAttackers",
+      "rva": "0xAC2C40",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E8FD",
+      "registration_rva": "0x368FB00",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "攻击者数量查询。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-attributes.get-painkiller-effect-type",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetPainkillerEffectType",
+      "rva": "0xAC3DD0",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20488B",
+      "registration_rva": "0x36947A0",
+      "capabilities": [
+        "sod2.survivor.attributes"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "止痛药效果类型查询。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-identity.get-portrait",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetPortrait",
+      "rva": "0xAC5540",
+      "prologue_guard": "48895C24085556574883EC3033ED488BF1498BF8488BDA488BCA48896C246048",
+      "registration_rva": "0x3699DB0",
+      "capabilities": [
+        "sod2.survivor.identity"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "取得角色头像。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-identity.get-portrait-asset-id",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetPortraitAssetId",
+      "rva": "0xAC5640",
+      "prologue_guard": "488BC44889580848897018574881EC1001000033F6498BF8488BDA4889701048",
+      "registration_rva": "0x368AE60",
+      "capabilities": [
+        "sod2.survivor.identity"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "取得角色头像资源 ID。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-damage.get-remaining-health",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetRemainingHealth",
+      "rva": "0xAC7820",
+      "prologue_guard": "488B42204533C94885C0410F95C14C03C84C894A20F30F108118020000F30F5C",
+      "registration_rva": "0x3697CD0",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": false,
+      "behavior": "剩余生命查询。",
+      "confidence": "static-registration-mid-function"
+    },
+    {
+      "id": "roguelite-progression.get-skill-by-definition",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetSkillByDefinition",
+      "rva": "0xACA510",
+      "prologue_guard": "48895C240848896C24184889742420574883EC2033FF488BE9498BF0488BDA48",
+      "registration_rva": "0x368EDB0",
+      "capabilities": [
+        "sod2.survivor.progression"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "按定义查询技能。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-progression.get-skills",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetSkills",
+      "rva": "0xACA7E0",
+      "prologue_guard": "48895C2408574883EC304C8B4A2033C04D85C9498BF80F95C04903C148894220",
+      "registration_rva": "0x368EDE0",
+      "capabilities": [
+        "sod2.survivor.progression"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "技能列表查询。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-attributes.get-stamina-burn-rate-modifier",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetStaminaBurnRateModifier",
+      "rva": "0xACBA30",
+      "prologue_guard": "48895C24104889742418574883EC2048837A2000488BF9488BCAC64424300049",
+      "registration_rva": "0x36948D0",
+      "capabilities": [
+        "sod2.survivor.attributes"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "体力消耗速率修正查询。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-attributes.get-stamina-current",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetStaminaCurrent",
+      "rva": "0xACBAC0",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E8AD",
+      "registration_rva": "0x368EDF0",
+      "capabilities": [
+        "sod2.survivor.attributes"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "当前体力查询。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-attributes.get-stamina-drain-rate",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetStaminaDrainRate",
+      "rva": "0xACBA30",
+      "prologue_guard": "48895C24104889742418574883EC2048837A2000488BF9488BCAC64424300049",
+      "registration_rva": "0x36949E0",
+      "capabilities": [
+        "sod2.survivor.attributes"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "体力消耗速率查询。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-attributes.get-stamina-effects",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetStaminaEffects",
+      "rva": "0xACBAF0",
+      "prologue_guard": "48895C241848894C24085556574154415541564157488BEC4881EC8000000033",
+      "registration_rva": "0x368EE00",
+      "capabilities": [
+        "sod2.survivor.attributes"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "体力相关效果列表。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-attributes.get-stamina-max",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetStaminaMax",
+      "rva": "0xACBDD0",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E84D",
+      "registration_rva": "0x368EE10",
+      "capabilities": [
+        "sod2.survivor.attributes"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "最大体力查询。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-attributes.get-stamina-peak",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetStaminaPeak",
+      "rva": "0xACBE00",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E89D",
+      "registration_rva": "0x368EE20",
+      "capabilities": [
+        "sod2.survivor.attributes"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "体力峰值查询。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-identity.get-survivor-by-id",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetSurvivorByID",
+      "rva": "0xACC930",
+      "prologue_guard": "48895C240848896C24184889742420574883EC2033FF488BE9498BF0488BDA48",
+      "registration_rva": "0x368C090",
+      "capabilities": [
+        "sod2.survivor.identity"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "按 ID 取得幸存者。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "survivor-ui.get-texture-reference-for-iggy",
+      "plugin": "survivor-roguelite",
+      "kind": "ui-native-candidate",
+      "symbol": "GetTextureReferenceForIggy",
+      "rva": "0xACD480",
+      "prologue_guard": "48895C2408488974241048897C24184C8974242055488D6C24A94881ECA00000",
+      "registration_rva": "0x368B0C0",
+      "capabilities": [
+        "sod2.ui.native-progression"
+      ],
+      "unwind_info_entry": true,
+      "behavior": "Iggy 纹理引用转换相关反射注册；仅记录映射，不作为成长 UI 接口。",
+      "confidence": "static-registration-only"
+    },
+    {
+      "id": "roguelite-pause.get-tickable-when-paused",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetTickableWhenPaused",
+      "rva": "0x247DE70",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E84D",
+      "registration_rva": "0x3CB87A0",
+      "capabilities": [
+        "sod2.session.single-player-pause"
+      ],
+      "origin": "Engine",
+      "unwind_info_entry": true,
+      "behavior": "暂停期间是否可 tick。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-progression.get-traits",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetTraits",
+      "rva": "0xACDB50",
+      "prologue_guard": "48895C2408574883EC304C8B4A2033C04D85C9498BF80F95C04903C148894220",
+      "registration_rva": "0x368EEB0",
+      "capabilities": [
+        "sod2.survivor.progression"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "角色特性列表。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-kill.get-valid-characters-after-death",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetValidCharactersAfterDeath",
+      "rva": "0xACE5B0",
+      "prologue_guard": "48895C2408574883EC304C8B4A2033C04D85C9498BF80F95C04903C148894220",
+      "registration_rva": "0x368C0C0",
+      "capabilities": [
+        "sod2.roguelite.kill-events",
+        "sod2.survivor.identity"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "死亡后可接替角色列表。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-enemy.get-zombie-blood-plague-qualifier-text-by-type",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetZombieBloodPlagueQualifierTextByType",
+      "rva": "0xACF820",
+      "prologue_guard": "48895C240848896C24184889742420574883EC4048837A2000488BE9488BCAC6",
+      "registration_rva": "0x36907A0",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "按丧尸类型取得血疫限定文本。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-enemy.get-zombie-survivor-casting",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "GetZombieSurvivorCasting",
+      "rva": "0xACFE80",
+      "prologue_guard": "48895C24205556574881EC80030000488B058AB5A3034833C448898424700300",
+      "registration_rva": "0x36915E0",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "丧尸类型判定，用于区分普通、血疫与特殊感染者。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-kill.handle-death-after-delay",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "HandleDeathAfterDelay",
+      "rva": "0xAD04F0",
+      "prologue_guard": "488B42204533C04885C0410F95C04C03C04C894220488B0148FFA038090000CC",
+      "registration_rva": "0x3693460",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": false,
+      "behavior": "延迟死亡处理。",
+      "confidence": "static-registration-mid-function"
+    },
+    {
+      "id": "roguelite-attributes.has-low-health",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "HasLowHealth",
+      "rva": "0xAD0DE0",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E87D",
+      "registration_rva": "0x36982F0",
+      "capabilities": [
+        "sod2.survivor.attributes"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "低生命判定。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-attributes.has-painkiller-duration-effect",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "HasPainkillerDurationEffect",
+      "rva": "0xAD0F30",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E84D",
+      "registration_rva": "0x368EF30",
+      "capabilities": [
+        "sod2.survivor.attributes"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "是否处于止痛药持续效果中。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-progression.has-trait",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "HasTrait",
+      "rva": "0xAD16C0",
+      "prologue_guard": "48895C240848896C24184889742420574883EC2033FF488BE9498BF0488BDA48",
+      "registration_rva": "0x368EF80",
+      "capabilities": [
+        "sod2.survivor.progression"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "是否拥有指定特性。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-progression.has-trait-with-tag",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "HasTraitWithTag",
+      "rva": "0xAD1750",
+      "prologue_guard": "48895C240848896C24184889742420574883EC2033FF488BE9498BF0488BDA48",
+      "registration_rva": "0x368EF90",
+      "capabilities": [
+        "sod2.survivor.progression"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "是否拥有指定标签的特性。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-damage.hit-character",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "HitCharacter",
+      "rva": "0xAD20A0",
+      "prologue_guard": "48895C2408488974241848897C242055488D6C24C04881EC4001000033FF488B",
+      "registration_rva": "0x368C9E0",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "命中角色的处理入口。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-attributes.is-damaged",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "IsDamaged",
+      "rva": "0xAD4DF0",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E84D",
+      "registration_rva": "0x368BC00",
+      "capabilities": [
+        "sod2.survivor.attributes"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "受损状态判定。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-attributes.is-damaged-ad4dc0",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "IsDamaged",
+      "rva": "0xAD4DC0",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E82D",
+      "registration_rva": "0x369B930",
+      "capabilities": [
+        "sod2.survivor.attributes"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "受损状态判定。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-kill.is-dead",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "IsDead",
+      "rva": "0xAD4E40",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E85D",
+      "registration_rva": "0x3698320",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "死亡状态查询。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-kill.is-dead-ad4e20",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "IsDead",
+      "rva": "0xAD4E20",
+      "prologue_guard": "488B42204533C94885C0410F95C14C03C84C894A200FB68188140000418800C3",
+      "registration_rva": "0x3699540",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": false,
+      "behavior": "死亡状态查询。",
+      "confidence": "static-registration-mid-function"
+    },
+    {
+      "id": "roguelite-kill.is-death-occurred",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "IsDeathOccurred",
+      "rva": "0xAD4EA0",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E86D",
+      "registration_rva": "0x368C370",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "是否已发生死亡。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-pause.is-game-paused",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "IsGamePaused",
+      "rva": "0xAD5E30",
+      "prologue_guard": "48895C24084889742418574883EC2033FF498BF0488BDA48897C2438488BCA48",
+      "registration_rva": "0x3694200",
+      "capabilities": [
+        "sod2.session.single-player-pause"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "游戏暂停状态查询。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-pause.is-game-paused-2483a00",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "IsGamePaused",
+      "rva": "0x2483A00",
+      "prologue_guard": "48895C24084889742418574883EC2033FF498BF0488BDA48897C2438488BCA48",
+      "registration_rva": "0x3CBE200",
+      "capabilities": [
+        "sod2.session.single-player-pause"
+      ],
+      "origin": "Engine",
+      "unwind_info_entry": true,
+      "behavior": "游戏暂停状态查询。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-attributes.is-immune-to-fatigue",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "IsImmuneToFatigue",
+      "rva": "0xAD62E0",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E8FD",
+      "registration_rva": "0x368EFE0",
+      "capabilities": [
+        "sod2.survivor.attributes"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "疲劳免疫判定。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-attributes.is-immune-to-injury",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "IsImmuneToInjury",
+      "rva": "0xAD6310",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E80D",
+      "registration_rva": "0x368EFF0",
+      "capabilities": [
+        "sod2.survivor.attributes"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "创伤免疫判定。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-attributes.is-immune-to-plague",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "IsImmuneToPlague",
+      "rva": "0xAD6340",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E8CD",
+      "registration_rva": "0x368F000",
+      "capabilities": [
+        "sod2.survivor.attributes"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "血疫免疫判定。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-attributes.is-over-fatigue-threshold",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "IsOverFatigueThreshold",
+      "rva": "0xAD7BA0",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E86D",
+      "registration_rva": "0x368F060",
+      "capabilities": [
+        "sod2.survivor.attributes"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "是否超过疲劳阈值。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-pause.is-paused",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "IsPaused",
+      "rva": "0x24D3140",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E83D",
+      "registration_rva": "0x3CC48D0",
+      "capabilities": [
+        "sod2.session.single-player-pause"
+      ],
+      "origin": "Engine",
+      "unwind_info_entry": true,
+      "behavior": "暂停状态查询。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-pause.is-paused-29a29c0",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "IsPaused",
+      "rva": "0x29A29C0",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E8DD",
+      "registration_rva": "0x3E0D2A0",
+      "capabilities": [
+        "sod2.session.single-player-pause"
+      ],
+      "origin": "Engine",
+      "unwind_info_entry": true,
+      "behavior": "暂停状态查询。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-pause.k2-is-timer-paused",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "K2_IsTimerPaused",
+      "rva": "0x2489C70",
+      "prologue_guard": "48895C240848896C24184889742420574883EC5033ED498BF0488BDA48896C24",
+      "registration_rva": "0x3CBD980",
+      "capabilities": [
+        "sod2.session.single-player-pause"
+      ],
+      "origin": "Engine",
+      "unwind_info_entry": true,
+      "behavior": "定时器暂停状态查询。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-pause.k2-pause-timer",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "K2_PauseTimer",
+      "rva": "0x248A3C0",
+      "prologue_guard": "48895C24084889742418574883EC5033F6488BDA488BCA488974246848397220",
+      "registration_rva": "0x3CBD9C0",
+      "capabilities": [
+        "sod2.session.single-player-pause"
+      ],
+      "origin": "Engine",
+      "unwind_info_entry": true,
+      "behavior": "定时器暂停。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-kill.killed-zombie",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "KilledZombie",
+      "rva": "0xADA660",
+      "prologue_guard": "48895C2418565741564883EC4048837A20004C8BF1488BCAC644247800488BDA",
+      "registration_rva": "0x368FC40",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "击杀丧尸后的统计与通知处理。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-kill.local-trigger-death-reaction",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "LocalTriggerDeathReaction",
+      "rva": "0xADB7A0",
+      "prologue_guard": "48895C2408574883EC4048837A2000488BF9488BCA488BDA7410488B52184C8D",
+      "registration_rva": "0x3699550",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "本地触发死亡反应。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-kill.mark-as-dead",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "MarkAsDead",
+      "rva": "0xADC2D0",
+      "prologue_guard": "488B42204533C04885C0410F95C04C03C04C894220E966EA6FFFCCCCCCCCCCCC",
+      "registration_rva": "0x368F100",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": false,
+      "behavior": "把角色标记为死亡。",
+      "confidence": "static-registration-mid-function"
+    },
+    {
+      "id": "roguelite-pause.montage-pause",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "Montage_Pause",
+      "rva": "0x2495220",
+      "prologue_guard": "48895C24084889742418574883EC2033FF488BF1488BDA48897C2438488BCA48",
+      "registration_rva": "0x3CBD050",
+      "capabilities": [
+        "sod2.session.single-player-pause"
+      ],
+      "origin": "Engine",
+      "unwind_info_entry": true,
+      "behavior": "蒙太奇暂停。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-damage.multicast-explosive-hit",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "MulticastExplosiveHit",
+      "rva": "0xADE310",
+      "prologue_guard": "48895C24104889742418574883EC4033FF488BF1488BDA48897C2450488BCA48",
+      "registration_rva": "0x3691BC0",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "爆炸命中的多播事件。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-kill.multicast-horde-killed",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "MulticastHordeKilled",
+      "rva": "0xADE620",
+      "prologue_guard": "48895C24184889742420574883EC2033FF488BF1488BDA48897C2438488BCA48",
+      "registration_rva": "0x3693C50",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "尸群被消灭的多播事件。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-kill.multicast-post-juggernaut-killed",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "MulticastPostJuggernautKilled",
+      "rva": "0xADF200",
+      "prologue_guard": "48895C2408574883EC3048837A2000488BF9488BCA488BDA7410488B52184C8D",
+      "registration_rva": "0x3699B90",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "巨无霸被击杀的多播事件。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-identity.multicast-set-mission-active-survivor-id",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "MulticastSetMissionActiveSurvivorId",
+      "rva": "0xA95E10",
+      "prologue_guard": "48895C24104889742418574883EC2033FF488BF1488BDA897C2430488BCA4839",
+      "registration_rva": "0x369C430",
+      "capabilities": [
+        "sod2.survivor.identity"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "多播设置任务激活幸存者 ID。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-kill.multicast-trigger-death-reaction",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "MulticastTriggerDeathReaction",
+      "rva": "0xAE1FD0",
+      "prologue_guard": "48895C2408574883EC4048837A2000488BF9488BCA488BDA7410488B52184C8D",
+      "registration_rva": "0x3699560",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "多播触发死亡反应。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-kill.multicast-zombie-killed",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "MulticastZombieKilled",
+      "rva": "0xAE3280",
+      "prologue_guard": "4055535657415441564157488D6C24D94881ECA000000033FF4C8BE1488BDA48",
+      "registration_rva": "0x3693CA0",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "丧尸击杀的网络多播通知。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-damage.net-multicast-apply-dynamic-hit-reacts",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "NetMulticastApplyDynamicHitReacts",
+      "rva": "0xAE43A0",
+      "prologue_guard": "48895C24084889742410574883EC3033FF488BF1488BDA48897C2420488BCA48",
+      "registration_rva": "0x368FCB0",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "动态受击反应的多播。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-progression.next-level",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "NextLevel",
+      "rva": "0xAE4520",
+      "prologue_guard": "48895C2408574883EC2048837A2000498BF8488BDAC644244000488BCA741048",
+      "registration_rva": "0x368B8C0",
+      "capabilities": [
+        "sod2.survivor.progression"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "推进到下一等级。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-damage.notify-damage-taken",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "NotifyDamageTaken",
+      "rva": "0xAE4870",
+      "prologue_guard": "48895C24184889742420574883EC2033FF488BF1488BDA48897C2438488BCA48",
+      "registration_rva": "0x368AF70",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "受到伤害的通知处理。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "survivor-ui.on-attached-character-info-changed",
+      "plugin": "survivor-roguelite",
+      "kind": "ui-native-candidate",
+      "symbol": "OnAttachedCharacterInfoChanged",
+      "rva": "0xAE61D0",
+      "prologue_guard": "48895C24084889742418574883EC2033FF488BF1488BDA48897C2438488BCA48",
+      "registration_rva": "0x36958E0",
+      "capabilities": [
+        "sod2.ui.native-progression"
+      ],
+      "unwind_info_entry": true,
+      "behavior": "附随角色信息变化相关 UFunction 注册入口；尚未确认其角色上下文、触发时机和可安全读取字段。",
+      "confidence": "static-registration-only"
+    },
+    {
+      "id": "survivor-ui.on-community-ui-hidden",
+      "plugin": "survivor-roguelite",
+      "kind": "ui-native-candidate",
+      "symbol": "OnCommunityUIHiddenNative",
+      "rva": "0xAE83D0",
+      "prologue_guard": "48895C24084889742418574883EC2033FF488BF1488BDA48897C2438488BCA48",
+      "registration_rva": "0x36978A0",
+      "capabilities": [
+        "sod2.ui.native-progression"
+      ],
+      "unwind_info_entry": true,
+      "behavior": "社区 UI 隐藏生命周期相关 UFunction 注册入口；尚未确认可用于安全订阅或控制 UI。",
+      "confidence": "static-registration-only"
+    },
+    {
+      "id": "survivor-ui.on-community-ui-shown",
+      "plugin": "survivor-roguelite",
+      "kind": "ui-native-candidate",
+      "symbol": "OnCommunityUIShownNative",
+      "rva": "0xAE8450",
+      "prologue_guard": "488B42204533C04885C0410F95C04C03C04C894220E956B771FFCCCCCCCCCCCC",
+      "registration_rva": "0x36978B0",
+      "capabilities": [
+        "sod2.ui.native-progression"
+      ],
+      "unwind_info_entry": false,
+      "behavior": "社区 UI 显示生命周期相关反射分发桩；尚未确认可用于安全订阅或控制 UI。",
+      "confidence": "static-registration-wrapper"
+    },
+    {
+      "id": "roguelite-kill.on-dayton-character-dead",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "OnDaytonCharacterDead",
+      "rva": "0xAE8AE0",
+      "prologue_guard": "48895C24084889742418574883EC2033FF488BF1488BDA48897C2438488BCA48",
+      "registration_rva": "0x368C570",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "角色死亡多播委托的原生实现，击杀事件链的主要汇合点。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-kill.on-dead",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "OnDead",
+      "rva": "0xAE8D60",
+      "prologue_guard": "48895C24104889742418574883EC2033FF488BF1488BDA48897C2430488BCA48",
+      "registration_rva": "0x368CAD0",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "死亡事件回调。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-kill.on-dead-character-turn-to-zombie",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "OnDeadCharacterTurnToZombie",
+      "rva": "0xAE8DF0",
+      "prologue_guard": "488B42204533C04885C0410F95C04C03C04C894220E9D6468BFFCCCCCCCCCCCC",
+      "registration_rva": "0x368FD40",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": false,
+      "behavior": "死亡角色转化为丧尸。",
+      "confidence": "static-registration-mid-function"
+    },
+    {
+      "id": "roguelite-kill.on-death-sequence-cancelled",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "OnDeathSequenceCancelled",
+      "rva": "0xAE8E10",
+      "prologue_guard": "488B42204533C04885C0410F95C04C03C04C894220E9E6346FFFCCCCCCCCCCCC",
+      "registration_rva": "0x369A020",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": false,
+      "behavior": "死亡演出序列取消。",
+      "confidence": "static-registration-mid-function"
+    },
+    {
+      "id": "roguelite-kill.on-death-sequence-over",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "OnDeathSequenceOver",
+      "rva": "0xAE8E30",
+      "prologue_guard": "488B42204533C04885C0410F95C04C03C04C894220E956356FFFCCCCCCCCCCCC",
+      "registration_rva": "0x369A030",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": false,
+      "behavior": "死亡演出序列结束。",
+      "confidence": "static-registration-mid-function"
+    },
+    {
+      "id": "roguelite-attributes.on-health-changed",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "OnHealthChanged",
+      "rva": "0xAEA830",
+      "prologue_guard": "48895C24084889742418574883EC2033FF488BF1488BDA48897C2448488BCA48",
+      "registration_rva": "0x368C5C0",
+      "capabilities": [
+        "sod2.survivor.attributes"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "生命值变化事件。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-attributes.on-health-changed-aea900",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "OnHealthChanged",
+      "rva": "0xAEA900",
+      "prologue_guard": "48895C24084889742418574883EC2033FF488BF1488BDA48897C2448488BCA48",
+      "registration_rva": "0x369D310",
+      "capabilities": [
+        "sod2.survivor.attributes"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "生命值变化事件。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-kill.on-local-player-death",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "OnLocalPlayerDeath",
+      "rva": "0xAEB810",
+      "prologue_guard": "488B42204533C04885C0410F95C04C03C04C894220E9B61F69FFCCCCCCCCCCCC",
+      "registration_rva": "0x3699C40",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": false,
+      "behavior": "本地玩家死亡事件。",
+      "confidence": "static-registration-mid-function"
+    },
+    {
+      "id": "roguelite-kill.on-moment-of-death",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "OnMomentOfDeath",
+      "rva": "0xAEB990",
+      "prologue_guard": "488B42204533C04885C0410F95C04C03C04C894220E946196FFFCCCCCCCCCCCC",
+      "registration_rva": "0x369A040",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": false,
+      "behavior": "死亡瞬间回调。",
+      "confidence": "static-registration-mid-function"
+    },
+    {
+      "id": "survivor-ui.on-movie-player-closed",
+      "plugin": "survivor-roguelite",
+      "kind": "ui-native-candidate",
+      "symbol": "OnMoviePlayerClosed",
+      "rva": "0xAEB9B0",
+      "prologue_guard": "48895C24084889742418574883EC2033FF488BF1488BDA48897C2438488BCA48",
+      "registration_rva": "0x369E000",
+      "capabilities": [
+        "sod2.ui.native-progression"
+      ],
+      "unwind_info_entry": true,
+      "behavior": "电影播放器关闭回调相关反射注册；上下文与回调生命周期尚未确认。",
+      "confidence": "static-registration-only"
+    },
+    {
+      "id": "roguelite-pause.on-paused",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "OnPaused",
+      "rva": "0xAEC160",
+      "prologue_guard": "48895C24084889742418574883EC2033FF488BF1488BDA897C2438488BCA4839",
+      "registration_rva": "0x3690AF0",
+      "capabilities": [
+        "sod2.session.single-player-pause"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "暂停事件回调。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "survivor-ui.on-player-character-ui-closed",
+      "plugin": "survivor-roguelite",
+      "kind": "ui-native-candidate",
+      "symbol": "OnPlayerCharacterUIClosed",
+      "rva": "0xAEC7C0",
+      "prologue_guard": "488B42204533C04885C0410F95C04C03C04C894220E9966476FFCCCCCCCCCCCC",
+      "registration_rva": "0x3690570",
+      "capabilities": [
+        "sod2.ui.native-progression"
+      ],
+      "unwind_info_entry": false,
+      "behavior": "Character UI 关闭相关静态注册符号；地址落在共享反射分发桩中，未确认事件触发条件。",
+      "confidence": "static-registration-wrapper"
+    },
+    {
+      "id": "roguelite-identity.on-rep-current-survivor-id",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "OnRep_CurrentSurvivorID",
+      "rva": "0xAED5D0",
+      "prologue_guard": "488B42204533C04885C0410F95C04C03C04C894220E9867079FFCCCCCCCCCCCC",
+      "registration_rva": "0x368C3F0",
+      "capabilities": [
+        "sod2.survivor.identity"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": false,
+      "behavior": "当前幸存者 ID 的网络复制回调。",
+      "confidence": "static-registration-mid-function"
+    },
+    {
+      "id": "roguelite-kill.on-speaker-died",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "OnSpeakerDied",
+      "rva": "0xAEE540",
+      "prologue_guard": "48895C24084889742418574883EC2033FF488BF1488BDA48897C2438488BCA48",
+      "registration_rva": "0x369C060",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "对话者死亡事件。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-kill.on-survivor-died",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "OnSurvivorDied",
+      "rva": "0xAEF020",
+      "prologue_guard": "48895C24084889742418574883EC2033FF488BF1488BDA48897C2438488BCA48",
+      "registration_rva": "0x369A050",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "幸存者死亡事件。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-kill.on-zombie-dead",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "OnZombieDead",
+      "rva": "0xAEFCD0",
+      "prologue_guard": "48895C24084889742418574883EC2033FF488BF1488BDA48897C2438488BCA48",
+      "registration_rva": "0x369D740",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "丧尸死亡处理入口。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-kill.on-zombie-killed",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "OnZombieKilled",
+      "rva": "0xAEFD50",
+      "prologue_guard": "48895C240848896C24184889742420574883EC2033FF488BE9498BF0488BDA48",
+      "registration_rva": "0x3693240",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "丧尸被击杀事件的原生入口。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-damage.owner-damaged-human",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "OwnerDamagedHuman",
+      "rva": "0xAF0970",
+      "prologue_guard": "405356574883EC2033FF488BF1488BDA48897C2458488BCA48397A207410488B",
+      "registration_rva": "0x368FDE0",
+      "capabilities": [
+        "sod2.roguelite.kill-events"
+      ],
+      "origin": "DaytonGame",
+      "unwind_info_entry": true,
+      "behavior": "所有者伤害了人类角色。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "survivor-ui.pass-input-to-iggy",
+      "plugin": "survivor-roguelite",
+      "kind": "ui-native-candidate",
+      "symbol": "PassInputToIggy",
+      "rva": "0xAF1D10",
+      "prologue_guard": "48895C2408574883EC2048837A2000488BF9488BCAC644243800488BDA741048",
+      "registration_rva": "0x3696C20",
+      "capabilities": [
+        "sod2.ui.native-progression"
+      ],
+      "unwind_info_entry": true,
+      "behavior": "Iggy 输入转发相关反射注册；仅证明存在输入转发路径，不证明可增加原版导航项。",
+      "confidence": "static-registration-only"
+    },
+    {
+      "id": "roguelite-pause.pause",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "Pause",
+      "rva": "0x1A82190",
+      "prologue_guard": "488B42204533C04885C0410F95C04C03C04C894220E9B678FFFFCCCCCCCCCCCC",
+      "registration_rva": "0x3A48970",
+      "capabilities": [
+        "sod2.session.single-player-pause"
+      ],
+      "origin": "Engine",
+      "unwind_info_entry": false,
+      "behavior": "暂停入口。",
+      "confidence": "static-registration-mid-function"
+    },
+    {
+      "id": "roguelite-pause.pause-2499070",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "Pause",
+      "rva": "0x2499070",
+      "prologue_guard": "488B42204533C04885C0410F95C04C03C04C894220488B0148FFA0F0050000CC",
+      "registration_rva": "0x3CB9EA0",
+      "capabilities": [
+        "sod2.session.single-player-pause"
+      ],
+      "origin": "Engine",
+      "unwind_info_entry": false,
+      "behavior": "暂停入口。",
+      "confidence": "static-registration-mid-function"
+    },
+    {
+      "id": "roguelite-pause.pause-2499090",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "Pause",
+      "rva": "0x2499090",
+      "prologue_guard": "488B42204533C04885C0410F95C04C03C04C894220488B0148FFA0F8090000CC",
+      "registration_rva": "0x3CB94B0",
+      "capabilities": [
+        "sod2.session.single-player-pause"
+      ],
+      "origin": "Engine",
+      "unwind_info_entry": false,
+      "behavior": "暂停入口。",
+      "confidence": "static-registration-mid-function"
+    },
+    {
+      "id": "roguelite-pause.pause-24d34c0",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "Pause",
+      "rva": "0x24D34C0",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E82D",
+      "registration_rva": "0x3CC4960",
+      "capabilities": [
+        "sod2.session.single-player-pause"
+      ],
+      "origin": "Engine",
+      "unwind_info_entry": true,
+      "behavior": "暂停入口。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-pause.pause-29a2b00",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "Pause",
+      "rva": "0x29A2B00",
+      "prologue_guard": "40534883EC20488B42204533C94885C0498BD8410F95C14C03C84C894A20E86D",
+      "registration_rva": "0x3E0D2E0",
+      "capabilities": [
+        "sod2.session.single-player-pause"
+      ],
+      "origin": "Engine",
+      "unwind_info_entry": true,
+      "behavior": "暂停入口。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "roguelite-pause.pause-animation",
+      "plugin": "survivor-roguelite",
+      "kind": "native-ufunction",
+      "symbol": "PauseAnimation",
+      "rva": "0x18D2210",
+      "prologue_guard": "48895C240848896C24184889742420574883EC2033FF488BE9498BF0488BDA48",
+      "registration_rva": "0x39E72A0",
+      "capabilities": [
+        "sod2.session.single-player-pause"
+      ],
+      "origin": "Engine",
+      "unwind_info_entry": true,
+      "behavior": "动画暂停。",
+      "confidence": "verified-static-registration"
+    },
+    {
+      "id": "survivor-ui.push-existing-movie-player",
+      "plugin": "survivor-roguelite",
+      "kind": "ui-native-candidate",
+      "symbol": "PushExistingMoviePlayer",
+      "rva": "0xAFBD00",
+      "prologue_guard": "48895C24084889742418574883EC2033FF488BF1488BDA48897C2438488BCA48",
+      "registration_rva": "0x369E010",
+      "capabilities": [
+        "sod2.ui.native-progression"
+      ],
+      "unwind_info_entry": true,
+      "behavior": "既有电影播放器入栈相关反射注册；内部例程的状态变更和安全调用条件尚未确认。",
+      "confidence": "static-registration-only"
+    },
+    {
+      "id": "survivor-ui.push-movie-player-afc180",
+      "plugin": "survivor-roguelite",
+      "kind": "ui-native-candidate",
+      "symbol": "PushMoviePlayer",
+      "rva": "0xAFC180",
+      "prologue_guard": "48895C2410488974241848897C242041564883EC2033FF488BF14D8BF0488BDA",
+      "registration_rva": "0x3690060",
+      "capabilities": [
+        "sod2.ui.native-progression"
+      ],
+      "unwind_info_entry": true,
+      "behavior": "电影播放器入栈相关反射注册；两种注册都转入内部例程，尚未确认所需对象类、资源加载语义或调用时机。",
+      "confidence": "static-registration-only"
+    },
+    {
+      "id": "survivor-ui.push-movie-player-afc220",
+      "plugin": "survivor-roguelite",
+      "kind": "ui-native-candidate",
+      "symbol": "PushMoviePlayer",
+      "rva": "0xAFC220",
+      "prologue_guard": "48895C240848896C24184889742420574883EC2033FF488BE9498BF0488BDA48",
+      "registration_rva": "0x369E020",
+      "capabilities": [
+        "sod2.ui.native-progression"
+      ],
+      "unwind_info_entry": true,
+      "behavior": "电影播放器入栈相关反射注册；两种注册都转入内部例程，尚未确认所需对象类、资源加载语义或调用时机。",
+      "confidence": "static-registration-only"
+    },
+    {
+      "id": "survivor-ui.refresh-hints-internal",
+      "plugin": "survivor-roguelite",
+      "kind": "ui-native-candidate",
+      "symbol": "RefreshHintsInternal",
+      "rva": "0xAFD3B0",
+      "prologue_guard": "488B42204533C04885C0410F95C04C03C04C894220E936B7C1FFCCCCCCCCCCCC",
+      "registration_rva": "0x3695A70",
+      "capabilities": [
+        "sod2.ui.native-progression"
+      ],
+      "unwind_info_entry": false,
+      "behavior": "技能提示刷新相关反射分发桩；调用链和界面生命周期未确认。",
+      "confidence": "static-registration-wrapper"
+    },
+    {
+      "id": "survivor-ui.set-attached-character",
+      "plugin": "survivor-roguelite",
+      "kind": "ui-native-candidate",
+      "symbol": "SetAttachedCharacter",
+      "rva": "0xB0E8F0",
+      "prologue_guard": "48895C24104889742418574883EC2033FF488BF1488BDA48897C2430488BCA48",
+      "registration_rva": "0x3694B30",
+      "capabilities": [
+        "sod2.ui.native-progression"
+      ],
+      "unwind_info_entry": true,
+      "behavior": "Character UI 角色绑定相关 UFunction 注册入口；静态反汇编显示处理反射参数帧，尚未确认参数布局及生命周期。",
+      "confidence": "static-registration-only"
+    },
+    {
+      "id": "survivor-ui.set-attached-character-native",
+      "plugin": "survivor-roguelite",
+      "kind": "ui-native-candidate",
+      "symbol": "SetAttachedCharacter_Native",
+      "rva": "0xB0E980",
+      "prologue_guard": "48895C24084889742418574883EC2033FF488BF1488BDA48897C2438488BCA48",
+      "registration_rva": "0x3695A80",
+      "capabilities": [
+        "sod2.ui.native-progression"
+      ],
+      "unwind_info_entry": true,
+      "behavior": "Character UI 角色绑定相关 UFunction 注册入口；与 SetAttachedCharacter 的关系及参数语义尚未确认。",
+      "confidence": "static-registration-only"
+    },
+    {
+      "id": "survivor-ui.show-skills",
+      "plugin": "survivor-roguelite",
+      "kind": "ui-native-candidate",
+      "symbol": "ShowSkills",
+      "rva": "0xB1BE00",
+      "prologue_guard": "488B42204533C04885C0410F95C04C03C04C894220488B0148FF6048CCCCCCCC",
+      "registration_rva": "0x3694BC0",
+      "capabilities": [
+        "sod2.ui.native-progression"
+      ],
+      "unwind_info_entry": false,
+      "behavior": "Character UI 技能页相关反射分发桩；目标经对象虚表转发，具体实现与调用条件未确认。",
+      "confidence": "static-registration-wrapper"
+    },
+    {
+      "id": "survivor-ui.show-skills-restricted",
+      "plugin": "survivor-roguelite",
+      "kind": "ui-native-candidate",
+      "symbol": "ShowSkillsRestricted",
+      "rva": "0xB1BE20",
+      "prologue_guard": "488B42204533C04885C0410F95C04C03C04C894220488B0148FF6040CCCCCCCC",
+      "registration_rva": "0x3694BD0",
+      "capabilities": [
+        "sod2.ui.native-progression"
+      ],
+      "unwind_info_entry": false,
+      "behavior": "Character UI 受限技能页相关反射分发桩；目标经对象虚表转发，具体实现与调用条件未确认。",
+      "confidence": "static-registration-wrapper"
+    },
+    {
+      "id": "survivor-ui.show-skills-restricted-native",
+      "plugin": "survivor-roguelite",
+      "kind": "ui-native-candidate",
+      "symbol": "ShowSkillsRestricted_Native",
+      "rva": "0xB1BE40",
+      "prologue_guard": "48895C2408574883EC2048837A2000488BF9488BCAC644243800488BDA741048",
+      "registration_rva": "0x3695B70",
+      "capabilities": [
+        "sod2.ui.native-progression"
+      ],
+      "unwind_info_entry": true,
+      "behavior": "受限技能页显示相关 UFunction 注册入口；实际绘制和数据绑定实现未确认。",
+      "confidence": "static-registration-only"
+    },
+    {
+      "id": "survivor-ui.show-skills-native",
+      "plugin": "survivor-roguelite",
+      "kind": "ui-native-candidate",
+      "symbol": "ShowSkills_Native",
+      "rva": "0xB1BEC0",
+      "prologue_guard": "488B42204533C04885C0410F95C04C03C04C894220E9F682C0FFCCCCCCCCCCCC",
+      "registration_rva": "0x3695B60",
+      "capabilities": [
+        "sod2.ui.native-progression"
+      ],
+      "unwind_info_entry": false,
+      "behavior": "原生技能页显示相关反射分发桩；实际绘制和数据绑定实现未确认。",
+      "confidence": "static-registration-wrapper"
+    },
+    {
+      "id": "survivor-ui.ui-skills-refresh-hints",
+      "plugin": "survivor-roguelite",
+      "kind": "ui-native-candidate",
+      "symbol": "UI_SkillsRefreshHints",
+      "rva": "0xB310A0",
+      "prologue_guard": "488B42204533C04885C0410F95C04C03C04C894220E92699BFFFCCCCCCCCCCCC",
+      "registration_rva": "0x3695E00",
+      "capabilities": [
+        "sod2.ui.native-progression"
+      ],
+      "unwind_info_entry": false,
+      "behavior": "技能提示刷新相关反射分发桩；没有确认可用于自定义成长内容刷新的扩展接口。",
+      "confidence": "static-registration-wrapper"
+    },
+    {
+      "id": "unlimited-community.can-add-character",
+      "plugin": "unlimited-community",
+      "kind": "recruitment-capacity-gate",
+      "symbol": "CanAddCharacter",
+      "rva": "0x276360",
+      "patch_ids": [
+        "unlimited-community.can-add-character"
+      ],
+      "behavior": "Player enclave capacity decision; player branch bypasses the 9/12 population comparison while non-player checks remain intact.",
+      "confidence": "verified-static-and-emulated"
+    },
+    {
+      "id": "unlimited-community.can-add-character-native",
+      "plugin": "unlimited-community",
+      "kind": "native-ufunction",
+      "symbol": "CanAddCharacter",
+      "rva": "0xA8EA30",
+      "registration_rva": "0x368BF20",
+      "behavior": "Fixed-build native registration; its decoded body calls the internal player-capacity decision at 0x276360. The registration name does not reveal caller ownership or reflected dispatch order.",
+      "confidence": "verified-static-name-rva-and-body"
+    },
+    {
+      "id": "unlimited-community.can-add-characters",
+      "plugin": "unlimited-community",
+      "kind": "recruitment-capacity-gate",
+      "symbol": "CanAddCharacters",
+      "rva": "0x2763A0",
+      "patch_ids": [
+        "unlimited-community.can-add-characters"
+      ],
+      "behavior": "Group recruitment capacity decision with the same player-only bypass and preserved rejection flags.",
+      "confidence": "verified-static-and-emulated"
+    },
+    {
+      "id": "unlimited-community.can-add-characters-native",
+      "plugin": "unlimited-community",
+      "kind": "native-ufunction",
+      "symbol": "CanAddCharacters",
+      "rva": "0xA8EAC0",
+      "registration_rva": "0x368BF30",
+      "behavior": "Fixed-build native registration; its decoded body calls the internal group-capacity decision at 0x2763A0. The registration name does not reveal caller ownership or reflected dispatch order.",
+      "confidence": "verified-static-name-rva-and-body"
+    },
+    {
+      "id": "unlimited-community.get-living-characters-count-native",
+      "plugin": "unlimited-community",
+      "kind": "native-ufunction",
+      "symbol": "GetLivingCharactersCount",
+      "rva": "0xABEC40",
+      "registration_rva": "0x368C010",
+      "behavior": "Fixed-build native registration; the decoded body calls internal population helper 0x27D150. The result's living/dead semantics are not inferred from the helper name alone.",
+      "confidence": "verified-static-name-rva-and-body"
+    },
+    {
+      "id": "unlimited-community.inlined-hard-cap",
+      "plugin": "unlimited-community",
+      "kind": "inlined-recruitment-gate",
+      "symbol": "Inlined recruitment hard-cap gate",
+      "rva": "0x2797C6",
+      "patch_ids": [
+        "unlimited-community.inlined-recruitment-hard-cap-gate"
+      ],
+      "behavior": "Player-only inline hard-cap check; other rejection branches remain unchanged.",
+      "confidence": "verified-static-and-emulated"
+    },
+    {
+      "id": "unlimited-community.is-past-population-soft-cap-native",
+      "plugin": "unlimited-community",
+      "kind": "native-ufunction",
+      "symbol": "IsPastPopulationSoftCap",
+      "rva": "0xAD7C50",
+      "registration_rva": "0x368C0E0",
+      "behavior": "Fixed-build native registration; its decoded body calls the internal soft-cap query at 0x281540. It is distinct from the hard recruitment eligibility checks.",
+      "confidence": "verified-static-name-rva-and-body"
+    },
+    {
+      "id": "unlimited-community.population-soft-cap-query",
+      "plugin": "unlimited-community",
+      "kind": "population-query",
+      "symbol": "IsPastPopulationSoftCap",
+      "rva": "0x281540",
+      "patch_ids": [
+        "unlimited-community.population-soft-cap-query"
+      ],
+      "behavior": "Player enclave bypass for the identified soft-cap query; NPC and other callers retain the original result.",
+      "confidence": "verified-static-and-emulated"
+    },
+    {
+      "id": "unlimited-community.player-capacity-leaf",
+      "plugin": "unlimited-community",
+      "kind": "helper",
+      "symbol": "Player capacity query leaf helper",
+      "rva": "0x27B414",
+      "patch_ids": [
+        "unlimited-community.player-capacity-query-leaf-helper",
+        "unlimited-community.player-capacity-query-zero-result"
+      ],
+      "behavior": "Player-only helper path for the two recruitment capacity queries; NPC callers tail-call the original getter.",
+      "confidence": "verified-static-and-emulated"
+    },
+    {
+      "id": "unlimited-community.remaining-recruitment-availability",
+      "plugin": "unlimited-community",
+      "kind": "capacity-query",
+      "symbol": "Remaining recruitment availability",
+      "rva": "0x27ADC0",
+      "patch_ids": [
+        "unlimited-community.remaining-recruitment-availability"
+      ],
+      "behavior": "Player-only query returns a positive availability result for the identified recruitment callers; the real population getter is not rewritten.",
+      "confidence": "verified-static-and-emulated"
+    },
+    {
+      "id": "unlimited-community.restore-exiled-character",
+      "plugin": "unlimited-community",
+      "kind": "inlined-recruitment-gate",
+      "symbol": "Restore exiled character population gate",
+      "rva": "0x290F5A",
+      "patch_ids": [
+        "unlimited-community.restore-exiled-character-population-gate"
+      ],
+      "behavior": "Player population gate used while restoring an exiled character.",
+      "confidence": "verified-static-and-emulated"
+    },
+    {
+      "id": "unlimited-community.transfer-character",
+      "plugin": "unlimited-community",
+      "kind": "inlined-recruitment-gate",
+      "symbol": "Transfer character population gate",
+      "rva": "0x2919EF",
+      "patch_ids": [
+        "unlimited-community.transfer-character-population-gate"
+      ],
+      "behavior": "Player population gate used by the transfer path.",
+      "confidence": "verified-static-and-emulated"
+    },
+    {
+      "id": "unlimited-community.try-add-character",
+      "plugin": "unlimited-community",
+      "kind": "inlined-recruitment-gate",
+      "symbol": "TryAddCharacter",
+      "rva": "0x290645",
+      "patch_ids": [
+        "unlimited-community.try-add-character-population-gate"
+      ],
+      "behavior": "Inlined player population gate used by the actual character append path.",
+      "confidence": "verified-static-and-emulated"
+    },
+    {
+      "id": "unlimited-community.try-add-character-native",
+      "plugin": "unlimited-community",
+      "kind": "native-ufunction",
+      "symbol": "TryAddCharacter",
+      "rva": "0xB23D00",
+      "registration_rva": "0x368C140",
+      "behavior": "Fixed-build native registration; the decoded body calls the append implementation at 0x290630, whose inlined player-cap gate is separately guarded and emulated.",
+      "confidence": "verified-static-name-rva-and-body"
+    },
+    {
+      "id": "unlimited-community.try-add-character-record",
+      "plugin": "unlimited-community",
+      "kind": "inlined-recruitment-gate",
+      "symbol": "TryAddCharacterRecord",
+      "rva": "0x29071F",
+      "patch_ids": [
+        "unlimited-community.try-add-character-record-population-gate"
+      ],
+      "behavior": "Inlined player population gate used by the character-record append path.",
+      "confidence": "verified-static-and-emulated"
+    },
+    {
+      "id": "unlimited-community.try-add-character-record-native",
+      "plugin": "unlimited-community",
+      "kind": "native-ufunction",
+      "symbol": "TryAddCharacterRecord",
+      "rva": "0xB23E10",
+      "registration_rva": "0x368C150",
+      "behavior": "Fixed-build native registration; the decoded body calls the record append implementation at 0x290710, whose inlined player-cap gate is separately guarded and emulated.",
+      "confidence": "verified-static-name-rva-and-body"
+    },
+    {
+      "id": "unlimited-followers.community-screen-quantity-gate",
+      "plugin": "unlimited-followers",
+      "kind": "follower-quantity-gate",
+      "symbol": "Community screen follower quantity gate",
+      "rva": "0x39595E",
+      "patch_ids": [
+        "unlimited-followers.community-screen-follower-quantity-gate"
+      ],
+      "behavior": "Removes the community-screen follower quantity branch while retaining the surrounding UI and eligibility logic.",
+      "confidence": "verified-static-and-emulated"
+    },
+    {
+      "id": "unlimited-followers.dialogue-quantity-gate",
+      "plugin": "unlimited-followers",
+      "kind": "follower-quantity-gate",
+      "symbol": "Dialogue follower quantity gate",
+      "rva": "0x22D7B9",
+      "patch_ids": [
+        "unlimited-followers.dialogue-follower-quantity-gate"
+      ],
+      "behavior": "Removes the dialogue-side follower quantity branch while preserving duplicate, relationship, and mission checks.",
+      "confidence": "verified-static-and-emulated"
+    }
+  ]
+}

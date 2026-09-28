@@ -1,0 +1,646 @@
+{
+  "schema": 1,
+  "target_build": 16535856,
+  "dll_name": "iggy_w64.dll",
+  "dll_sha256": "09049ffc7b48639c72336bb809035fa1c1b827e898693fbc2968165bd23940a6",
+  "export_count": 204,
+  "scope": "Read-only x64 export/control-flow analysis; no DLL loading, invocation, injection, or game-process access.",
+  "export_surface": {
+    "script_call_exports": [
+      "IggyPlayerCallFunctionRS",
+      "IggyPlayerCallMethodRS"
+    ],
+    "focus_exports": [
+      "IggyPlayerGetFocusableObjects",
+      "IggyPlayerSetFocusRS"
+    ],
+    "movie_creation_exports": [
+      "IggyLibraryCreateFromMemory",
+      "IggyPlayerCreateFromMemory"
+    ],
+    "explicit_display_tree_mutation_name_candidates": [],
+    "name_scan_limitation": "Export-name absence does not rule out script-call-based mutation or undocumented interfaces."
+  },
+  "analyzed_exports": [
+    {
+      "name": "IggyLibraryCreateFromMemory",
+      "export_rva": 361312,
+      "entry_pdata_range": [
+        361312,
+        361527
+      ],
+      "reachable_instruction_count": 56,
+      "reachable_code_ranges": [
+        {
+          "start_rva": 361312,
+          "end_rva": 361527,
+          "instruction_count": 56
+        }
+      ],
+      "direct_calls": [
+        {
+          "site_rva": 361382,
+          "target_rva": 284000,
+          "target_export": null,
+          "target_pdata_range": [
+            284000,
+            284806
+          ]
+        },
+        {
+          "site_rva": 361436,
+          "target_rva": 17328,
+          "target_export": null,
+          "target_pdata_range": [
+            17328,
+            17765
+          ]
+        },
+        {
+          "site_rva": 361452,
+          "target_rva": 25840,
+          "target_export": null,
+          "target_pdata_range": null
+        },
+        {
+          "site_rva": 361492,
+          "target_rva": 13712,
+          "target_export": null,
+          "target_pdata_range": [
+            13712,
+            13741
+          ]
+        },
+        {
+          "site_rva": 361510,
+          "target_rva": 789920,
+          "target_export": null,
+          "target_pdata_range": null
+        }
+      ],
+      "direct_branch_count": 5
+    },
+    {
+      "name": "IggyPlayerCreateFromMemory",
+      "export_rva": 361136,
+      "entry_pdata_range": [
+        361136,
+        361173
+      ],
+      "reachable_instruction_count": 10,
+      "reachable_code_ranges": [
+        {
+          "start_rva": 361136,
+          "end_rva": 361173,
+          "instruction_count": 10
+        }
+      ],
+      "direct_calls": [
+        {
+          "site_rva": 361163,
+          "target_rva": 17328,
+          "target_export": null,
+          "target_pdata_range": [
+            17328,
+            17765
+          ]
+        }
+      ],
+      "direct_branch_count": 0
+    },
+    {
+      "name": "IggyPlayerCallFunctionRS",
+      "export_rva": 357280,
+      "entry_pdata_range": [
+        357280,
+        357359
+      ],
+      "reachable_instruction_count": 58,
+      "reachable_code_ranges": [
+        {
+          "start_rva": 357280,
+          "end_rva": 357526,
+          "instruction_count": 58
+        }
+      ],
+      "direct_calls": [
+        {
+          "site_rva": 357368,
+          "target_rva": 25552,
+          "target_export": null,
+          "target_pdata_range": null
+        },
+        {
+          "site_rva": 357399,
+          "target_rva": 13712,
+          "target_export": null,
+          "target_pdata_range": [
+            13712,
+            13741
+          ]
+        },
+        {
+          "site_rva": 357458,
+          "target_rva": 730400,
+          "target_export": null,
+          "target_pdata_range": [
+            730400,
+            731584
+          ]
+        },
+        {
+          "site_rva": 357478,
+          "target_rva": 25552,
+          "target_export": null,
+          "target_pdata_range": null
+        },
+        {
+          "site_rva": 357510,
+          "target_rva": 13712,
+          "target_export": null,
+          "target_pdata_range": [
+            13712,
+            13741
+          ]
+        }
+      ],
+      "direct_branch_count": 7
+    },
+    {
+      "name": "IggyPlayerCallMethodRS",
+      "export_rva": 357536,
+      "entry_pdata_range": [
+        357536,
+        357615
+      ],
+      "reachable_instruction_count": 60,
+      "reachable_code_ranges": [
+        {
+          "start_rva": 357536,
+          "end_rva": 357790,
+          "instruction_count": 60
+        }
+      ],
+      "direct_calls": [
+        {
+          "site_rva": 357624,
+          "target_rva": 25552,
+          "target_export": null,
+          "target_pdata_range": null
+        },
+        {
+          "site_rva": 357655,
+          "target_rva": 13712,
+          "target_export": null,
+          "target_pdata_range": [
+            13712,
+            13741
+          ]
+        },
+        {
+          "site_rva": 357722,
+          "target_rva": 731584,
+          "target_export": null,
+          "target_pdata_range": [
+            731584,
+            732872
+          ]
+        },
+        {
+          "site_rva": 357742,
+          "target_rva": 25552,
+          "target_export": null,
+          "target_pdata_range": null
+        },
+        {
+          "site_rva": 357774,
+          "target_rva": 13712,
+          "target_export": null,
+          "target_pdata_range": [
+            13712,
+            13741
+          ]
+        }
+      ],
+      "direct_branch_count": 7
+    },
+    {
+      "name": "IggyPlayerDispatchEventRS",
+      "export_rva": 360160,
+      "entry_pdata_range": [
+        360160,
+        360385
+      ],
+      "reachable_instruction_count": 56,
+      "reachable_code_ranges": [
+        {
+          "start_rva": 360160,
+          "end_rva": 360385,
+          "instruction_count": 56
+        }
+      ],
+      "direct_calls": [
+        {
+          "site_rva": 360208,
+          "target_rva": 13712,
+          "target_export": null,
+          "target_pdata_range": [
+            13712,
+            13741
+          ]
+        },
+        {
+          "site_rva": 360253,
+          "target_rva": 25552,
+          "target_export": null,
+          "target_pdata_range": null
+        },
+        {
+          "site_rva": 360284,
+          "target_rva": 13712,
+          "target_export": null,
+          "target_pdata_range": [
+            13712,
+            13741
+          ]
+        },
+        {
+          "site_rva": 360305,
+          "target_rva": 98176,
+          "target_export": null,
+          "target_pdata_range": [
+            98176,
+            98445
+          ]
+        },
+        {
+          "site_rva": 360325,
+          "target_rva": 25552,
+          "target_export": null,
+          "target_pdata_range": null
+        },
+        {
+          "site_rva": 360357,
+          "target_rva": 13712,
+          "target_export": null,
+          "target_pdata_range": [
+            13712,
+            13741
+          ]
+        }
+      ],
+      "direct_branch_count": 4
+    },
+    {
+      "name": "IggyPlayerGetFocusableObjects",
+      "export_rva": 98624,
+      "entry_pdata_range": [
+        98624,
+        98915
+      ],
+      "reachable_instruction_count": 72,
+      "reachable_code_ranges": [
+        {
+          "start_rva": 98624,
+          "end_rva": 98915,
+          "instruction_count": 72
+        }
+      ],
+      "direct_calls": [],
+      "direct_branch_count": 17
+    },
+    {
+      "name": "IggyPlayerSetFocusRS",
+      "export_rva": 360496,
+      "entry_pdata_range": [
+        360496,
+        360552
+      ],
+      "reachable_instruction_count": 61,
+      "reachable_code_ranges": [
+        {
+          "start_rva": 13712,
+          "end_rva": 13741,
+          "instruction_count": 7
+        },
+        {
+          "start_rva": 360496,
+          "end_rva": 360725,
+          "instruction_count": 54
+        }
+      ],
+      "direct_calls": [
+        {
+          "site_rva": 13731,
+          "target_rva": 9760,
+          "target_export": null,
+          "target_pdata_range": [
+            9760,
+            9977
+          ]
+        },
+        {
+          "site_rva": 360561,
+          "target_rva": 25552,
+          "target_export": null,
+          "target_pdata_range": null
+        },
+        {
+          "site_rva": 360592,
+          "target_rva": 13712,
+          "target_export": null,
+          "target_pdata_range": [
+            13712,
+            13741
+          ]
+        },
+        {
+          "site_rva": 360627,
+          "target_rva": 98448,
+          "target_export": null,
+          "target_pdata_range": [
+            98448,
+            98616
+          ]
+        },
+        {
+          "site_rva": 360645,
+          "target_rva": 25552,
+          "target_export": null,
+          "target_pdata_range": null
+        },
+        {
+          "site_rva": 360677,
+          "target_rva": 13712,
+          "target_export": null,
+          "target_pdata_range": [
+            13712,
+            13741
+          ]
+        }
+      ],
+      "direct_branch_count": 6
+    },
+    {
+      "name": "IggyValueRefCreateEmptyObject",
+      "export_rva": 425920,
+      "entry_pdata_range": [
+        425920,
+        426160
+      ],
+      "reachable_instruction_count": 59,
+      "reachable_code_ranges": [
+        {
+          "start_rva": 425920,
+          "end_rva": 426160,
+          "instruction_count": 59
+        }
+      ],
+      "direct_calls": [
+        {
+          "site_rva": 425957,
+          "target_rva": 356304,
+          "target_export": null,
+          "target_pdata_range": [
+            356304,
+            356424
+          ]
+        },
+        {
+          "site_rva": 426011,
+          "target_rva": 867520,
+          "target_export": null,
+          "target_pdata_range": null
+        },
+        {
+          "site_rva": 426034,
+          "target_rva": 290912,
+          "target_export": null,
+          "target_pdata_range": [
+            290912,
+            291005
+          ]
+        },
+        {
+          "site_rva": 426062,
+          "target_rva": 418496,
+          "target_export": null,
+          "target_pdata_range": [
+            418496,
+            418593
+          ]
+        },
+        {
+          "site_rva": 426110,
+          "target_rva": 13712,
+          "target_export": null,
+          "target_pdata_range": [
+            13712,
+            13741
+          ]
+        },
+        {
+          "site_rva": 426141,
+          "target_rva": 356432,
+          "target_export": null,
+          "target_pdata_range": [
+            356432,
+            356514
+          ]
+        }
+      ],
+      "direct_branch_count": 5
+    },
+    {
+      "name": "IggyValueRefCreateArray",
+      "export_rva": 426160,
+      "entry_pdata_range": [
+        426160,
+        426516
+      ],
+      "reachable_instruction_count": 95,
+      "reachable_code_ranges": [
+        {
+          "start_rva": 426160,
+          "end_rva": 426516,
+          "instruction_count": 95
+        }
+      ],
+      "direct_calls": [
+        {
+          "site_rva": 426219,
+          "target_rva": 13712,
+          "target_export": null,
+          "target_pdata_range": [
+            13712,
+            13741
+          ]
+        },
+        {
+          "site_rva": 426259,
+          "target_rva": 13712,
+          "target_export": null,
+          "target_pdata_range": [
+            13712,
+            13741
+          ]
+        },
+        {
+          "site_rva": 426282,
+          "target_rva": 356304,
+          "target_export": null,
+          "target_pdata_range": [
+            356304,
+            356424
+          ]
+        },
+        {
+          "site_rva": 426323,
+          "target_rva": 867520,
+          "target_export": null,
+          "target_pdata_range": null
+        },
+        {
+          "site_rva": 426357,
+          "target_rva": 292304,
+          "target_export": null,
+          "target_pdata_range": [
+            292304,
+            292387
+          ]
+        },
+        {
+          "site_rva": 426416,
+          "target_rva": 418496,
+          "target_export": null,
+          "target_pdata_range": [
+            418496,
+            418593
+          ]
+        },
+        {
+          "site_rva": 426464,
+          "target_rva": 13712,
+          "target_export": null,
+          "target_pdata_range": [
+            13712,
+            13741
+          ]
+        },
+        {
+          "site_rva": 426495,
+          "target_rva": 356432,
+          "target_export": null,
+          "target_pdata_range": [
+            356432,
+            356514
+          ]
+        }
+      ],
+      "direct_branch_count": 9
+    },
+    {
+      "name": "IggyValueRefFromPath",
+      "export_rva": 425616,
+      "entry_pdata_range": [
+        425616,
+        425848
+      ],
+      "reachable_instruction_count": 61,
+      "reachable_code_ranges": [
+        {
+          "start_rva": 425616,
+          "end_rva": 425848,
+          "instruction_count": 61
+        }
+      ],
+      "direct_calls": [
+        {
+          "site_rva": 425664,
+          "target_rva": 356304,
+          "target_export": null,
+          "target_pdata_range": [
+            356304,
+            356424
+          ]
+        },
+        {
+          "site_rva": 425735,
+          "target_rva": 867520,
+          "target_export": null,
+          "target_pdata_range": null
+        },
+        {
+          "site_rva": 425764,
+          "target_rva": 420544,
+          "target_export": null,
+          "target_pdata_range": [
+            420544,
+            421139
+          ]
+        },
+        {
+          "site_rva": 425787,
+          "target_rva": 425488,
+          "target_export": null,
+          "target_pdata_range": [
+            425488,
+            425510
+          ]
+        },
+        {
+          "site_rva": 425824,
+          "target_rva": 356432,
+          "target_export": null,
+          "target_pdata_range": [
+            356432,
+            356514
+          ]
+        }
+      ],
+      "direct_branch_count": 3
+    },
+    {
+      "name": "IggyValuePathSetParent",
+      "export_rva": 420400,
+      "entry_pdata_range": null,
+      "reachable_instruction_count": 33,
+      "reachable_code_ranges": [
+        {
+          "start_rva": 13712,
+          "end_rva": 13741,
+          "instruction_count": 7
+        },
+        {
+          "start_rva": 420400,
+          "end_rva": 420506,
+          "instruction_count": 26
+        }
+      ],
+      "direct_calls": [
+        {
+          "site_rva": 13731,
+          "target_rva": 9760,
+          "target_export": null,
+          "target_pdata_range": [
+            9760,
+            9977
+          ]
+        }
+      ],
+      "direct_branch_count": 6
+    }
+  ],
+  "focus_enumeration_observations": {
+    "export_rva": 98624,
+    "static_patterns_verified": {
+      "count_initialized_to_zero": true,
+      "optional_player_context_pointer_copied": true,
+      "focus_record_stride_24_bytes": true,
+      "output_copies_existing_object_fields": true,
+      "walks_existing_object_links": true
+    },
+    "interpretation": "The function traverses existing runtime objects and writes focus records to caller-provided storage; it is an enumeration/focus facility, not evidence of a display-object constructor or insertion API."
+  },
+  "capability_conclusion": "The pinned DLL exposes generic script function/method dispatch, movie creation from memory, and focus enumeration/set APIs. Static export names reveal no explicit display-tree add/create/insert API, but this does not prove that a script-call route is impossible. No current evidence supplies the required mod-page display object, callback code, or safe asset insertion contract."
+}

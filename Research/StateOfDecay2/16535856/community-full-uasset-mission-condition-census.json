@@ -1,0 +1,497 @@
+{
+  "schema": 1,
+  "target": "target.json",
+  "target_sha256": "EBF0A73E164BAA701F74655585F262F8E38A32B1F6DC5057303489BA5B333ECE",
+  "method": "Read JSON files under each immediate provider asset subtree as UTF-8 with optional BOM, excluding root-level analysis sidecars; parse files containing the exact CommunityMissionCondition Type field and count serialized Properties without inferring defaults.",
+  "scope": {
+    "export_root_name": "SoD2StaticFullUassetExportsFinal",
+    "provider_asset_roots": [
+      "Engine",
+      "StateOfDecay2"
+    ],
+    "json_files_seen": 105357,
+    "json_bytes_scanned": 2332782471,
+    "candidate_files": 19,
+    "json_decode_errors": 0,
+    "game_process_started_or_attached": false,
+    "class_default_inferred": false
+  },
+  "static_definition_search": {
+    "searched_same_full_json_tree": true,
+    "default_object_name_token": "Default__CommunityMissionCondition",
+    "default_object_name_hit_count": 0,
+    "comparison_enum_definition_type": "UserDefinedEnum",
+    "comparison_enum_definition_count": 0,
+    "condition_struct_definition_type": "UserDefinedStruct",
+    "condition_struct_definition_count": 0,
+    "interpretation": "This export tree contains no direct cooked UEnum/UStruct definition or named class-default object for the condition's missing Comparison values; absence does not establish what native/default-struct initialization supplies."
+  },
+  "summary": {
+    "condition_object_count": 315,
+    "comparison_stat_counts": {
+      "<missing>": 3,
+      "ECommunityConditionStat::CommunityMembers": 211,
+      "ECommunityConditionStat::CommunityMorale": 1,
+      "ECommunityConditionStat::CommunityNoise": 16,
+      "ECommunityConditionStat::CommunityOutposts": 1,
+      "ECommunityConditionStat::CommunityStandingHighWaterMark": 6,
+      "ECommunityConditionStat::CommunityTimeTotal": 76,
+      "ECommunityConditionStat::CommunityTotalStanding": 1
+    },
+    "comparison_field_present_count": 269,
+    "comparison_field_missing_count": 46,
+    "comparison_by_stat": [
+      {
+        "comparison_stat": "<missing>",
+        "comparison": "<missing>",
+        "count": 2
+      },
+      {
+        "comparison_stat": "<missing>",
+        "comparison": "EMissionConditionComparison::LessOrEqual",
+        "count": 1
+      },
+      {
+        "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+        "comparison": "<missing>",
+        "count": 43
+      },
+      {
+        "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+        "comparison": "EMissionConditionComparison::Greater",
+        "count": 43
+      },
+      {
+        "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+        "comparison": "EMissionConditionComparison::GreaterOrEqual",
+        "count": 14
+      },
+      {
+        "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+        "comparison": "EMissionConditionComparison::Less",
+        "count": 14
+      },
+      {
+        "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+        "comparison": "EMissionConditionComparison::LessOrEqual",
+        "count": 93
+      },
+      {
+        "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+        "comparison": "EMissionConditionComparison::NotEqual",
+        "count": 4
+      },
+      {
+        "comparison_stat": "ECommunityConditionStat::CommunityMorale",
+        "comparison": "EMissionConditionComparison::GreaterOrEqual",
+        "count": 1
+      },
+      {
+        "comparison_stat": "ECommunityConditionStat::CommunityNoise",
+        "comparison": "EMissionConditionComparison::GreaterOrEqual",
+        "count": 8
+      },
+      {
+        "comparison_stat": "ECommunityConditionStat::CommunityNoise",
+        "comparison": "EMissionConditionComparison::Less",
+        "count": 8
+      },
+      {
+        "comparison_stat": "ECommunityConditionStat::CommunityOutposts",
+        "comparison": "<missing>",
+        "count": 1
+      },
+      {
+        "comparison_stat": "ECommunityConditionStat::CommunityStandingHighWaterMark",
+        "comparison": "EMissionConditionComparison::GreaterOrEqual",
+        "count": 3
+      },
+      {
+        "comparison_stat": "ECommunityConditionStat::CommunityStandingHighWaterMark",
+        "comparison": "EMissionConditionComparison::Less",
+        "count": 3
+      },
+      {
+        "comparison_stat": "ECommunityConditionStat::CommunityTimeTotal",
+        "comparison": "EMissionConditionComparison::GreaterOrEqual",
+        "count": 38
+      },
+      {
+        "comparison_stat": "ECommunityConditionStat::CommunityTimeTotal",
+        "comparison": "EMissionConditionComparison::Less",
+        "count": 38
+      },
+      {
+        "comparison_stat": "ECommunityConditionStat::CommunityTotalStanding",
+        "comparison": "EMissionConditionComparison::Greater",
+        "count": 1
+      }
+    ],
+    "missing_by_stat": {
+      "<missing>": 2,
+      "ECommunityConditionStat::CommunityMembers": 43,
+      "ECommunityConditionStat::CommunityOutposts": 1
+    }
+  },
+  "packages": [
+    {
+      "asset": "StateOfDecay2/Content/Story/AmbientMissions/AmbientMissions.json",
+      "object_count": 34
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/AmbientMissions/AmbientMissions_CU2.json",
+      "object_count": 23
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/AmbientMissions/SiegeMissions.json",
+      "object_count": 16
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/BoonsBanes/BoonsBanesMissions.json",
+      "object_count": 12
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/Community/Community_EndOfDayEvents.json",
+      "object_count": 3
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/EnclaveMissions/ApprehensiveEnclaveCreationMissions.json",
+      "object_count": 36
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/EnclaveMissions/ApprehensiveEnclaveMissions.json",
+      "object_count": 36
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/EnclaveMissions/ApprehensiveEnclaveMissions_CU2.json",
+      "object_count": 2
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/EnclaveMissions/ApprehensiveEnclaveMissions_CU2_Create.json",
+      "object_count": 2
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/EnclaveMissions/EnclaveMissions_DLC4.json",
+      "object_count": 2
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/HeartlandMissions/Heartland_CLEODrops.json",
+      "object_count": 7
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/HeartlandMissions/Heartland_Standalone_PlagueSiegeAtBase.json",
+      "object_count": 28
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/LegacyArcs/Arc_Legacy_Builder.json",
+      "object_count": 68
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/LegacyArcs/Arc_Legacy_Sheriff_Missions.json",
+      "object_count": 2
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/LegacyArcs/Arc_Legacy_Trader.json",
+      "object_count": 2
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/LegacyArcs/Arc_Legacy_Warlord.json",
+      "object_count": 4
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/StarterScenarioArcs/StarterJugg_FourLeaders.json",
+      "object_count": 1
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/TestAssets/Ambient/AmbientMissions_General.json",
+      "object_count": 36
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/TestAssets/TestConditionEvents.json",
+      "object_count": 1
+    }
+  ],
+  "missing_comparison_objects": [
+    {
+      "asset": "StateOfDecay2/Content/Story/BoonsBanes/BoonsBanesMissions.json",
+      "object": "CommunityMissionCondition_13",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 2.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/BoonsBanes/BoonsBanesMissions.json",
+      "object": "CommunityMissionCondition_15",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 2.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/BoonsBanes/BoonsBanesMissions.json",
+      "object": "CommunityMissionCondition_17",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 2.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/BoonsBanes/BoonsBanesMissions.json",
+      "object": "CommunityMissionCondition_19",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 2.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/BoonsBanes/BoonsBanesMissions.json",
+      "object": "CommunityMissionCondition_21",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 2.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/BoonsBanes/BoonsBanesMissions.json",
+      "object": "CommunityMissionCondition_23",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 2.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/HeartlandMissions/Heartland_CLEODrops.json",
+      "object": "CommunityMissionCondition_28",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 2.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/HeartlandMissions/Heartland_CLEODrops.json",
+      "object": "CommunityMissionCondition_29",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 3.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/HeartlandMissions/Heartland_CLEODrops.json",
+      "object": "CommunityMissionCondition_30",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 4.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/HeartlandMissions/Heartland_CLEODrops.json",
+      "object": "CommunityMissionCondition_31",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 5.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/HeartlandMissions/Heartland_CLEODrops.json",
+      "object": "CommunityMissionCondition_32",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 6.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/HeartlandMissions/Heartland_CLEODrops.json",
+      "object": "CommunityMissionCondition_33",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 7.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/HeartlandMissions/Heartland_Standalone_PlagueSiegeAtBase.json",
+      "object": "CommunityMissionCondition_28",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 1.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/HeartlandMissions/Heartland_Standalone_PlagueSiegeAtBase.json",
+      "object": "CommunityMissionCondition_30",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 1.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/HeartlandMissions/Heartland_Standalone_PlagueSiegeAtBase.json",
+      "object": "CommunityMissionCondition_33",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": null
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/HeartlandMissions/Heartland_Standalone_PlagueSiegeAtBase.json",
+      "object": "CommunityMissionCondition_34",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 2.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/HeartlandMissions/Heartland_Standalone_PlagueSiegeAtBase.json",
+      "object": "CommunityMissionCondition_35",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 3.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/HeartlandMissions/Heartland_Standalone_PlagueSiegeAtBase.json",
+      "object": "CommunityMissionCondition_36",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 4.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/HeartlandMissions/Heartland_Standalone_PlagueSiegeAtBase.json",
+      "object": "CommunityMissionCondition_37",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 5.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/HeartlandMissions/Heartland_Standalone_PlagueSiegeAtBase.json",
+      "object": "CommunityMissionCondition_38",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 6.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/HeartlandMissions/Heartland_Standalone_PlagueSiegeAtBase.json",
+      "object": "CommunityMissionCondition_39",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 7.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/HeartlandMissions/Heartland_Standalone_PlagueSiegeAtBase.json",
+      "object": "CommunityMissionCondition_40",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 8.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/HeartlandMissions/Heartland_Standalone_PlagueSiegeAtBase.json",
+      "object": "CommunityMissionCondition_41",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 9.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/HeartlandMissions/Heartland_Standalone_PlagueSiegeAtBase.json",
+      "object": "CommunityMissionCondition_42",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 1.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/HeartlandMissions/Heartland_Standalone_PlagueSiegeAtBase.json",
+      "object": "CommunityMissionCondition_44",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 1.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/HeartlandMissions/Heartland_Standalone_PlagueSiegeAtBase.json",
+      "object": "CommunityMissionCondition_47",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": null
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/HeartlandMissions/Heartland_Standalone_PlagueSiegeAtBase.json",
+      "object": "CommunityMissionCondition_48",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 2.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/HeartlandMissions/Heartland_Standalone_PlagueSiegeAtBase.json",
+      "object": "CommunityMissionCondition_49",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 3.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/HeartlandMissions/Heartland_Standalone_PlagueSiegeAtBase.json",
+      "object": "CommunityMissionCondition_50",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 4.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/HeartlandMissions/Heartland_Standalone_PlagueSiegeAtBase.json",
+      "object": "CommunityMissionCondition_51",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 5.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/HeartlandMissions/Heartland_Standalone_PlagueSiegeAtBase.json",
+      "object": "CommunityMissionCondition_52",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 6.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/HeartlandMissions/Heartland_Standalone_PlagueSiegeAtBase.json",
+      "object": "CommunityMissionCondition_53",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 7.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/HeartlandMissions/Heartland_Standalone_PlagueSiegeAtBase.json",
+      "object": "CommunityMissionCondition_54",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 8.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/HeartlandMissions/Heartland_Standalone_PlagueSiegeAtBase.json",
+      "object": "CommunityMissionCondition_55",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 9.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/LegacyArcs/Arc_Legacy_Builder.json",
+      "object": "CommunityMissionCondition_122",
+      "comparison_stat": null,
+      "value": 10.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/LegacyArcs/Arc_Legacy_Builder.json",
+      "object": "CommunityMissionCondition_123",
+      "comparison_stat": null,
+      "value": 11.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/LegacyArcs/Arc_Legacy_Builder.json",
+      "object": "CommunityMissionCondition_124",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 12.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/LegacyArcs/Arc_Legacy_Builder.json",
+      "object": "CommunityMissionCondition_126",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 11.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/LegacyArcs/Arc_Legacy_Builder.json",
+      "object": "CommunityMissionCondition_132",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 11.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/LegacyArcs/Arc_Legacy_Builder.json",
+      "object": "CommunityMissionCondition_133",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 12.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/LegacyArcs/Arc_Legacy_Builder.json",
+      "object": "CommunityMissionCondition_68",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 1.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/LegacyArcs/Arc_Legacy_Sheriff_Missions.json",
+      "object": "CommunityMissionCondition_18",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 1.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/LegacyArcs/Arc_Legacy_Trader.json",
+      "object": "CommunityMissionCondition_0",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 1.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/LegacyArcs/Arc_Legacy_Warlord.json",
+      "object": "CommunityMissionCondition_4",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 1.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/LegacyArcs/Arc_Legacy_Warlord.json",
+      "object": "CommunityMissionCondition_7",
+      "comparison_stat": "ECommunityConditionStat::CommunityMembers",
+      "value": 12.0
+    },
+    {
+      "asset": "StateOfDecay2/Content/Story/StarterScenarioArcs/StarterJugg_FourLeaders.json",
+      "object": "CommunityMissionCondition_5",
+      "comparison_stat": "ECommunityConditionStat::CommunityOutposts",
+      "value": 2.0
+    }
+  ],
+  "errors": [],
+  "limits": [
+    "The report describes serialized exported object properties only; a missing Comparison field does not establish the native class-default value.",
+    "This census includes all packages in the supplied export tree, not only MissionAsset packages; object counts must not be compared as if the selections were identical."
+  ]
+}

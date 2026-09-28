@@ -1,0 +1,586 @@
+{
+  "schema": 1,
+  "target": "target.json",
+  "target_sha256": "EBF0A73E164BAA701F74655585F262F8E38A32B1F6DC5057303489BA5B333ECE",
+  "native_enum_registration_report": "zombie-variant-enum-native-registration.json",
+  "native_plague_flag_name_reference_report": "zombie-plague-flag-native-name-references.json",
+  "method": "Parse exact serialized Ue4Export JSON assets and scan every JSON under every immediate provider-asset subtree for AllZombieTypes::NewEnumeratorN and plague-flag tokens; root-level analysis sidecars are excluded.",
+  "scope": {
+    "game_process_started_or_attached": false,
+    "export_root_name": "SoD2StaticFullUassetExportsFinal",
+    "provider_asset_roots": [
+      "Engine",
+      "StateOfDecay2"
+    ],
+    "enum_usage_json_files": 105357,
+    "enum_usage_json_bytes_scanned": 2332782471,
+    "enum_usage_decode_errors": 0
+  },
+  "all_zombie_types_enum": {
+    "asset": "AI/AllZombieTypes.uasset",
+    "display_names_in_serialized_order": [
+      "Generic",
+      "Screamer",
+      "Bloater",
+      "Juggernaut",
+      "Feral",
+      "All"
+    ],
+    "enumerator_ordinal_mapping_candidates": [
+      {
+        "enumerator": "AllZombieTypes::NewEnumerator0",
+        "ordinal": 0,
+        "display_name_candidate": "Generic"
+      },
+      {
+        "enumerator": "AllZombieTypes::NewEnumerator1",
+        "ordinal": 1,
+        "display_name_candidate": "Screamer"
+      },
+      {
+        "enumerator": "AllZombieTypes::NewEnumerator2",
+        "ordinal": 2,
+        "display_name_candidate": "Bloater"
+      },
+      {
+        "enumerator": "AllZombieTypes::NewEnumerator3",
+        "ordinal": 3,
+        "display_name_candidate": "Juggernaut"
+      },
+      {
+        "enumerator": "AllZombieTypes::NewEnumerator4",
+        "ordinal": 4,
+        "display_name_candidate": "Feral"
+      },
+      {
+        "enumerator": "AllZombieTypes::NewEnumerator5",
+        "ordinal": 5,
+        "display_name_candidate": "All"
+      }
+    ],
+    "exported_names_map_entry_count": 5,
+    "exported_names_map_values": [
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    "mapping_basis": "The candidates pair NewEnumeratorN with the Nth serialized DisplayNames item. The export's Names map is recorded separately and is not used to claim the mapping because this build's export has duplicate/zero values."
+  },
+  "enum_usage": {
+    "json_files_seen": 105357,
+    "json_bytes_scanned": 2332782471,
+    "decode_errors": 0,
+    "errors": [],
+    "serialized_reference_count": 6,
+    "enumerator_reference_counts": {
+      "AllZombieTypes::NewEnumerator3": 2,
+      "AllZombieTypes::NewEnumerator5": 4
+    },
+    "assets_by_enumerator": {
+      "AllZombieTypes::NewEnumerator3": [
+        "StateOfDecay2/Content/AI/Human/AITree_HumanCombatVsZombie.json"
+      ],
+      "AllZombieTypes::NewEnumerator5": [
+        "StateOfDecay2/Content/AI/Human/AITree_HumanCombatVsZombie.json",
+        "StateOfDecay2/Content/AI/Human/AITree_HumanFollowMode.json",
+        "StateOfDecay2/Content/AI/Human/Experiment/AITree_HumanRoot_Experimental.json"
+      ]
+    },
+    "plague_flag_asset_paths": [
+      "StateOfDecay2/Content/AI/Helpers/Task_FeralDiveTackle.json",
+      "StateOfDecay2/Content/AI/Human/AIController_Human.json",
+      "StateOfDecay2/Content/AI/Zombie/Helpers/Task_AttachToVehicle.json",
+      "StateOfDecay2/Content/AI/Zombie/Screamer/AIController_Screamer.json",
+      "StateOfDecay2/Content/Characters/Bloater/BloaterCharacter.json",
+      "StateOfDecay2/Content/Characters/Bloater/BloodBloater.json",
+      "StateOfDecay2/Content/Characters/Bloater/BloodBloaterAmbush.json",
+      "StateOfDecay2/Content/Characters/Bloater/BloodBloaterWalker.json",
+      "StateOfDecay2/Content/Characters/BloodPlagueNode/BloodPlagueNode.json",
+      "StateOfDecay2/Content/Characters/BloodPlagueWall/BloodPlagueWall.json",
+      "StateOfDecay2/Content/Characters/Common/Actions/CommonSyncedAttackedActionImpl.json",
+      "StateOfDecay2/Content/Characters/Common/ZombieDurabilityFunctions.json",
+      "StateOfDecay2/Content/Characters/Feral/Actions/FeralAttachIntroActionImpl.json",
+      "StateOfDecay2/Content/Characters/Feral/Actions/FeralAttackingActionImpl.json",
+      "StateOfDecay2/Content/Characters/Feral/Actions/FeralDeadActionImpl.json",
+      "StateOfDecay2/Content/Characters/Feral/Actions/FeralDieActionImpl.json",
+      "StateOfDecay2/Content/Characters/Feral/Actions/FeralLocomotionActionImpl.json",
+      "StateOfDecay2/Content/Characters/Feral/BloodFeral.json",
+      "StateOfDecay2/Content/Characters/Feral/FeralCharacter.json",
+      "StateOfDecay2/Content/Characters/Feral/FeralFullBodyAction.json",
+      "StateOfDecay2/Content/Characters/Human/HumanCharacter.json",
+      "StateOfDecay2/Content/Characters/Juggernaut/BloodPlagueJuggCharacter.json",
+      "StateOfDecay2/Content/Characters/Juggernaut/JuggernautCharacter.json",
+      "StateOfDecay2/Content/Characters/Juggernaut/JuggernautFullBodyAction.json",
+      "StateOfDecay2/Content/Characters/Screamer/Actions/ScreamerScreamActionImpl.json",
+      "StateOfDecay2/Content/Characters/Screamer/BloodScreamer.json",
+      "StateOfDecay2/Content/Characters/Screamer/ScreamerCharacter.json",
+      "StateOfDecay2/Content/Characters/Screamer/ScreamerFullBodyAction.json",
+      "StateOfDecay2/Content/Characters/Zombie/Actions/CrawlerAttackingActionImpl.json",
+      "StateOfDecay2/Content/Characters/Zombie/Actions/ZombieAttackingActionImpl.json",
+      "StateOfDecay2/Content/Characters/Zombie/Actions/ZombieDeadActionImpl.json",
+      "StateOfDecay2/Content/Characters/Zombie/AnimNotify_ZombieBiteDamage.json",
+      "StateOfDecay2/Content/Characters/Zombie/Presets/Zombie_Plague.json",
+      "StateOfDecay2/Content/Characters/Zombie/Presets/Zombie_PlagueAmbush.json",
+      "StateOfDecay2/Content/Characters/Zombie/ZombieCharacter.json",
+      "StateOfDecay2/Content/Characters/Zombie/ZombieCharacterInterface.json",
+      "StateOfDecay2/Content/Characters/Zombie/ZombieFullBodyAction.json",
+      "StateOfDecay2/Content/Characters/ZombieClassHelper.json",
+      "StateOfDecay2/Content/Cinematics/Classes/CinematicZombie.json",
+      "StateOfDecay2/Content/GameModes/DaybreakGameMode_BP.json",
+      "StateOfDecay2/Content/GameModes/DaytonGameMode_BPInterface.json",
+      "StateOfDecay2/Content/GameModes/VanillaGameMode_BP.json",
+      "StateOfDecay2/Content/Missions/MissionFunctionLibrary.json",
+      "StateOfDecay2/Content/Persona/Feral/Feral1_ABP.json",
+      "StateOfDecay2/Content/Persona/Human/Human1_ABP.json",
+      "StateOfDecay2/Content/Persona/Screamer/ScreamerZombie_ABP2.json",
+      "StateOfDecay2/Content/Story/MissionEvents/TurnCharacterToZombieMissionEventInstance.json"
+    ]
+  },
+  "zombie_type_struct": {
+    "asset": "Missions/ZombieEncounter/ZombieTypeStruct.uasset",
+    "struct_flags": 0,
+    "property_name": "DaytonZombieClassAsset_21_E02F3AD04C87B40B49FC72A8D4C69D2D",
+    "property_meta_class": "Class'DaytonZombieCharacter'"
+  },
+  "zombie_type_data_table": {
+    "asset": "Missions/ZombieEncounter/ZombieTypeDataTable.uasset",
+    "row_struct": "UserDefinedStruct'ZombieTypeStruct'",
+    "row_count": 17,
+    "rows": [
+      {
+        "row_name": "Armored",
+        "class_paths": [
+          "/Game/Characters/Zombie/Presets/Zombie_Armored.Zombie_Armored_C"
+        ]
+      },
+      {
+        "row_name": "Captive",
+        "class_paths": [
+          "/Game/Characters/Zombie/Presets/Zombie_Captive.Zombie_Captive_C"
+        ]
+      },
+      {
+        "row_name": "Crawler",
+        "class_paths": [
+          "/Game/Characters/Zombie/Presets/Zombie_Crawler.Zombie_Crawler_C"
+        ]
+      },
+      {
+        "row_name": "CrawlerAmbush",
+        "class_paths": [
+          "/Game/Characters/Zombie/Presets/Zombie_CrawlerAmbush.Zombie_CrawlerAmbush_C"
+        ]
+      },
+      {
+        "row_name": "Fast",
+        "class_paths": [
+          "/Game/Characters/Zombie/Presets/Zombie_Fast.Zombie_Fast_C"
+        ]
+      },
+      {
+        "row_name": "FastAmbush",
+        "class_paths": [
+          "/Game/Characters/Zombie/Presets/Zombie_FastAmbush.Zombie_FastAmbush_C"
+        ]
+      },
+      {
+        "row_name": "Plague",
+        "class_paths": [
+          "/Game/Characters/Zombie/Presets/Zombie_Plague.Zombie_Plague_C"
+        ]
+      },
+      {
+        "row_name": "Slow",
+        "class_paths": [
+          "/Game/Characters/Zombie/Presets/Zombie_Slow.Zombie_Slow_C"
+        ]
+      },
+      {
+        "row_name": "SlowAmbush",
+        "class_paths": [
+          "/Game/Characters/Zombie/Presets/Zombie_SlowAmbush.Zombie_SlowAmbush_C"
+        ]
+      },
+      {
+        "row_name": "Bloater",
+        "class_paths": [
+          "/Game/Characters/Bloater/BloaterCharacter.BloaterCharacter_C"
+        ]
+      },
+      {
+        "row_name": "Feral",
+        "class_paths": [
+          "/Game/Characters/Feral/FeralCharacter.FeralCharacter_C"
+        ]
+      },
+      {
+        "row_name": "Juggernaut",
+        "class_paths": [
+          "/Game/Characters/Juggernaut/JuggernautCharacter.JuggernautCharacter_C"
+        ]
+      },
+      {
+        "row_name": "Screamer",
+        "class_paths": [
+          "/Game/Characters/Screamer/ScreamerCharacter.ScreamerCharacter_C"
+        ]
+      },
+      {
+        "row_name": "BpJuggernaut",
+        "class_paths": [
+          "/Game/Characters/Juggernaut/BloodPlagueJuggCharacter.BloodPlagueJuggCharacter_C"
+        ]
+      },
+      {
+        "row_name": "BpBloater",
+        "class_paths": [
+          "/Game/Characters/Bloater/BloodBloater.BloodBloater_C"
+        ]
+      },
+      {
+        "row_name": "BpScreamer",
+        "class_paths": [
+          "/Game/Characters/Screamer/BloodScreamer.BloodScreamer_C"
+        ]
+      },
+      {
+        "row_name": "BpFeral",
+        "class_paths": [
+          "/Game/Characters/Feral/BloodFeral.BloodFeral_C"
+        ]
+      }
+    ]
+  },
+  "zombie_variants_data_table": {
+    "asset": "Art/Characters/Zombie/ZombieVariants.uasset",
+    "row_struct": "UserDefinedStruct'ZombieContentVariant'",
+    "row_count": 28,
+    "variant_type_property": "ZombieVariantType_36_667736414DC425F4F5E68C8189533DF1",
+    "plague_variant_row_count": 3,
+    "plague_variant_rows": [
+      {
+        "row_name": "MalePlague01",
+        "serialized_variant_type": "EZombieVariantType::Plague",
+        "appearance_path": "/Game/Art/Characters/Zombie/Appearances/MalePlague01.MalePlague01"
+      },
+      {
+        "row_name": "FemalePlague01",
+        "serialized_variant_type": "EZombieVariantType::Plague",
+        "appearance_path": "/Game/Art/Characters/Zombie/Appearances/FemalePlague01.FemalePlague01"
+      },
+      {
+        "row_name": "MaleFatPlague01",
+        "serialized_variant_type": "EZombieVariantType::Plague",
+        "appearance_path": "/Game/Art/Characters/Zombie/Appearances/MaleFatPlague01.MaleFatPlague01"
+      }
+    ]
+  },
+  "generic_plague_variant_logic": {
+    "asset": "Characters/Zombie/ZombieCharacter.uasset",
+    "function": "SetSpecificCharacterAppearance",
+    "table_lookup": {
+      "function": "Function'DataTableFunctionLibrary:GetDataTableRowFromName'",
+      "table": "DataTable'ZombieVariants'",
+      "row_name_source": "ZombieVariant"
+    },
+    "comparison": {
+      "statement_index": 627,
+      "result_local": "K2Node_SwitchEnum2_CmpSuccess",
+      "operator": "NotEqual_ByteByte",
+      "variant_type_property": "ByteProperty'ZombieContentVariant:ZombieVariantType_36_667736414DC425F4F5E68C8189533DF1'",
+      "byte_value": 4
+    },
+    "conditional_branch": {
+      "statement_index": 667,
+      "opcode": "EX_JumpIfNot",
+      "code_offset": 1282,
+      "branch_condition": "The stored NotEqual result is false, so the compared byte equals byte_value."
+    },
+    "equal_value_branch_flag_writes": [
+      {
+        "statement_index": 1292,
+        "variable": "BoolProperty'ZombieCharacter_C:IsPlagueZombie'",
+        "serialized_value_token": "EX_True"
+      },
+      {
+        "statement_index": 1303,
+        "variable": "BoolProperty'DaytonZombieCharacter:bIsBloodPlagueZombie'",
+        "serialized_value_token": "EX_True"
+      }
+    ],
+    "interpretation": "Rows serialized as EZombieVariantType::Plague correlate with the byte-equality branch that writes both plague flags. The fixed-build native enum registrar independently provides a strong static ordinal inference of Slow=0, Unique=1, Fast=2, Armored=3, Plague=4; the native setter is virtual and unnamed, so the mapping remains an inference rather than runtime confirmation."
+  },
+  "serialized_plague_flag_inventory": {
+    "candidate_asset_count": 47,
+    "candidate_assets": [
+      "StateOfDecay2/Content/AI/Helpers/Task_FeralDiveTackle.json",
+      "StateOfDecay2/Content/AI/Human/AIController_Human.json",
+      "StateOfDecay2/Content/AI/Zombie/Helpers/Task_AttachToVehicle.json",
+      "StateOfDecay2/Content/AI/Zombie/Screamer/AIController_Screamer.json",
+      "StateOfDecay2/Content/Characters/Bloater/BloaterCharacter.json",
+      "StateOfDecay2/Content/Characters/Bloater/BloodBloater.json",
+      "StateOfDecay2/Content/Characters/Bloater/BloodBloaterAmbush.json",
+      "StateOfDecay2/Content/Characters/Bloater/BloodBloaterWalker.json",
+      "StateOfDecay2/Content/Characters/BloodPlagueNode/BloodPlagueNode.json",
+      "StateOfDecay2/Content/Characters/BloodPlagueWall/BloodPlagueWall.json",
+      "StateOfDecay2/Content/Characters/Common/Actions/CommonSyncedAttackedActionImpl.json",
+      "StateOfDecay2/Content/Characters/Common/ZombieDurabilityFunctions.json",
+      "StateOfDecay2/Content/Characters/Feral/Actions/FeralAttachIntroActionImpl.json",
+      "StateOfDecay2/Content/Characters/Feral/Actions/FeralAttackingActionImpl.json",
+      "StateOfDecay2/Content/Characters/Feral/Actions/FeralDeadActionImpl.json",
+      "StateOfDecay2/Content/Characters/Feral/Actions/FeralDieActionImpl.json",
+      "StateOfDecay2/Content/Characters/Feral/Actions/FeralLocomotionActionImpl.json",
+      "StateOfDecay2/Content/Characters/Feral/BloodFeral.json",
+      "StateOfDecay2/Content/Characters/Feral/FeralCharacter.json",
+      "StateOfDecay2/Content/Characters/Feral/FeralFullBodyAction.json",
+      "StateOfDecay2/Content/Characters/Human/HumanCharacter.json",
+      "StateOfDecay2/Content/Characters/Juggernaut/BloodPlagueJuggCharacter.json",
+      "StateOfDecay2/Content/Characters/Juggernaut/JuggernautCharacter.json",
+      "StateOfDecay2/Content/Characters/Juggernaut/JuggernautFullBodyAction.json",
+      "StateOfDecay2/Content/Characters/Screamer/Actions/ScreamerScreamActionImpl.json",
+      "StateOfDecay2/Content/Characters/Screamer/BloodScreamer.json",
+      "StateOfDecay2/Content/Characters/Screamer/ScreamerCharacter.json",
+      "StateOfDecay2/Content/Characters/Screamer/ScreamerFullBodyAction.json",
+      "StateOfDecay2/Content/Characters/Zombie/Actions/CrawlerAttackingActionImpl.json",
+      "StateOfDecay2/Content/Characters/Zombie/Actions/ZombieAttackingActionImpl.json",
+      "StateOfDecay2/Content/Characters/Zombie/Actions/ZombieDeadActionImpl.json",
+      "StateOfDecay2/Content/Characters/Zombie/AnimNotify_ZombieBiteDamage.json",
+      "StateOfDecay2/Content/Characters/Zombie/Presets/Zombie_Plague.json",
+      "StateOfDecay2/Content/Characters/Zombie/Presets/Zombie_PlagueAmbush.json",
+      "StateOfDecay2/Content/Characters/Zombie/ZombieCharacter.json",
+      "StateOfDecay2/Content/Characters/Zombie/ZombieCharacterInterface.json",
+      "StateOfDecay2/Content/Characters/Zombie/ZombieFullBodyAction.json",
+      "StateOfDecay2/Content/Characters/ZombieClassHelper.json",
+      "StateOfDecay2/Content/Cinematics/Classes/CinematicZombie.json",
+      "StateOfDecay2/Content/GameModes/DaybreakGameMode_BP.json",
+      "StateOfDecay2/Content/GameModes/DaytonGameMode_BPInterface.json",
+      "StateOfDecay2/Content/GameModes/VanillaGameMode_BP.json",
+      "StateOfDecay2/Content/Missions/MissionFunctionLibrary.json",
+      "StateOfDecay2/Content/Persona/Feral/Feral1_ABP.json",
+      "StateOfDecay2/Content/Persona/Human/Human1_ABP.json",
+      "StateOfDecay2/Content/Persona/Screamer/ScreamerZombie_ABP2.json",
+      "StateOfDecay2/Content/Story/MissionEvents/TurnCharacterToZombieMissionEventInstance.json"
+    ],
+    "default_object_flag_values": [
+      {
+        "asset": "StateOfDecay2/Content/Characters/Zombie/Presets/Zombie_Plague.json",
+        "object": "Default__Zombie_Plague_C",
+        "field": "IsPlagueZombie",
+        "serialized_value": true
+      },
+      {
+        "asset": "StateOfDecay2/Content/Characters/Zombie/Presets/Zombie_PlagueAmbush.json",
+        "object": "Default__Zombie_PlagueAmbush_C",
+        "field": "IsPlagueZombie",
+        "serialized_value": true
+      }
+    ],
+    "bytecode_flag_assignments": [
+      {
+        "asset": "StateOfDecay2/Content/Characters/Bloater/BloodBloater.json",
+        "function": "UserConstructionScript",
+        "field": "BoolProperty'DaytonZombieCharacter:bIsBloodPlagueZombie'",
+        "statement_index": 10,
+        "serialized_value_token": "EX_True",
+        "value_is_true": true,
+        "source": "EX_True"
+      },
+      {
+        "asset": "StateOfDecay2/Content/Characters/Bloater/BloodBloaterAmbush.json",
+        "function": "UserConstructionScript",
+        "field": "BoolProperty'DaytonZombieCharacter:bIsBloodPlagueZombie'",
+        "statement_index": 10,
+        "serialized_value_token": "EX_True",
+        "value_is_true": true,
+        "source": "EX_True"
+      },
+      {
+        "asset": "StateOfDecay2/Content/Characters/Bloater/BloodBloaterWalker.json",
+        "function": "UserConstructionScript",
+        "field": "BoolProperty'DaytonZombieCharacter:bIsBloodPlagueZombie'",
+        "statement_index": 10,
+        "serialized_value_token": "EX_True",
+        "value_is_true": true,
+        "source": "EX_True"
+      },
+      {
+        "asset": "StateOfDecay2/Content/Characters/Feral/BloodFeral.json",
+        "function": "UserConstructionScript",
+        "field": "BoolProperty'DaytonZombieCharacter:bIsBloodPlagueZombie'",
+        "statement_index": 10,
+        "serialized_value_token": "EX_True",
+        "value_is_true": true,
+        "source": "EX_True"
+      },
+      {
+        "asset": "StateOfDecay2/Content/Characters/Juggernaut/BloodPlagueJuggCharacter.json",
+        "function": "UserConstructionScript",
+        "field": "BoolProperty'DaytonZombieCharacter:bIsBloodPlagueZombie'",
+        "statement_index": 10,
+        "serialized_value_token": "EX_True",
+        "value_is_true": true,
+        "source": "EX_True"
+      },
+      {
+        "asset": "StateOfDecay2/Content/Characters/Screamer/BloodScreamer.json",
+        "function": "UserConstructionScript",
+        "field": "BoolProperty'DaytonZombieCharacter:bIsBloodPlagueZombie'",
+        "statement_index": 10,
+        "serialized_value_token": "EX_True",
+        "value_is_true": true,
+        "source": "EX_True"
+      },
+      {
+        "asset": "StateOfDecay2/Content/Characters/Zombie/ZombieCharacter.json",
+        "function": "UserConstructionScript",
+        "field": "BoolProperty'DaytonZombieCharacter:bIsBloodPlagueZombie'",
+        "statement_index": 168,
+        "serialized_value_token": "EX_InstanceVariable",
+        "value_is_true": false,
+        "source": "IsPlagueZombie"
+      },
+      {
+        "asset": "StateOfDecay2/Content/Characters/Zombie/ZombieCharacter.json",
+        "function": "OnRep_RandomSeed",
+        "field": "BoolProperty'DaytonZombieCharacter:bIsBloodPlagueZombie'",
+        "statement_index": 89,
+        "serialized_value_token": "EX_InstanceVariable",
+        "value_is_true": false,
+        "source": "IsPlagueZombie"
+      },
+      {
+        "asset": "StateOfDecay2/Content/Characters/Zombie/ZombieCharacter.json",
+        "function": "InitAsDaytonHuman",
+        "field": "BoolProperty'DaytonZombieCharacter:bIsBloodPlagueZombie'",
+        "statement_index": 54,
+        "serialized_value_token": "EX_InstanceVariable",
+        "value_is_true": false,
+        "source": "IsPlagueZombie"
+      },
+      {
+        "asset": "StateOfDecay2/Content/Characters/Zombie/ZombieCharacter.json",
+        "function": "SetSpecificCharacterAppearance",
+        "field": "BoolProperty'DaytonZombieCharacter:bIsBloodPlagueZombie'",
+        "statement_index": 292,
+        "serialized_value_token": "EX_False",
+        "value_is_true": false,
+        "source": "EX_False"
+      },
+      {
+        "asset": "StateOfDecay2/Content/Characters/Zombie/ZombieCharacter.json",
+        "function": "SetSpecificCharacterAppearance",
+        "field": "BoolProperty'DaytonZombieCharacter:bIsBloodPlagueZombie'",
+        "statement_index": 1303,
+        "serialized_value_token": "EX_True",
+        "value_is_true": true,
+        "source": "EX_True"
+      }
+    ]
+  },
+  "boons_banes_density_categories": {
+    "asset": "AmbientSpawn/MGR_AmbientSpawner.uasset",
+    "serialized_property": "Default__MGR_AmbientSpawner_C.Properties.BaseDensityReductions[*].ZombieType",
+    "base_density_reduction_category_count": 9,
+    "base_density_reduction_categories": [
+      "EBoonsBanesZombieType::SlowZombie",
+      "EBoonsBanesZombieType::FastZombie",
+      "EBoonsBanesZombieType::HumanTurnedZombie",
+      "EBoonsBanesZombieType::Crawler",
+      "EBoonsBanesZombieType::ArmoredZombie",
+      "EBoonsBanesZombieType::Bloater",
+      "EBoonsBanesZombieType::Screamer",
+      "EBoonsBanesZombieType::Feral",
+      "EBoonsBanesZombieType::Juggernaut"
+    ]
+  },
+  "explicit_plague_flag_evidence": {
+    "normal_plague_preset": {
+      "asset": "Characters/Zombie/Presets/Zombie_Plague.uasset",
+      "class": "Zombie_Plague_C",
+      "default_object": "Default__Zombie_Plague_C",
+      "field": "IsPlagueZombie",
+      "serialized_value": true
+    },
+    "blood_plague_special_presets": [
+      {
+        "data_table_row": "BpBloater",
+        "asset": "StateOfDecay2/Content/Characters/Bloater/BloodBloater.json",
+        "blueprint_class_name": "BloodBloater_C",
+        "construction_function": "UserConstructionScript",
+        "parent_construction_call": "Function'BloaterCharacter_C:UserConstructionScript'",
+        "explicit_assignments": [
+          {
+            "statement_index": 10,
+            "variable": "BoolProperty'DaytonZombieCharacter:bIsBloodPlagueZombie'",
+            "serialized_value_token": "EX_True",
+            "value_is_true": true
+          }
+        ]
+      },
+      {
+        "data_table_row": "BpFeral",
+        "asset": "StateOfDecay2/Content/Characters/Feral/BloodFeral.json",
+        "blueprint_class_name": "BloodFeral_C",
+        "construction_function": "UserConstructionScript",
+        "parent_construction_call": "Function'FeralCharacter_C:UserConstructionScript'",
+        "explicit_assignments": [
+          {
+            "statement_index": 10,
+            "variable": "BoolProperty'DaytonZombieCharacter:bIsBloodPlagueZombie'",
+            "serialized_value_token": "EX_True",
+            "value_is_true": true
+          }
+        ]
+      },
+      {
+        "data_table_row": "BpScreamer",
+        "asset": "StateOfDecay2/Content/Characters/Screamer/BloodScreamer.json",
+        "blueprint_class_name": "BloodScreamer_C",
+        "construction_function": "UserConstructionScript",
+        "parent_construction_call": "Function'ScreamerCharacter_C:UserConstructionScript'",
+        "explicit_assignments": [
+          {
+            "statement_index": 10,
+            "variable": "BoolProperty'DaytonZombieCharacter:bIsBloodPlagueZombie'",
+            "serialized_value_token": "EX_True",
+            "value_is_true": true
+          }
+        ]
+      },
+      {
+        "data_table_row": "BpJuggernaut",
+        "asset": "StateOfDecay2/Content/Characters/Juggernaut/BloodPlagueJuggCharacter.json",
+        "blueprint_class_name": "BloodPlagueJuggCharacter_C",
+        "construction_function": "UserConstructionScript",
+        "parent_construction_call": "Function'JuggernautCharacter_C:UserConstructionScript'",
+        "explicit_assignments": [
+          {
+            "statement_index": 10,
+            "variable": "BoolProperty'DaytonZombieCharacter:bIsBloodPlagueZombie'",
+            "serialized_value_token": "EX_True",
+            "value_is_true": true
+          }
+        ]
+      }
+    ],
+    "limits": [
+      "IsPlagueZombie and bIsBloodPlagueZombie are separate serialized properties; this report does not assert they are aliases or mutually exclusive.",
+      "The special-preset evidence is Blueprint construction bytecode, not a runtime observation of victim objects or death-event payloads."
+    ]
+  },
+  "interpretation": [
+    "ZombieTypeDataTable serializes preset-class paths, including separate Plague, BpJuggernaut, BpBloater, BpScreamer and BpFeral rows. This is class/spawn data, not proof that every death event carries or uses this row name.",
+    "Zombie_Plague_C defaults IsPlagueZombie to true; all four Bp special presets' serialized UserConstructionScript bytecode calls the parent constructor and writes DaytonZombieCharacter.bIsBloodPlagueZombie=true. These explicit blueprint flags refine asset-level blood-plague classification but do not prove the reward path reads them.",
+    "ZombieVariants has 28 serialized appearance rows, including three rows labeled EZombieVariantType::Plague. ZombieCharacter_C:SetSpecificCharacterAppearance reads this table using its ZombieVariant instance property, compares the variant-type byte to 4, and the equality branch writes IsPlagueZombie=true and bIsBloodPlagueZombie=true. The fixed-build native enum registrar provides a strong static inference of Slow=0, Unique=1, Fast=2, Armored=3, Plague=4, independently supporting the byte-4/Plague match; the virtual setter remains unnamed and the map is not runtime-confirmed.",
+    "AllZombieTypes display labels and NewEnumeratorN ordinal pairing are recorded as candidates based on array order; do not conflate this AI targeting enum with award or death classification.",
+    "Boons/Banes BaseDensityReductions lists zombie-type categories for density settings only; its enum taxonomy is not proven equivalent to the spawn table or experience classification."
+  ],
+  "limits": [
+    "No runtime victim UObject/class observation, death event payload, XP class branch, or blood-plague flag combination has been verified.",
+    "The fixed-build native EZombieVariantType ordinal map is a strong inference from native registration order and an unnamed virtual setter, not runtime confirmation; it identifies the byte-4 branch as Plague but does not prove which victim fields a death event supplies or whether XP reads either plague flag.",
+    "No crosswalk is inferred between AllZombieTypes, EBoonsBanesZombieType, ZombieTypeDataTable row names, or reward categories.",
+    "The display-name ordinal pairing is candidate evidence from serialization order; the exporter's Names map is retained verbatim because its values are not usable as a unique ordinal map in this dump."
+  ]
+}

@@ -1,0 +1,240 @@
+{
+  "schema": 1,
+  "target_build": 16535856,
+  "scope": "Offline static repair of the fixed-build native MCM bridge and removal of the legacy F1 settings overlay. No game launch, injection, or live process inspection.",
+  "status": "f1_overlay_retired; native_settings_page_runtime_unverified",
+  "entry": {
+    "previous_version": "0.1.1-preview",
+    "previous_entry_navigation_runtime_confirmed_by_user": true,
+    "current_version": "0.2.4-preview",
+    "current_settings_page_runtime_verified": false,
+    "page_category": 0,
+    "page_operations": {
+      "begin_snapshot": 0,
+      "page_count": 1,
+      "option_count": 2,
+      "detected_language": 14,
+      "set_option": 15,
+      "status": 17,
+      "status_code": 18
+    },
+    "patched_methods": {
+      "ApiInput": 1302,
+      "SendGameplaySettings": 1313,
+      "InitializeCategoryMenu": 1343,
+      "SetCategory": 1348,
+      "OnCategoryBack": 1350,
+      "RequestSettingsHide": 1351,
+      "GetSettingsCategory": 1355,
+      "PopulateSettingsCategory": 1365
+    },
+    "new_display_objects_or_traits": false,
+    "existing_vanilla_control_builders_reused": [
+      "AddTextSetting",
+      "AddTextBlock",
+      "AddSubHeader",
+      "AddToggleSetting",
+      "AddSliderSettingWithValue",
+      "AddDropdownSetting"
+    ],
+    "f1_mcm_remains_available": false,
+    "category_language": "runtime-detected-read-only",
+    "appended_string_count": 7,
+    "language_channel_uses_mcm_dispatch_name": true,
+    "reference_entry_only_iggy_sha256": "83a358a862c37c0537ed19c19c0d700425cfcbbe0310d457c60ac44c6e844a81",
+    "reference_entry_only_uasset_sha256": "fc4d4ef45947779b2bde8700c76a7408a45b3fc2bd00679a588d61dff4a544a8",
+    "reference_entry_only_uasset_size": 7618600
+  },
+  "iggy_callback_abi": {
+    "dll_sha256": "09049ffc7b48639c72336bb809035fa1c1b827e898693fbc2968165bd23940a6",
+    "analysis": "Static x64 disassembly of the pinned DLL with Visual Studio dumpbin; the DLL was not loaded.",
+    "disassembly_rvas": {
+      "external_dispatcher": "0xB20F0",
+      "callback_invoke_narrow": "0xB2402",
+      "callback_invoke_wide": "0xB2414",
+      "callback_registration_narrow": "0xBE180",
+      "callback_registration_wide": "0xBE190",
+      "value_conversion_helper": "0xB1FA0",
+      "result_path_export": "0x66890",
+      "set_s32_export": "0x67880",
+      "set_string_utf8_export": "0x67A30"
+    },
+    "callback": {
+      "argument_registers": [
+        "RCX=user",
+        "RDX=player",
+        "R8=Call*"
+      ],
+      "return_register": "EAX; nonzero follows the handled path",
+      "registration_slots": {
+        "narrow_function_pointer_rva": "0x101D50",
+        "narrow_user_pointer_rva": "0x101D58",
+        "wide_function_pointer_rva": "0x101D60",
+        "wide_user_pointer_rva": "0x101D68"
+      },
+      "call_layout": {
+        "name_pointer": 0,
+        "name_length": 8,
+        "argument_count": 16,
+        "arguments": 24,
+        "value_stride": 32
+      },
+      "value_layout": {
+        "type": 0,
+        "atom": 8,
+        "number_or_boolean_bits": 16,
+        "length": 24,
+        "size": 32
+      },
+      "numeric_type": 4,
+      "numeric_representation": "IEEE-754 double in Value.number",
+      "boolean_type": 3,
+      "boolean_representation": "low 32-bit integer 0 or 1 in Value+16; upper 32 bits are unspecified by the converter",
+      "checked_exports": {
+        "IggyPlayerCallbackResultPath": "image base + 0x66890",
+        "IggyValueSetS32RS": "image base + 0x67880",
+        "IggyValueSetStringUTF8RS": "image base + 0x67A30"
+      }
+    },
+    "implementation_guard": "The bridge only accepts the pinned DLL hash and exact export RVAs. It forwards all non-MCM callbacks to the original callback and accepts Boolean payloads only in the SetOption value slot, only for 0 or 1."
+  },
+  "bridge_initialization_incident": {
+    "evidence": "Mcm-native-23036.log confirms every construction attempt reaches StatusCode checkpoint 101 after language RPC but never reaches checkpoint 102 after Vector.<dropdown_option> construction. The original PopulateSettingsCategory method installs this and newactivation on its scope stack before constructing Vector; the injected prefix previously ran before that prologue.",
+    "root_cause": "The Iggy callback installation race has been resolved, but the remaining native page construction failure is unresolved. Exact RPC sequence is required to locate the failing ActionScript operation.",
+    "fix": "Entry 0.2.3 retained its verified method-scope prologue. Entry 0.2.4 corrects the external dispatch name so language operation 14 reaches SoD2SE_Mcm_v1. MCM 0.6.3 uses this read-only result to select Chinese/English labels and removes the manual language dropdown. Offline build and package parsing pass; blank-page runtime acceptance remains pending.",
+    "runtime_verified": false
+  },
+  "asset": {
+    "source_iggy_sha256": "e69875cd5421f8082cf4e0b66e8a2cd09ba81f8455b08243635695ea0b4bdb57",
+    "output_iggy_sha256": "0953ecdc189d31b68fc933e8a2bfa00f9f90396d55cb9b34a9eb5a1a15502b39",
+    "output_iggy_size": 7559442,
+    "source_abc_size": 184397,
+    "output_abc_size": 186554,
+    "output_uasset_sha256": "ee721b19cdeb9b419199dde70d5e40f1ef540b911028355d98c7fa58854908ff",
+    "output_uasset_size": 7620416,
+    "ffdec_xml_noop_abc_identical": true,
+    "constants_append_only": true,
+    "original_class_traits_methods_namespaces_signatures_preserved": true,
+    "all_untargeted_method_bodies_preserved": true,
+    "original_non_target_movie_bytes_preserved": true,
+    "independent_ffdec_reexport_and_binding_check": true,
+    "uassetapi_binary_roundtrip": true,
+    "cue4parse_ue4_13_package_load": true,
+    "text_table_rows": 159,
+    "api_function_count": 65,
+    "static_only": true
+  },
+  "automated_validation": {
+    "NativeSettingsTest": "passed",
+    "NativeSettingsIggyTest": "passed; no game loaded",
+    "test_patch_native_mcm_bytecode.py": "2 passed",
+    "test_build_native_mod_settings_entry.py": "9 passed",
+    "test_analyze_iggy_script_api.py": "4 passed",
+    "page_input_static_check": "FFDec re-decompilation, method-body scope prologue assertion, original Vector opcode contract, literal checkpoint assertion, uasset rewrite and CUE4Parse package load passed for entry 0.2.3; runtime pending",
+    "runtime_verified": false,
+    "native_release_build": "passed; MCM native 0.6.2 diagnostic DLL and managed Mcm.dll rebuilt",
+    "verify_native.py": "passed; build 16535856 records 23 native offsets and MCM ABI v6 matches the protocol header",
+    "test_verify_native_iggy_rvas.py": "2 passed; test fixture updated for the current guarded initialization contract",
+    "McmSmoke": "passed; Steam MountedConfig Chinese/English switching, stale override removal, persistence",
+    "python_static_tool_suite": "108 passed",
+    "native_asset_build": "FFDec 26.3.0 XML roundtrip, UAssetAPI binary roundtrip, and independent CUE4Parse UE4.13 load passed",
+    "package_layout": "passed; correct preset names, version metadata, Root layout, and file hashes",
+    "installation": "MCM 0.6.3, native entry 0.2.4, and Core ABI 0.6.0 installed; other Mod packages unchanged",
+    "verify_sources.py": "passed"
+  },
+  "installation": {
+    "mod_directory": "E:\\Game\\SD2_mod\\mods\\原版 Mod 设置入口 - Native Mod Settings Entry",
+    "new_asset_relative_path": "Saved/Cooked/WindowsNoEditor/StateOfDecay2/Content/Art/UI/settings.uasset",
+    "user_config_preserved": true,
+    "f1_overlay_removed": true,
+    "manual_user_acceptance_required": true,
+    "package_filenames": [
+      "SoD2-NativeModSettingsEntry-MO2-v0.2.4-preview.zip",
+      "SoD2SE-Mcm-MO2-v0.6.3-preview-native-settings.zip"
+    ],
+    "entry_package_sha256": "1f39191c9769cb2aabcab4d647f690619a0887aaa4b2fa65532ce2b8b62d61e4",
+    "mcm_package_sha256": "0770717b4144472d31d96bb4756016c9fbd19db6aba35bf6da409edab372f9ca",
+    "entry_asset_sha256": "ee721b19cdeb9b419199dde70d5e40f1ef540b911028355d98c7fa58854908ff",
+    "mcm_native_dll_relative_path": "Root/Plugins/Mcm/SoD2SE.Mcm.Native.dll",
+    "mcm_native_dll_sha256": "ad99d5d1f951b9338b2ec1dd63edaea74ff01efaa3035b62fd83fe8fa3615a19",
+    "mcm_package_version": "0.6.3-preview",
+    "entry_package_version": "0.2.4-preview",
+    "default_profile_entry_enabled": true,
+    "default_profile_mcm_enabled": true,
+    "profile_enable_state_preserved": true,
+    "backup_directory": "E:\\Game\\SD2_mod\\sod2-support\\manual-install-backups\\mcm-language-autodetect-20260926-012157-b6222ef4",
+    "mcm_repair_backup_directory": "E:\\Game\\SD2_mod\\sod2-support\\manual-install-backups\\native-settings-mcm-deferred-iggy-init-20260925",
+    "active_mo2_profile": "Default",
+    "active_profile_source": "C:\\Users\\18236\\AppData\\Local\\ModOrganizer\\State of Decay 2\\ModOrganizer.ini selected_profile=@ByteArray(Default)",
+    "default_profile_entry_enabled_before_install": false,
+    "entry_enabled_for_user_acceptance": true,
+    "profile_modlist_backup": "E:\\Game\\SD2_mod\\sod2-support\\manual-install-backups\\native-settings-mcm-020-preview-20260925\\Default-modlist.txt.before",
+    "profile_enable_change": "This repair did not change MO2 profile enable states; the existing MCM and native-entry state was preserved.",
+    "entry_meta_version": "0.2.4-preview",
+    "mcm_package_filename": "SoD2SE-Mcm-MO2-v0.6.3-preview-native-settings.zip",
+    "mcm_native_dll_size": 737280,
+    "installationFile": "SoD2SE-Mcm-MO2-v0.6.3-preview-native-settings.zip",
+    "latest_backup_directory": "E:\\Game\\SD2_mod\\sod2-support\\manual-install-backups\\mcm-language-autodetect-20260926-012157-b6222ef4",
+    "only_mcm_native_component_updated": false,
+    "old_mcm_package_removed_from_downloads": true,
+    "entry_latest_backup_directory": "E:\\Game\\SD2_mod\\sod2-support\\manual-install-backups\\mcm-language-autodetect-20260926-012157-b6222ef4",
+    "old_preview_packages_archived_to": "E:\\Game\\SD2_mod\\sod2-support\\manual-install-backups\\native-settings-entry-022-20260925-214733",
+    "old_entry_packages_removed_from_downloads": true,
+    "mcm_managed_dll_sha256": "61f6e4c6c78832bccdefbc8fdc035733b3c2486c61c59a0133e4cdaca371f481",
+    "core_dll_sha256": "b8d1602b19503d218414eca044bb2ed6e6911f26eac655b288b3763118f58977",
+    "core_abi": "0.6.0",
+    "mcm_meta_version": "0.6.3-preview",
+    "mcm_managed_assembly_version": "0.6.0",
+    "other_mod_packages_updated": false,
+    "updated_components": [
+      "SoD2SE.Core.dll",
+      "Mcm.dll",
+      "SoD2SE.Mcm.Native.dll",
+      "native Settings asset"
+    ]
+  },
+  "limitations": [
+    "The user previously confirmed that Settings → Mod Settings opens, but the page body remained blank. The 0.6.3-preview / 0.2.4-preview language-detection rebuild has only static validation and remains unverified in-game; the blank-page issue remains open.",
+    "The previous saved runtime logs verify only Iggy ABI readiness; they do not prove the callback hook or RPC was installed/reached.",
+    "F1 no longer opens the legacy MCM settings overlay in the new DLL. A process that already loaded the older DLL retains it until fully exited and restarted.",
+    "Keyboard/gamepad focus, page layout, option writes and persistence require in-game acceptance."
+  ],
+  "runtime_diagnostics": {
+    "log_pattern": "%LOCALAPPDATA%\\StateOfDecay2\\SoD2SE\\Mcm-native-<PID>.log",
+    "distinct_events": [
+      "Iggy external callback slots empty",
+      "MinHook create/enable result",
+      "Iggy external callback hook installed",
+      "MCM RPC reached Iggy callback",
+      "MCM RPC argument shape mismatch",
+      "MCM RPC processing lock contention",
+      "MCM channel refused to begin the settings snapshot",
+      "MCM bridge rejected an Iggy settings request",
+      "Iggy callback result path is null",
+      "Iggy refused the callback result value"
+    ],
+    "note": "The 0.6.2 trace localized the previous failure to constructing the manual language dropdown. MCM 0.6.3 removes that control; native entry 0.2.4 uses the correct SoD2SE_Mcm_v1 dispatcher for read-only language operation 14. No current runtime log confirms the page body is fixed."
+  },
+  "language_detection": {
+    "manual_selector": false,
+    "supported_languages": [
+      "Chinese",
+      "English"
+    ],
+    "precedence": [
+      "game language/locale/culture config",
+      "Steam appmanifest 495420 MountedConfig.language",
+      "Steam appmanifest 495420 UserConfig.language",
+      "per-game Steam registry",
+      "global Steam UI language",
+      "Windows UI culture fallback"
+    ],
+    "legacy_config_keys_removed": [
+      "mcm.language",
+      "mcm.language-source"
+    ],
+    "native_language_operation": 14,
+    "detected_each_initialization": true,
+    "runtime_verified": false
+  }
+}

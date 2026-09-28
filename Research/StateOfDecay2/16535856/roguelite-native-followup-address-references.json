@@ -1,0 +1,160 @@
+{
+  "schema": 1,
+  "target": "target.json",
+  "target_sha256": "EBF0A73E164BAA701F74655585F262F8E38A32B1F6DC5057303489BA5B333ECE",
+  "scope": {
+    "game_process_started_or_attached": false,
+    "executable_pdata_function_ranges": 259728,
+    "target_count": 8,
+    "excluded_exception_directory_section": ".pdata"
+  },
+  "method": "Capstone scan of every executable .pdata body for non-branch immediate/RIP-relative references, plus raw literal VA qword and RVA dword pattern scans of non-executable sections.",
+  "targets": [
+    {
+      "target_rva": "0x1cf9ca",
+      "target_kind": "roguelite-followup-chaininfo-fragment-start",
+      "candidate_reason": "CHAININFO-linked subrange start in the 0x1cf910 AwardExperience helper chain; the fragment calls internal target 0x19ef80",
+      "upstream_native_function": "AwardExperience",
+      "non_branch_instruction_reference_count": 0,
+      "non_branch_instruction_references": [],
+      "absolute_va_qword_candidates": [],
+      "rva_dword_candidates": [
+        {
+          "section": ".rdata",
+          "site_rva": "0x40e5e5c",
+          "byte_offset": 16141916,
+          "encoding_candidate": "rva-dword-pattern",
+          "target_is_executable": true
+        },
+        {
+          "section": ".rdata",
+          "site_rva": "0x40e5e6c",
+          "byte_offset": 16141932,
+          "encoding_candidate": "rva-dword-pattern",
+          "target_is_executable": true
+        }
+      ]
+    },
+    {
+      "target_rva": "0x1e53ab",
+      "candidate_reason": "unnamed caller of AwardExperience internal target 0x1cf910",
+      "upstream_native_function": "AwardExperience",
+      "non_branch_instruction_reference_count": 0,
+      "non_branch_instruction_references": [],
+      "absolute_va_qword_candidates": [],
+      "rva_dword_candidates": [
+        {
+          "section": ".rdata",
+          "site_rva": "0x40e5ea4",
+          "byte_offset": 16141988,
+          "encoding_candidate": "rva-dword-pattern",
+          "target_is_executable": true
+        },
+        {
+          "section": ".rdata",
+          "site_rva": "0x40e5eb4",
+          "byte_offset": 16142004,
+          "encoding_candidate": "rva-dword-pattern",
+          "target_is_executable": true
+        }
+      ]
+    },
+    {
+      "target_rva": "0x276e80",
+      "candidate_reason": "unnamed caller of AwardExperience internal target 0x1cf910 and GetSurvivorByID helper 0x27eef0",
+      "upstream_native_function": "AwardExperience; GetSurvivorByID",
+      "non_branch_instruction_reference_count": 0,
+      "non_branch_instruction_references": [],
+      "absolute_va_qword_candidates": [
+        {
+          "section": ".rdata",
+          "site_rva": "0x3244ac8",
+          "byte_offset": 801480,
+          "encoding_candidate": "absolute-va-qword-pattern",
+          "target_is_executable": true
+        }
+      ],
+      "rva_dword_candidates": []
+    },
+    {
+      "target_rva": "0x29a690",
+      "candidate_reason": "unnamed caller of GetCharacterWhoHitMost internal target 0x3be4e0",
+      "upstream_native_function": "GetCharacterWhoHitMost",
+      "non_branch_instruction_reference_count": 0,
+      "non_branch_instruction_references": [],
+      "absolute_va_qword_candidates": [],
+      "rva_dword_candidates": []
+    },
+    {
+      "target_rva": "0x2bbd8b",
+      "candidate_reason": "unnamed function with six direct calls to 0x29a690 in the bounded follow-up scan",
+      "upstream_native_function": "GetCharacterWhoHitMost",
+      "non_branch_instruction_reference_count": 0,
+      "non_branch_instruction_references": [],
+      "absolute_va_qword_candidates": [],
+      "rva_dword_candidates": [
+        {
+          "section": ".rdata",
+          "site_rva": "0x40f5c20",
+          "byte_offset": 16206880,
+          "encoding_candidate": "rva-dword-pattern",
+          "target_is_executable": true
+        },
+        {
+          "section": ".rdata",
+          "site_rva": "0x40f5c30",
+          "byte_offset": 16206896,
+          "encoding_candidate": "rva-dword-pattern",
+          "target_is_executable": true
+        }
+      ]
+    },
+    {
+      "target_rva": "0x3292c7",
+      "candidate_reason": "unnamed caller of AuthOnZombieKilled internal target 0x3dbfe0",
+      "upstream_native_function": "AuthOnZombieKilled",
+      "non_branch_instruction_reference_count": 0,
+      "non_branch_instruction_references": [],
+      "absolute_va_qword_candidates": [],
+      "rva_dword_candidates": []
+    },
+    {
+      "target_rva": "0x3c92e4",
+      "candidate_reason": "unnamed caller of OnZombieKilled internal target 0x253ed0",
+      "upstream_native_function": "OnZombieKilled",
+      "non_branch_instruction_reference_count": 0,
+      "non_branch_instruction_references": [],
+      "absolute_va_qword_candidates": [],
+      "rva_dword_candidates": []
+    },
+    {
+      "target_rva": "0x461993",
+      "candidate_reason": "unnamed caller of AwardExperience internal target 0x19ef80",
+      "upstream_native_function": "AwardExperience",
+      "non_branch_instruction_reference_count": 0,
+      "non_branch_instruction_references": [],
+      "absolute_va_qword_candidates": [],
+      "rva_dword_candidates": [
+        {
+          "section": ".rdata",
+          "site_rva": "0x411419c",
+          "byte_offset": 16331164,
+          "encoding_candidate": "rva-dword-pattern",
+          "target_is_executable": true
+        },
+        {
+          "section": ".rdata",
+          "site_rva": "0x41141ac",
+          "byte_offset": 16331180,
+          "encoding_candidate": "rva-dword-pattern",
+          "target_is_executable": true
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "Literal VA/RVA matches are byte-pattern candidates and may be unrelated data; they are not proof of a function pointer or call.",
+    "The scan does not resolve relative-pointer encodings other than RIP-relative instruction operands, relocations, vtables, delegates, ProcessEvent, or runtime-created references.",
+    "Instructions outside executable .pdata ranges are not decoded by the instruction-reference pass."
+  ]
+}

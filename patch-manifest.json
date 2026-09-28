@@ -1,0 +1,24 @@
+{
+  "framework": "SoD2SE fixed 38.2",
+  "steam_app_id": "495420",
+  "steam_build_id": "16535856",
+  "sha256": "EBF0A73E164BAA701F74655585F262F8E38A32B1F6DC5057303489BA5B333ECE",
+  "patches": [
+    {
+      "name": "Dialogue follower quantity gate",
+      "rva": 2283449,
+      "original": "74",
+      "replacement": "eb",
+      "guard_rva": 2283444,
+      "guard_original": "807c243100743a488d95a8070000c603004c8d05045efe02488d8c24b8000000e857832600488bd0488d8b88000000e888ade600488bbc24c0000000e94efeffff0fb644243084c00f857cfeffff498bcee866"
+    },
+    {
+      "name": "Community screen follower quantity gate",
+      "rva": 3758430,
+      "original": "40b702",
+      "replacement": "eb2c90",
+      "guard_rva": 3758390,
+      "guard_original": "85ff7e524863c7488bcb488d14c3483bda74150f1f800000000048393174324883c108483bca75f240b7024885db7408488bcbe8a25ed100400fb6c7488b7c2440488b5c2450488b6c24584883c4305ec340b701ebd54885db7408488bcbe8775ed10080bd60010000037224488bd6488bcde8133dffff0f2f85380c00007210488bcde8b2d2feff84c07504b003ebac32c0eba8488b"
+    }
+  ]
+}

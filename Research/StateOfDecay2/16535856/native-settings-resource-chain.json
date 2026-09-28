@@ -1,0 +1,175 @@
+{
+  "schema": 2,
+  "target_build": 16535856,
+  "method": "offline cooked-export structure inspection and PAK payload hashing",
+  "cooked_settings_pak": "pakchunk000030-WindowsNoEditor.pak",
+  "cooked_settings_sha256": "d8d320363be69ea9dfb39b5c20c8de5237c642841fe3ac86b00f8115050fe06e",
+  "cooked_settings_size": 7618264,
+  "cooked_assets": {
+    "Art/UI/settings.uasset": {
+      "pak": "pakchunk000030-WindowsNoEditor.pak",
+      "sha256": "d8d320363be69ea9dfb39b5c20c8de5237c642841fe3ac86b00f8115050fe06e",
+      "size": 7618264
+    },
+    "UI/SettingsUI_BP.uasset": {
+      "pak": "pakchunk000300-WindowsNoEditor.pak",
+      "sha256": "767be031303b50cbe1ad939a140dc5f420606dd9456d12c054ec6cd984752a71",
+      "size": 26680
+    },
+    "UI/PauseUI_BP.uasset": {
+      "pak": "pakchunk000300-WindowsNoEditor.pak",
+      "sha256": "afb1037283fb7eff297dba6207e2a6959e16d5ce62940600c229cf60c9d01f52",
+      "size": 30472
+    }
+  },
+  "export_sha256": {
+    "Art/UI/settings.json": "55bf2be297080f4a6ffc6f8a402712d5527fee4c42b719df21eb2b679438eb35",
+    "UI/SettingsUI_BP.json": "06ea01e40a768d9c2ac71703f70130ce8f71e18efbc315975e3c8eb6911d2492",
+    "UI/PauseUI_BP.json": "094ec82ed9f31b3d27110fdd27c915c430e0881beceb839de2d5a5c05b7c1322",
+    "GameModes/VanillaPlayerController_BP.json": "397817c9a8021c9c98f5378fa789272a98f0c27e54cc3df4d2a859dd0eacd007"
+  },
+  "resource_chain": [
+    "PauseUI_BP.SettingsMovie -> /game/ui/settingsui_bp",
+    "PauseUI_BP.DisplaySettings / HideSettings / GetSettingsUI",
+    "SettingsUI_BP default Player -> /game/art/ui/settings",
+    "Art/UI/settings -> IggyPlayer with TextTable and ApiFunctions",
+    "VanillaPlayerController_BP.CreateCharacterUI -> UIManagerComponent.CreateMoviePlayer(CharacterUI_BP_C)"
+  ],
+  "movie_player_factory_callsite": [
+    {
+      "function": "UIManagerComponent:CreateMoviePlayer",
+      "source_asset": "GameModes/VanillaPlayerController_BP.json",
+      "class_argument": "/game/ui/characterui_bp"
+    }
+  ],
+  "settings_navigation_source": {
+    "asset": "UI/PauseUI_BP.json",
+    "asset_sha256": "094ec82ed9f31b3d27110fdd27c915c430e0881beceb839de2d5a5c05b7c1322"
+  },
+  "settings_navigation": {
+    "display_settings": {
+      "entry_point": 1075,
+      "graph_jump_target": 713,
+      "operations": [
+        "GameplayStatics.GetPlayerController(0)",
+        "DaytonFunctionLibrary.GetComponentByClass(UIManagerComponent)",
+        "UIManagerComponent.PushMoviePlayer(/game/ui/settingsui_bp)",
+        "store returned player in PauseUI_BP.SettingsMovie"
+      ]
+    },
+    "closed_delegate": {
+      "property": "MulticastDelegateProperty'CommonUIMoviePlayer:Closed'",
+      "callback": "OnSettingsClosed"
+    },
+    "hide_settings": {
+      "entry_point": 906,
+      "graph_jump_target": 657,
+      "operation": "PauseUI_BP.SettingsMovie = null",
+      "note": "This verifies reference cleanup; it does not prove a generic close or back-navigation contract."
+    },
+    "evidence": {
+      "push_statement_index": 821,
+      "player_assignment_statement_index": 669,
+      "close_binding_statement_index": 300,
+      "closed_delegate_statement_index": 323,
+      "clear_reference_statement_index": 657
+    }
+  },
+  "settings_text_table_rows": 159,
+  "settings_api_functions": [
+    "ApiAddBase",
+    "ApiAddCostToLastBase",
+    "ApiAddDifficulty",
+    "ApiAddDifficultySliderInfo",
+    "ApiAddDifficultySliderInfoItem",
+    "ApiAddFacilityToLastBase",
+    "ApiAddKeybinding",
+    "ApiAddKeybindingCategory",
+    "ApiAddMap",
+    "ApiAddResolution",
+    "ApiAddSlotToLastBase",
+    "ApiClearTextureQueue",
+    "ApiFinishBaseSetup",
+    "ApiHide",
+    "ApiHideBackdrop",
+    "ApiHideBasePicker",
+    "ApiHideDifficultyPicker",
+    "ApiHideGamma",
+    "ApiHideKeybindings",
+    "ApiHideMapPicker",
+    "ApiInit",
+    "ApiInput",
+    "ApiKeybindingCategoriesComplete",
+    "ApiKeybindingComplete",
+    "ApiKeybindingMessage",
+    "ApiRefreshKeybindings",
+    "ApiResetDifficultyPicker",
+    "ApiResetInputBindings",
+    "ApiResetResolutions",
+    "ApiSetAccessibilitySettings",
+    "ApiSetAudioSettings",
+    "ApiSetControllerAttached",
+    "ApiSetControlsSettings",
+    "ApiSetDaybreakMultiplayerSettings",
+    "ApiSetDemoLockdown",
+    "ApiSetDesktopResolution",
+    "ApiSetDifficultyRewardInfo",
+    "ApiSetEnabledFeatures",
+    "ApiSetFieldOfViewDefaultValues",
+    "ApiSetFieldOfViewSettings",
+    "ApiSetGameplaySettings",
+    "ApiSetGammaSettings",
+    "ApiSetHudSettings",
+    "ApiSetInputIcons",
+    "ApiSetInputMode",
+    "ApiSetMouseActive",
+    "ApiSetMultiplayerSettings",
+    "ApiSetMultiplayerStatus",
+    "ApiSetResolution",
+    "ApiSetScalabilitySettings",
+    "ApiSetScalabilitySettingsCommit",
+    "ApiSetScrollSpeed",
+    "ApiSetSubtitleScale",
+    "ApiSetSubtitleScaleLabel",
+    "ApiSetVideoSettings",
+    "ApiSetVoiceChatSettings",
+    "ApiShow",
+    "ApiShowBackdrop",
+    "ApiShowBasePicker",
+    "ApiShowDifficultyPicker",
+    "ApiShowGamma",
+    "ApiShowMapPicker",
+    "ApiUpdateBadges",
+    "ApiUpdateKeybinding",
+    "ApiVideoCancelDialogDismissed"
+  ],
+  "settings_api_name_scan": {
+    "generic_page_or_plugin_candidates": [],
+    "note": "Name-only scan; absence of a matching name does not prove an undocumented capability is absent."
+  },
+  "settings_input_binding_functions": [
+    "DaytonInpAxisEvt_Community UI Zoom_UniqueObjectNameForCooking_25",
+    "DaytonInpActEvt_UI Back_UniqueObjectNameForCooking_26",
+    "DaytonInpActEvt_UI Scroll Down_UniqueObjectNameForCooking_27",
+    "DaytonInpActEvt_UI Scroll Up_UniqueObjectNameForCooking_28",
+    "DaytonInpActEvt_UI Down Stick_UniqueObjectNameForCooking_29",
+    "DaytonInpActEvt_UI Up Stick_UniqueObjectNameForCooking_30",
+    "DaytonInpActEvt_UI Left Stick_UniqueObjectNameForCooking_31",
+    "DaytonInpActEvt_UI Right Stick_UniqueObjectNameForCooking_32",
+    "DaytonInpActEvt_UI Special2_UniqueObjectNameForCooking_33",
+    "DaytonInpActEvt_UI Special_UniqueObjectNameForCooking_34",
+    "DaytonInpActEvt_UI Escape_UniqueObjectNameForCooking_35",
+    "DaytonInpActEvt_UI Confirm_UniqueObjectNameForCooking_36",
+    "DaytonInpActEvt_UI Cancel_UniqueObjectNameForCooking_37",
+    "DaytonInpActEvt_UI Right_UniqueObjectNameForCooking_38",
+    "DaytonInpActEvt_UI Left_UniqueObjectNameForCooking_39",
+    "DaytonInpActEvt_UI Down_UniqueObjectNameForCooking_40",
+    "DaytonInpActEvt_UI Up_UniqueObjectNameForCooking_41",
+    "DaytonInpRawEvt_UniqueObjectNameForCooking_44"
+  ],
+  "limitations": [
+    "Serialized references and input event names do not prove focus or gamepad behavior.",
+    "TextTable and ApiFunctions metadata do not reveal an editable Iggy control tree.",
+    "No compatible Iggy content authoring/rebuild path or in-game loading of edited assets is established."
+  ]
+}

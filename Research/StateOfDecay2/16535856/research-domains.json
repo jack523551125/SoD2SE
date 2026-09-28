@@ -1,0 +1,273 @@
+{
+  "schema": 1,
+  "target": "target.json",
+  "description": "Curated static-research queues for game systems not yet represented by a verified SoD2SE capability. Native names are candidate registration names only; they are not runtime hooks or confirmed API contracts.",
+  "domains": [
+    {
+      "id": "ai-zombie-spawning",
+      "priority": "high",
+      "status": "candidate-only",
+      "summary": "Ambient population, special-zombie spawn weights, custom spawn requests, hordes, and siege waves.",
+      "native_candidates": [
+        "GetAmbientPopulationCap",
+        "GetZombieDensityMultiplier",
+        "GetZombieSpawnRateThisStage",
+        "GetZombieSpawnSetupThisStage",
+        "GetSpawnDensityAtLocation",
+        "GetMaxZombiesThatAllowStageSpawning",
+        "GetNumActiveSiegeHordes",
+        "GetNumInfestationHordes",
+        "GetHordeInfestationSeverity",
+        "RequestCustomSpawns",
+        "CanLaunchNextSiegeWave",
+        "LaunchNextSiegeWave",
+        "OnHordeDestroyed",
+        "TryCreateInfestationHorde",
+        "GetStoryDirector"
+      ],
+      "asset_paths": [
+        "AI/AllZombieTypes.uasset",
+        "AmbientSpawn/MGR_AmbientSpawner.uasset",
+        "AmbientSpawn/DefaultAmbientSpawnSetup.uasset",
+        "AmbientSpawn/MaxPawns_Population_Curve.uasset",
+        "AmbientSpawn/PopulationLimit_Vanilla_Fast.uasset",
+        "Hordes/GenericHorde.uasset",
+        "Hordes/BloodPlagueMiniHorde.uasset"
+      ],
+      "asset_observations": [
+        "String scanning of the supplied cooked assets found spawn entries, population caps, spawn weights, cooldowns, and special-zombie classes in DefaultAmbientSpawnSetup/MGR_AmbientSpawner assets.",
+        "AllZombieTypes contains readable names for Bloater, Feral, Juggernaut, and Screamer; this does not prove the full classification schema or editable asset pipeline."
+      ],
+      "mod_opportunities": [
+        "Configurable special-infected frequency or horde composition.",
+        "A campaign spawn-pressure preset that adjusts population and cooldown settings."
+      ],
+      "questions": [
+        "Which values are authoritative per difficulty, map, and game mode, and which are only UI queries?",
+        "How do the ambient spawner, mission-forced spawns, plague-heart spawns, and siege waves interact?",
+        "Which calls are server-authoritative, and how are active-spawn limits and cleanup enforced?"
+      ],
+      "promotion_requirements": [
+        "Resolve owner classes, parameter metadata, and the call/dispatch paths for each candidate.",
+        "Map difficulty and game-mode selection plus spawn lifetime and cleanup rules.",
+        "Build offline model tests before considering a runtime capability."
+      ]
+    },
+    {
+      "id": "vehicle-condition-and-use",
+      "priority": "medium",
+      "status": "candidate-only",
+      "summary": "Fuel, engine/frame condition, repair/refuel requests, vehicle damage zones, and occupancy events.",
+      "native_candidates": [
+        "GetFuelRatio",
+        "GetEngineAndBodyHealth",
+        "ServerRefuelVehicle",
+        "ServerRepairVehicle",
+        "ServerFlipVehicleForRepair",
+        "ServerRemoveFuel",
+        "ServerSetVehiclePartHealth",
+        "ServerSetVehicleZoneHealth",
+        "NotifyEngineHealthChanged",
+        "NotifyGasTankHealthChanged",
+        "MulticastVehicleRefueled",
+        "OnVehicleOccupancyChanged",
+        "IsEngineRunning",
+        "StopEngine"
+      ],
+      "asset_paths": [
+        "Art/Driveables/VehicleBase_BP.uasset",
+        "Art/Driveables/VehicleBaseFunctionality_BP.uasset",
+        "Art/Driveables/DefaultVehicleDamageLayout_BP.uasset"
+      ],
+      "asset_observations": [
+        "The supplied vehicle assets contain readable fields and symbols for engine, frame, gas-tank, zone health, repair items, and vehicle interaction."
+      ],
+      "mod_opportunities": [
+        "Optional vehicle fuel use, durability, or repair-cost settings.",
+        "Vehicle information and condition display, if an established game UI extension point is found."
+      ],
+      "questions": [
+        "Which component owns condition and fuel values, and when are they replicated or saved?",
+        "Do server request functions mutate state directly or validate inventory, range, and repair items first?",
+        "How do vehicle explosions, zone damage, and mission-spawned vehicle defaults differ?"
+      ],
+      "promotion_requirements": [
+        "Confirm object ownership, parameter layouts, authority checks, and save/replication behavior.",
+        "Keep vehicle requests inside original validation paths; do not write guessed offsets.",
+        "Create boundary and failure-path tests for fuel, repair, and destroyed vehicles."
+      ]
+    },
+    {
+      "id": "inventory-equipment-durability",
+      "priority": "medium",
+      "status": "candidate-only",
+      "summary": "Inventory queries, equipped gear, rucksacks, item counts, and weapon durability.",
+      "native_candidates": [
+        "DurabilityHit",
+        "DurabilityRepair",
+        "GetDurability",
+        "GetMaxDurability",
+        "GetItemCount",
+        "GetInventoryItemStacksByClass",
+        "GetItemsCopy",
+        "GetNumItems",
+        "GetEquippedRangedWeapon",
+        "GetRucksack",
+        "DepositRucksack",
+        "OnInventoryChanged",
+        "OnCurrentCharacterInventoryChanged",
+        "OnEquippedMeleeWeaponChanged",
+        "GetStorageInventory"
+      ],
+      "asset_paths": [
+        "Items/Consumables/Consumable_GainSkill_Base_BP.uasset",
+        "Items/Consumables/Consumable_SkillRespec_Base_BP.uasset",
+        "UI/BaseManagementUI_BP.uasset"
+      ],
+      "asset_observations": [
+        "The current 1100-asset export has adjacent consumable and locker/UI assets but no complete inventory asset family; absence from this partial export is not evidence that the game lacks those assets."
+      ],
+      "mod_opportunities": [
+        "Durability and repair-balance options.",
+        "Inventory quality-of-life features, provided item transfer and save semantics are verified."
+      ],
+      "questions": [
+        "Which item operations preserve stack, ownership, weight, and replication invariants?",
+        "Which durability paths cover melee hits, ranged shots, jamming, and repair items?",
+        "When are inventory change callbacks fired for local prediction versus authoritative updates?"
+      ],
+      "promotion_requirements": [
+        "Map item instance and container identity without retaining raw UObject pointers.",
+        "Trace the authoritative mutation path and the matching save/replication notifications.",
+        "Test duplicate requests, empty stacks, equipment swaps, and interrupted transactions."
+      ]
+    },
+    {
+      "id": "base-facility-outpost-resources",
+      "priority": "medium",
+      "status": "candidate-only",
+      "summary": "Facility slots and tasks, morale/resources, outpost claims, upgrades, and base-data replication.",
+      "native_candidates": [
+        "GetAggregateMorale",
+        "GetCommunityResourceIncomeObjective",
+        "GetCommunityResourceValueObjective",
+        "GetCostCommunityResourceDynamic",
+        "GetFacilitySlot",
+        "NumFacilitySlots",
+        "OnFacilityTaskEffectStarted",
+        "OnFacilityTaskEffectEnded",
+        "RequestFacilitySlotStateFromServer",
+        "ClientUpdateBaseData",
+        "ClientUpdateFacilityData",
+        "ServerProcessUpdatedBaseData",
+        "ServerRequestBaseData",
+        "CanClaimOutpost",
+        "TryClaimOutpost",
+        "TryAbandonOutpost",
+        "GetOutpostCount",
+        "GetOutpostNames",
+        "GetResources",
+        "ClaimResource"
+      ],
+      "asset_paths": [
+        "UI/BaseManagementUI_BP.uasset",
+        "Site/OutpostInteractable.uasset",
+        "GameSystems/Enclave/EnclaveSettings_BP.uasset"
+      ],
+      "asset_observations": [
+        "BaseManagementUI strings expose facility build/upgrade/mod actions, resource and morale sections, and outpost slots. These strings establish UI concepts, not safe mutation points."
+      ],
+      "mod_opportunities": [
+        "Configurable facility production, upkeep, morale effects, or outpost yield.",
+        "A base-planning quality-of-life feature that reports resource sources and facility effects."
+      ],
+      "questions": [
+        "Where are production, upkeep, and morale effects calculated and aggregated?",
+        "How do facility task start/end, facility upgrade, and base migration affect cached resources?",
+        "Which outpost checks are eligibility rules versus resource-state mutations?"
+      ],
+      "promotion_requirements": [
+        "Trace the full state transition from UI request through authority validation to save update.",
+        "Keep player-base changes separate from NPC enclaves and mission bases.",
+        "Test resource totals, concurrent facility tasks, and map/community transitions."
+      ]
+    },
+    {
+      "id": "mission-enclave-community-events",
+      "priority": "high",
+      "status": "candidate-only",
+      "summary": "Mission creation/completion/failure, enclave identity and relationships, recruitment records, and community events.",
+      "native_candidates": [
+        "AddEnclaveRecord",
+        "CancelMission",
+        "CheckMissionPhase",
+        "CompleteMission",
+        "CompleteMissionObjective",
+        "CreateAdjustSpawnsMissionEvent",
+        "CreateDemoVanillaStartDemoTimerMissionEvent",
+        "CreateEnclaveFromRecord",
+        "CreateGiveStandingMissionEvent",
+        "CreateMission",
+        "CreateProhibitSpawnsMissionEvent",
+        "CreateSetZombieStasisMissionEvent",
+        "CreateSpawnZombieMissionEvent",
+        "CreateTurnCharacterToZombieMissionEvent",
+        "FailMission",
+        "FinishConditionCheck",
+        "GetActiveMissions",
+        "GetEnclaveByID",
+        "GetEnclaveRelationship",
+        "GetEnclaves",
+        "GetMissionInstance",
+        "GetMissionInstanceByNetworkID",
+        "GetNumActiveMissions",
+        "GetPlayerCommunityEnclave",
+        "InitializeEvent",
+        "MissionCancelled",
+        "MissionComplete",
+        "MulticastEnclaveRelationshipAltered",
+        "MulticastFireEvent",
+        "OnAsyncMissionCreationComplete",
+        "SendMissionToState",
+        "SetEnclaveRelationship",
+        "TrySpawnMission",
+        "TrySpawnMissionAsync",
+        "ULPopupLegacyMissionFireEvent",
+        "UpdateMissionState"
+      ],
+      "asset_paths": [
+        "GameSystems/Enclave/EnclaveSettings_BP.uasset",
+        "Missions/MissionFunctionLibrary.uasset",
+        "Missions/MissionMacroLibrary.uasset",
+        "Story/MissionCastingComponent_BP.uasset",
+        "Story/MissionEvents/MissionEventInstance.uasset",
+        "Story/MissionModeComponent_BP.uasset",
+        "Story/MissionStateComponent_BP.uasset",
+        "UI/CommunityUI_BP.uasset"
+      ],
+      "asset_observations": [
+        "The supplied mission/enclave assets identify campaign and relationship concepts. Their readable names do not establish mission completion safety or permanent character identity.",
+        "Full-package bytecode search finds seven serialized InitializeEvent calls from event factory functions, but no serialized call token for FinishConditionCheck, SendMissionToState, or state outcome notifications; native/reflected dispatch remains possible."
+      ],
+      "mod_opportunities": [
+        "Mission and enclave quality-of-life settings, such as clearer status or configurable cooldowns.",
+        "Recruitment and relationship assistance that preserves original mission and eligibility checks."
+      ],
+      "questions": [
+        "How are mission IDs and enclave IDs kept stable across map travel and save/load?",
+        "Which mission callbacks fire once, and which are replicated or replayed during restore?",
+        "How do recruit records become live survivor objects and enter the player's community?"
+      ],
+      "promotion_requirements": [
+        "Confirm one-shot event semantics, authoritative side, and transition ordering.",
+        "Trace mission/enclave IDs through save and load without using display names as identity.",
+        "Test cancellation, failure, completion, map travel, and repeated callback delivery."
+      ]
+    }
+  ],
+  "limitations": [
+    "A registered name plus an RVA proves only a static name-to-code mapping for the target executable.",
+    "The asset export is a partial 1100-file tree; asset-path matches and string scans do not prove a complete content inventory or an editable/cookable pipeline.",
+    "No candidate domain is enabled in Game API or consumed by a gameplay plugin until its owner, signature, authority, lifetime, and tests are established."
+  ]
+}

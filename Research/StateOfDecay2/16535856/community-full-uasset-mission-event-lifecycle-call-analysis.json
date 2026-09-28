@@ -1,0 +1,187 @@
+{
+  "schema": 1,
+  "method": "Offline census of serialized Ue4Export Blueprint expression trees; filters call tokens by the supplied target regex.",
+  "target_filter": "(?i)(InitializeEvent|FinishConditionCheck|SendMissionToState|UpdateMissionState|CheckMissionPhase|Create[A-Za-z0-9_]*MissionEvent|TrySpawnMissionAsync|TrySpawnMission\\\\b|MissionComplete\\\\b|MissionCancelled\\\\b|CompleteMissionObjective|CompleteMission\\\\b|CancelMission\\\\b|FailMission\\\\b|SetMissionMode\\\\b|MulticastFireEvent\\\\b|ULPopupLegacyMissionFireEvent\\\\b|OnAsyncMissionCreationComplete|GetMissionInstance|GetMissionStateComponent|GetActiveMissions)",
+  "scope": {
+    "export_root": "external temporary data",
+    "json_files_seen": 105357,
+    "json_decode_error_count": 0,
+    "decoded_object_count": 494268,
+    "function_count": 16579,
+    "function_bytecode_count": 16579,
+    "top_level_bytecode_expression_count": 209339,
+    "filtered_call_reference_count": 18,
+    "filtered_call_target_count": 7,
+    "call_references_in_exporter_warning_assets": 0,
+    "decode_errors": []
+  },
+  "capacity_native_wrapper_reference_counts": {
+    "CanAddCharacter": 0,
+    "CanAddCharacters": 0,
+    "TryAddCharacter": 0,
+    "TryAddCharacterRecord": 0
+  },
+  "target_reference_counts": {
+    "Function'DaytonGameGameState:GetMissionStateComponent'": 1,
+    "Function'MissionEventInstance:InitializeEvent'": 7,
+    "Function'MissionFunctionLibrary:CompleteMissionObjective'": 1,
+    "Function'MissionFunctionLibrary:GetMissionInstance'": 4,
+    "Function'MissionModeComponent:DebugGetActiveMissionString'": 1,
+    "Function'MissionModeComponent:GetActiveMissions'": 2,
+    "Function'MissionModeComponent:GetMissionInstanceByNetworkID'": 2
+  },
+  "call_references": [
+    {
+      "asset_path": "StateOfDecay2/Content/Cinematics/Blueprints/CinematicFunctionLibrary.uasset",
+      "blueprint_function": "SetScriptedAttackFlag",
+      "token": "EX_FinalFunction",
+      "target": "Function'MissionFunctionLibrary:GetMissionInstance'",
+      "target_path": "/Script/DaytonGame",
+      "asset_has_export_warning": false
+    },
+    {
+      "asset_path": "StateOfDecay2/Content/Cinematics/Blueprints/CinematicManager.uasset",
+      "blueprint_function": "ExecuteUbergraph_CinematicManager",
+      "token": "EX_FinalFunction",
+      "target": "Function'MissionFunctionLibrary:CompleteMissionObjective'",
+      "target_path": "/Script/DaytonGame",
+      "asset_has_export_warning": false
+    },
+    {
+      "asset_path": "StateOfDecay2/Content/Cinematics/Blueprints/CinematicManager.uasset",
+      "blueprint_function": "SetNPCCharacters",
+      "token": "EX_FinalFunction",
+      "target": "Function'MissionFunctionLibrary:GetMissionInstance'",
+      "target_path": "/Script/DaytonGame",
+      "asset_has_export_warning": false
+    },
+    {
+      "asset_path": "StateOfDecay2/Content/Story/DaybreakMissionModeComponent_BP.uasset",
+      "blueprint_function": "ExecuteUbergraph_DaybreakMissionModeComponent_BP",
+      "token": "EX_FinalFunction",
+      "target": "Function'MissionModeComponent:GetActiveMissions'",
+      "target_path": "/Script/DaytonGame",
+      "asset_has_export_warning": false
+    },
+    {
+      "asset_path": "StateOfDecay2/Content/Story/MissionCastingComponent_BP.uasset",
+      "blueprint_function": "CreateAdjustSpawnsMissionEvent",
+      "token": "EX_FinalFunction",
+      "target": "Function'MissionEventInstance:InitializeEvent'",
+      "target_path": "/Script/DaytonGame",
+      "asset_has_export_warning": false
+    },
+    {
+      "asset_path": "StateOfDecay2/Content/Story/MissionCastingComponent_BP.uasset",
+      "blueprint_function": "CreateDemoVanillaStartDemoTimerMissionEvent",
+      "token": "EX_FinalFunction",
+      "target": "Function'MissionEventInstance:InitializeEvent'",
+      "target_path": "/Script/DaytonGame",
+      "asset_has_export_warning": false
+    },
+    {
+      "asset_path": "StateOfDecay2/Content/Story/MissionCastingComponent_BP.uasset",
+      "blueprint_function": "CreateGiveStandingMissionEvent",
+      "token": "EX_FinalFunction",
+      "target": "Function'MissionEventInstance:InitializeEvent'",
+      "target_path": "/Script/DaytonGame",
+      "asset_has_export_warning": false
+    },
+    {
+      "asset_path": "StateOfDecay2/Content/Story/MissionCastingComponent_BP.uasset",
+      "blueprint_function": "CreateProhibitSpawnsMissionEvent",
+      "token": "EX_FinalFunction",
+      "target": "Function'MissionEventInstance:InitializeEvent'",
+      "target_path": "/Script/DaytonGame",
+      "asset_has_export_warning": false
+    },
+    {
+      "asset_path": "StateOfDecay2/Content/Story/MissionCastingComponent_BP.uasset",
+      "blueprint_function": "CreateSetZombieStasisMissionEvent",
+      "token": "EX_FinalFunction",
+      "target": "Function'MissionEventInstance:InitializeEvent'",
+      "target_path": "/Script/DaytonGame",
+      "asset_has_export_warning": false
+    },
+    {
+      "asset_path": "StateOfDecay2/Content/Story/MissionCastingComponent_BP.uasset",
+      "blueprint_function": "CreateSpawnZombieMissionEvent",
+      "token": "EX_FinalFunction",
+      "target": "Function'MissionEventInstance:InitializeEvent'",
+      "target_path": "/Script/DaytonGame",
+      "asset_has_export_warning": false
+    },
+    {
+      "asset_path": "StateOfDecay2/Content/Story/MissionCastingComponent_BP.uasset",
+      "blueprint_function": "CreateTurnCharacterToZombieMissionEvent",
+      "token": "EX_FinalFunction",
+      "target": "Function'MissionEventInstance:InitializeEvent'",
+      "target_path": "/Script/DaytonGame",
+      "asset_has_export_warning": false
+    },
+    {
+      "asset_path": "StateOfDecay2/Content/Story/MissionCastingComponent_BP.uasset",
+      "blueprint_function": "DoLocationDebugTick",
+      "token": "EX_FinalFunction",
+      "target": "Function'MissionModeComponent:GetMissionInstanceByNetworkID'",
+      "target_path": "/Script/DaytonGame",
+      "asset_has_export_warning": false
+    },
+    {
+      "asset_path": "StateOfDecay2/Content/Story/MissionCastingComponent_BP.uasset",
+      "blueprint_function": "DoLocationDebugTick",
+      "token": "EX_FinalFunction",
+      "target": "Function'MissionModeComponent:GetMissionInstanceByNetworkID'",
+      "target_path": "/Script/DaytonGame",
+      "asset_has_export_warning": false
+    },
+    {
+      "asset_path": "StateOfDecay2/Content/Story/MissionCastingComponent_BP.uasset",
+      "blueprint_function": "GetMissionState",
+      "token": "EX_FinalFunction",
+      "target": "Function'DaytonGameGameState:GetMissionStateComponent'",
+      "target_path": "/Script/DaytonGame",
+      "asset_has_export_warning": false
+    },
+    {
+      "asset_path": "StateOfDecay2/Content/Story/MissionModeComponent_BP.uasset",
+      "blueprint_function": "ExecuteUbergraph_MissionModeComponent_BP",
+      "token": "EX_FinalFunction",
+      "target": "Function'MissionModeComponent:GetActiveMissions'",
+      "target_path": "/Script/DaytonGame",
+      "asset_has_export_warning": false
+    },
+    {
+      "asset_path": "StateOfDecay2/Content/Story/StoryUMG/MissionDebugHUDLayout.uasset",
+      "blueprint_function": "PopulateDebugMenu",
+      "token": "EX_FinalFunction",
+      "target": "Function'MissionFunctionLibrary:GetMissionInstance'",
+      "target_path": "/Script/DaytonGame",
+      "asset_has_export_warning": false
+    },
+    {
+      "asset_path": "StateOfDecay2/Content/UICheat/CheatMenu.uasset",
+      "blueprint_function": "DebugStartMissionAndTeleportToCasting",
+      "token": "EX_FinalFunction",
+      "target": "Function'MissionFunctionLibrary:GetMissionInstance'",
+      "target_path": "/Script/DaytonGame",
+      "asset_has_export_warning": false
+    },
+    {
+      "asset_path": "StateOfDecay2/Content/UICheat/CheatMenu.uasset",
+      "blueprint_function": "ExecuteUbergraph_CheatMenu",
+      "token": "EX_FinalFunction",
+      "target": "Function'MissionModeComponent:DebugGetActiveMissionString'",
+      "target_path": "/Script/DaytonGame",
+      "asset_has_export_warning": false
+    }
+  ],
+  "limits": [
+    "Serialized call tokens are evidence of references only; they do not prove runtime execution, caller completeness, or campaign reachability.",
+    "EX_VirtualFunction names are not resolved to native or Blueprint implementations.",
+    "ProcessEvent, delegates outside the parsed expression forms, native indirect calls, data-driven dispatch, and save/load semantics are not reconstructed.",
+    "Packages with exporter warnings may have incomplete serialization even when their JSON file decodes."
+  ],
+  "target": "target.json",
+  "target_sha256": "EBF0A73E164BAA701F74655585F262F8E38A32B1F6DC5057303489BA5B333ECE"
+}

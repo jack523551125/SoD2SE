@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "scope": "offline text-only proof; no in-game load or navigation claim",
+  "source_pak": "pakchunk000030-WindowsNoEditor.pak",
+  "asset": "Art/UI/settings.uasset",
+  "source_sha256": "d8d320363be69ea9dfb39b5c20c8de5237c642841fe3ac86b00f8115050fe06e",
+  "source_size": 7618264,
+  "no_op_reparse_matches_reference": true,
+  "changed_byte_count": 9,
+  "changed_byte_span": [
+    6585,
+    6594
+  ],
+  "patched_reparse_succeeded": true,
+  "changed_export_paths": [
+    "/0/Properties/TextTable/0/Text/LocalizedString",
+    "/0/Properties/TextTable/0/Text/SourceString"
+  ],
+  "text_table_rows": 159,
+  "api_function_count": 65,
+  "limits": [
+    "Equal-length FText source substitution only; it does not add an Iggy control.",
+    "A cooked asset parsed by CUE4Parse is not proof of game load, localization precedence, focus or input behavior.",
+    "No edited game asset is retained or distributed by this tool."
+  ]
+}

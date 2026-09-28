@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "scope": "DLL export names only; no invocation, parameter contract or display-list semantics",
+  "dll_name": "iggy_w64.dll",
+  "dll_sha256": "09049ffc7b48639c72336bb809035fa1c1b827e898693fbc2968165bd23940a6",
+  "export_count": 204,
+  "selected_exports": [
+    "IggyPlayerCallFunctionRS",
+    "IggyPlayerCallMethodRS",
+    "IggyPlayerCallbackResultPath",
+    "IggyPlayerSetFocusRS",
+    "IggyValueRefCheck",
+    "IggyValueRefCreateArray",
+    "IggyValueRefCreateEmptyObject",
+    "IggyValueRefFree",
+    "IggyValueRefFromPath",
+    "IggyValueRefFromTempRef",
+    "IggyValueRefGetGlobal",
+    "IggyValueSetBooleanRS",
+    "IggyValueSetF32RS",
+    "IggyValueSetF64RS",
+    "IggyValueSetS32RS",
+    "IggyValueSetStringUTF16RS",
+    "IggyValueSetStringUTF8RS",
+    "IggyValueSetU32RS",
+    "IggyValueSetUserDataRS",
+    "IggyValueSetValueRefRS"
+  ],
+  "limit": "Call/ValueRef APIs suggest a possible runtime research route, but do not prove arbitrary Iggy controls can be created or inserted into the current settings movie."
+}

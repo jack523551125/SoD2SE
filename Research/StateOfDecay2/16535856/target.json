@@ -1,0 +1,14 @@
+{
+  "schema": 1,
+  "game": "State of Decay 2",
+  "game_version": "Update 38.2",
+  "engine_version": "Unreal Engine 4.13.2 (Engine/Build/Build.version)",
+  "steam_app_id": "495420",
+  "steam_build_id": "16535856",
+  "architecture": "x64 PE32+",
+  "executable": "StateOfDecay2-Win64-Shipping.exe",
+  "sha256": "EBF0A73E164BAA701F74655585F262F8E38A32B1F6DC5057303489BA5B333ECE",
+  "framework": "SoD2SE 0.6.0-preview",
+  "status": "fixed-version research target",
+  "scope": "Offline reverse-engineering metadata for the verified executable. It contains no game binary, memory dump, or proprietary asset."
+}
