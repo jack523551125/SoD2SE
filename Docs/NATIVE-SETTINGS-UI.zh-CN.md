@@ -1,6 +1,6 @@
 # 原版设置菜单接入：离线研究与实现门槛
 
-当前方向是将现有 MCM 设置注册表接入原版设置菜单并移除 F1 设置覆盖层。`0.2.0-preview` 已实现离线桥接并安装；用户确认原版入口可打开，但设置页内容仍为空白。MCM `0.6.1-preview` 已移除旧 F1 菜单，并增加 Iggy 回调/RPC 诊断；尚未确认空白页的剩余故障点。没有启动、注入或读取运行中的游戏。当前版本、ABI 和自动化证据以 `Research/StateOfDecay2/16535856/native-settings-mcm-bridge.json` 为准。下文早期研究门槛是历史记录，不代表当前实现状态。
+本文主要记录早期原版设置页研究与故障排查，以下版本号与空白页现象属于历史阶段。用户后续截图已显示原版“Mod 设置”入口、已注册选项和滑块。当前打包声明与验证入口见 [原版入口说明](NativeModSettingsEntry.zh-CN.md)和[离线发布](RELEASE.zh-CN.md)。本次只做离线工作，没有启动、注入或读取运行中的游戏；最新构建仍需单独实机验收。
 
 ## 已闭合的资源关系
 
@@ -20,7 +20,7 @@ RAD 官方对 Iggy 的介绍说明，它以 Flash/SWF 兼容工具创作 UI，�
 - 没有完成修改 Iggy 页面并绑定 Blueprint 的离线复建；也没有证明能向运行中的播放器插入组件。当前缺少把 `McmRegistry` 连接到原版页面的可信传输端。
 - 游戏安装目录包含 `StateOfDecay2/Plugins/IggyPlugin/Binaries/Win64/iggy_w64.dll`。静态枚举得到 204 个导出，包含 `IggyPlayerCallFunctionRS`、`IggyPlayerCallMethodRS`、`IggyPlayerSetFocusRS` 与 `IggyValueRef*`；名单与 DLL 散列见 `iggy-dll-exports.json`。这些名字指出下一条研究路线，但仍缺少与当前播放器的对象、调用参数及组件创建契约。DLL 的存在本身不解除上述门槛。
 
-以上是桥接实现前的历史结论。2026-09-25 后续工作已加入原版入口、回调桥接和 Mod 设置资源；当前用户已确认入口可打开，但页面内容仍空白。F1 设置覆盖层已从新 MCM 原生 DLL 移除；`UiSurface` 仍由宿主用于玩法界面。
+以上是桥接实现前的历史结论。2026-09-25 后续工作已加入原版入口、回调桥接和 Mod 设置资源；用户后续截图也确认页面内容已显示。F1 设置覆盖层已从新 MCM 原生 DLL 移除；`UiSurface` 仍由宿主用于玩法界面。
 
 这是桥接实现前的历史研究建议。当前需要用新 DLL 生成的 Iggy hook/RPC 日志定位用户报告的空白页面，再修复并由用户实机确认原版设置页内容、输入和保存行为。
 
@@ -50,7 +50,7 @@ RAD 官方对 Iggy 的介绍说明，它以 Flash/SWF 兼容工具创作 UI，�
 
 继续核对 `IggyFile` 与 `IggyIndexBuilder` 后发现：JPEXS 的 `parseEntries()` 里读取 type-0 索引的调用被注释掉；写回时则移除原有全部索引子流，再依据其序列化的 SWF 数据生成单条索引流。独立解析器如今能把索引命令选中的记录布局与对象类型交叉核对；JPEXS 本身仍没有解码这些 SoD2 自定义对象或显示关系，目标设置电影的两条原始索引流也没有被它证明能够无损保留或重建。因此 JPEXS 仍不能作为 SoD2 原始 Iggy 电影的无损往返器。来源见 [IggyFile.java](https://github.com/jindrapetrik/jpexs-decompiler/blob/version26.3.0/libsrc/ffdec_lib/src/com/jpexs/decompiler/flash/iggy/IggyFile.java) 和 [IggyIndexBuilder.java](https://github.com/jindrapetrik/jpexs-decompiler/blob/version26.3.0/libsrc/ffdec_lib/src/com/jpexs/decompiler/flash/iggy/streams/IggyIndexBuilder.java)。
 
-这段记录的是早期 Iggy 研究状态。后续已完成固定版本设置资源的可复现修改、原版分类入口、`McmRegistry` 桥接和离线解析验证；页面内容仍存在用户可复现的空白问题，运行时显示与设置持久化尚未通过验收。
+这段记录的是早期 Iggy 研究状态。后续已完成固定版本设置资源的可复现修改、原版分类入口、`McmRegistry` 桥接和离线解析验证；用户截图确认页面内容已显示，最新构建的设置持久化尚未通过本轮验收。
 
 新增了固定散列保护的 `patch_iggy_text.py`，并在设置电影索引 82 上完成一次 17 个 UTF-16 代码单元的等长替换。独立解析器成功重读输出；载荷仍为 7,557,290 字节，只有字符串区间的 17 个字节值发生变化，所有已报告的对象、索引和布局字段保持一致。实验只证明已解码文本可被定长原位修改并保持结构可解析；它没有新增或改动显示对象、按钮、回调、焦点或导航，也没有验证游戏是否加载该输出。原文和替换文本均不写入研究报告，散列与偏移记录在 `native-settings-iggy-compatibility.json`。
 
@@ -69,4 +69,4 @@ Iggy 候选对象链接（2026-09-25）：新增 `native-settings-iggy-object-li
 
 ## 2026-09-25：原版设置页桥接预览
 
-现有 MCM 注册页已经通过保留原始 ABC 绑定的定点字节码修改，映射到固定版本原版菜单，并通过 Iggy callback ABI 连接原生 MCM 注册表。新 MCM 包已移除 F1 设置覆盖层。用户确认入口可打开，但设置页仍空白；当前新日志会区分回调未挂钩、RPC 未到达、参数异常和结果路径失败。运行时布局、焦点、输入和配置持久化仍待修复与验收。
+现有 MCM 注册页已经通过保留原始 ABC 绑定的定点字节码修改，映射到固定版本原版菜单，并通过 Iggy callback ABI 连接原生 MCM 注册表。新 MCM 包已移除 F1 设置覆盖层。用户截图确认设置页内容已显示；运行时布局、焦点、输入和配置持久化仍需针对最新构建验收。

@@ -5,6 +5,8 @@
 - [项目说明](../README.zh-CN.md)：框架、安装和现有插件。
 - [研究状态与未完成项](RESEARCH-STATUS.zh-CN.md)：证据边界和后续研究。
 - [维护与验证](MAINTENANCE.zh-CN.md)：静态检查、产物管理与归档恢复。
+- [新增 Mod](NEW-MOD.zh-CN.md)：项目目录、声明文件和构建接入。
+- [离线发布](RELEASE.zh-CN.md)：统一版本、打包输入与 MO2 包结构。
 - [固定版本详细研究](../Research/StateOfDecay2/16535856/README.zh-CN.md)。
 - [测试说明](../Tests/README.md)。
 - [MCM](../MCM.zh-CN.md)、[界面协议](../UI.zh-CN.md)、[近战攻速](../MELEE.zh-CN.md)、[社区招募](../COMMUNITY.zh-CN.md)。

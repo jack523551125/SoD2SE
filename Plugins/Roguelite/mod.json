@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "id": "Roguelite",
+  "name": "幸存者成长 - Survivor Roguelite",
+  "version": "0.1.0-preview",
+  "publish": false,
+  "requires": ["SoD2SE Framework", "Mcm"],
+  "files": [
+    {"input": "build:Plugins/Roguelite.dll", "target": "Root/Plugins/Roguelite.dll"}
+  ]
+}

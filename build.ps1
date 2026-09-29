@@ -18,10 +18,8 @@ $pluginOut = Join-Path $out 'Plugins'
 [IO.Directory]::CreateDirectory($out) | Out-Null
 [IO.Directory]::CreateDirectory($pluginOut) | Out-Null
 
-# Version single source: FrameworkInfo.Version in Core/SoD2SE.Core.cs.  The
-# assembly attributes are generated here instead of being copied into eight
-# AssemblyInfo.cs files, so a DLL can no longer be stamped with another
-# release's version.
+# FrameworkInfo.Version owns framework binaries. Each Plugins/<Id>/mod.json
+# owns that plugin's assembly and MO2 package version.
 $environmentScript = Join-Path $PSScriptRoot 'Environment.ps1'
 if (-not (Test-Path -LiteralPath $environmentScript -PathType Leaf)) { throw "找不到共享脚本：$environmentScript" }
 . $environmentScript
@@ -55,8 +53,24 @@ $pluginDirectories = @(Get-ChildItem -LiteralPath (Join-Path $PSScriptRoot 'Plug
 foreach ($pluginDirectory in $pluginDirectories) {
     $sources = @(Get-ChildItem -LiteralPath $pluginDirectory.FullName -Filter '*.cs' -File | Sort-Object Name | Select-Object -ExpandProperty FullName)
     if ($sources.Count -eq 0) { continue }
+    $manifestPath = Join-Path $pluginDirectory.FullName 'mod.json'
+    if (-not (Test-Path -LiteralPath $manifestPath -PathType Leaf)) { throw "插件缺少 mod.json：$manifestPath" }
+    $manifest = Get-Content -LiteralPath $manifestPath -Raw -Encoding UTF8 | ConvertFrom-Json
+    if ($manifest.id -cne $pluginDirectory.Name) { throw "插件 ID 与目录名不一致：$manifestPath" }
+    $pluginVersion = [string]$manifest.version
+    if ($pluginVersion -cnotmatch '^\d+\.\d+\.\d+(?:-[A-Za-z0-9.-]+)?$') { throw "插件版本无效：$manifestPath" }
+    $pluginAssemblyVersion = Get-SoD2SEAssemblyVersion -Version $pluginVersion
+    $pluginVersionSource = Join-Path $generatedDirectory ($pluginDirectory.Name + '.AssemblyVersion.g.cs')
+    $pluginVersionAttributes = @"
+using System.Reflection;
+
+[assembly: AssemblyVersion("$pluginAssemblyVersion")]
+[assembly: AssemblyFileVersion("$pluginAssemblyVersion")]
+[assembly: AssemblyInformationalVersion("$pluginVersion")]
+"@
+    [IO.File]::WriteAllText($pluginVersionSource, $pluginVersionAttributes, [Text.UTF8Encoding]::new($true))
     $plugin = Join-Path $pluginOut ($pluginDirectory.Name + '.dll')
-    & $compiler @common "/reference:$core" "/reference:$gameApi" '/target:library' "/out:$plugin" @sources $versionSource
+    & $compiler @common "/reference:$core" "/reference:$gameApi" '/target:library' "/out:$plugin" @sources $pluginVersionSource
     if ($LASTEXITCODE -ne 0) { throw "插件 $($pluginDirectory.Name) 编译失败：$LASTEXITCODE" }
     Write-Output "插件：$plugin"
 }

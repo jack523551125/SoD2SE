@@ -17,7 +17,7 @@
 - `Plugins\Mcm.dll` 和 `Plugins\Mcm\SoD2SE.Mcm.Native.dll`：独立的游戏内配置菜单插件及 DX11 渲染组件，同时作为所有 Mod 界面（含升级提示）的宿主。
 - `Plugins\Roguelite.dll`：幸存者成长核心；数据保存在 `%LOCALAPPDATA%\StateOfDecay2\SoD2SE\Roguelite\progress.dat`，需要已验证的游戏事件能力才会在游戏内接收击杀。
 
-发布目录中的 `SoD2SE-CommunityMods-v0.6.0-preview.zip` 是包含源码和验证资料的开发归档；给 MO2 安装的五个独立 Mod ZIP 只放运行文件和 `meta.ini`，不包含 `Docs`。框架 ZIP 只放根目录 Loader/Core/GameApi，也不包含 `meta.ini`。
+`SoD2SE-CommunityMods-v0.6.0-preview.zip` 是历史开发归档，不是当前 MO2 安装包。当前由 `package_mo2.ps1` 自动发现 `mod.json` 中标为发布的 Mod，每个独立 ZIP 只放运行文件与 `meta.ini`，不包含 `Docs`；框架 ZIP 只放 Loader/Core/GameApi，不包含 `meta.ini`。操作见 [离线发布](Docs/RELEASE.zh-CN.md)。
 
 托管插件 DLL 由加载器加载，并通过框架 API 修改游戏进程内存。MCM 另将自己的原生渲染组件加载进游戏进程，在游戏画面中绘制菜单。框架不会修改磁盘上的 EXE、PAK 或存档。
 
@@ -33,11 +33,11 @@ MO2 模式下，加载器保留原进程及其环境，并检查实际创建的�
 
 通过 MO2 管理两个 DLL 时，只把 Loader 和 Core 放在游戏根目录，将独立 DLL Mod 压缩包安装到 MO2。在左栏分别启停，退出游戏后重启生效。若已经手动把 DLL 放进游戏 Plugins 目录，先用支持插件面板的“接管 SoD2SE 插件”迁移；保留实体副本会绕过 MO2 勾选控制。两个插件全部取消勾选后，0.3.3 允许正常启动且不应用内存补丁。同名 DLL 由 MO2 左栏优先级决定使用哪个文件；不同插件的初始化顺序仍按 DLL 文件名。
 
-MCM `0.6.3-preview` 已移除旧的 `F1` 设置覆盖层，也不再提供手动语言选择。启用独立 MCM 包和“原版 Mod 设置入口 - Native Mod Settings Entry 0.2.4-preview”后，从游戏“设置 → Mod 设置”进入配置页。Core 每次启动检测游戏配置或 Steam 中此游戏的语言，并让入口和 MCM 自身文案跟随切换。该页仍未完成实机验收；最新运行诊断写入 `%LOCALAPPDATA%\StateOfDecay2\SoD2SE\Mcm-native-<PID>.log`。本次只更新 Core、MCM 和原版入口包，不重建或替换其他 Mod 包。
+MCM 包声明版本 `0.6.3-preview` 已移除旧的 `F1` 设置覆盖层，也不再提供手动语言选择。启用独立 MCM 包和原版入口包（声明版本 `0.3.1-preview`）后，从游戏“设置 → Mod 设置”进入配置页。Core 每次启动检测游戏语言。用户截图已确认入口与选项显示；最新构建的焦点、保存与语言切换仍需验收。运行诊断写入 `%LOCALAPPDATA%\StateOfDecay2\SoD2SE\Mcm-native-<PID>.log`。
 
-五个由 MO2 管理的 Mod 压缩包根目录包含标准 `meta.ini`；MCM 当前包版本为 `0.6.3-preview`、原版入口包为 `0.2.4-preview`，其他独立包保持原版本。框架压缩包用于游戏根目录，不包含 `meta.ini`，也不应作为 MO2 Mod 安装。如果 MO2 仍显示日期版本，请用含正确元数据的新压缩包覆盖并刷新 Mod 信息；仅修改 ZIP 文件名不会更新 MO2 版本字段。
+各 Mod 的版本和预设名称由对应 `mod.json` 管理：MCM `0.6.3-preview`，近战攻速、无限随从、社区招募各 `0.6.1-preview`，原版入口 `0.3.1-preview`，跳过启动介绍 `0.1.1-preview`。这些是源码**声明的待打包版本**，不是当前 MO2 实例的安装状态。MO2 Mod 包根目录包含由打包器生成的 `meta.ini`；框架包没有该文件。如果 MO2 显示日期版本，应核对安装器是否消费了包元数据及实际安装包，而不只改 ZIP 文件名。
 
-无限随从和社区招募插件各提供启用开关、说明与本次加载状态，设置自动保存，失败会显示错误并保留旧值。两个开关均在下次启动生效；没有增加未实现的随从人数或社区人数滑块。配置保存在 `%LOCALAPPDATA%\StateOfDecay2\SoD2SE\mcm.ini`；也可通过环境变量 `SOD2SE_MCM_CONFIG` 指定文件。默认不同 MO2 配置档共用该文件。MCM 取消勾选后不加载菜单，但框架仍读取已经保存的两个插件启停设置。
+无限随从和社区招募插件在 MCM 注册页面与本次加载状态，不再提供启用开关；启停通过 MO2 左栏管理，也没有未实现的随从人数或社区人数滑块。近战攻速配置保存在 `%LOCALAPPDATA%\StateOfDecay2\SoD2SE\mcm.ini`；也可通过环境变量 `SOD2SE_MCM_CONFIG` 指定文件。默认不同 MO2 配置档共用该文件。MCM 取消勾选后不加载菜单，不影响其他已启用插件的独立加载。
 
 MO2 独立包结构为 `Root\Plugins\Mcm.dll` 与 `Root\Plugins\Mcm\SoD2SE.Mcm.Native.dll`；支持插件需要能够把 `Root` 虚拟到游戏根目录。Loader/Core/GameApi ABI 仍为 0.6.0；本次 MCM 更新还需要替换兼容的 `SoD2SE.Core.dll`，不更新其他 Mod 包。使用 MO2 时不要同时把 MO2 管理的插件 DLL 复制到实体 `Plugins` 目录。MCM 不再提供语言选项，每次启动会跟随游戏配置或 Steam 中该游戏的实际语言，并自动选择中文或 English。详细能力、限制和开发接口见 `MCM.zh-CN.md`。
 

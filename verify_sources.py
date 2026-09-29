@@ -420,20 +420,15 @@ def verify_growth_ui_routing_and_load_status(base):
 
 
 def verify_version_single_source(base):
-    """FrameworkInfo.Version is the only version literal in the tree.
-
-    build.ps1 generates the version attributes from it, packaging reads it
-    through Environment.ps1, and the research target records it, so a stray
-    literal anywhere is a leftover that would ship a mislabelled package.
-    """
+    """Framework and each plugin have one declared version source."""
     core_path = locate_core(base)
     match = VERSION_RE.search(core_path.read_text(encoding="utf-8"))
     if match is None:
         raise VerificationError("Core/SoD2SE.Core.cs 没有 FrameworkInfo.Version")
     version = match.group(1)
 
-    # No source file may carry a version attribute: build.ps1 writes the three
-    # attributes from Core for Core, GameApi, Loader and every Plugins/* folder.
+    # No source file may carry version attributes: build.ps1 generates them
+    # from Core for framework binaries and each plugin's mod.json for plugins.
     roots = []
     for root in (base, base / "source"):
         if not (root / "Core" / "SoD2SE.Core.cs").is_file():
@@ -448,13 +443,13 @@ def verify_version_single_source(base):
             stray = VERSION_ATTRIBUTE_RE.findall(path.read_text(encoding="utf-8"))
             if stray:
                 raise VerificationError(
-                    "%s 仍然硬编码版本属性 %s；版本由 build.ps1 从 FrameworkInfo.Version 生成"
+                    "%s 仍然硬编码版本属性 %s；版本由 build.ps1 生成"
                     % (path.relative_to(base), ", ".join(stray)))
         for path in sorted(root.glob("Plugins/*/*.cs")) + sorted(root.glob("*/*.cs")):
             stray = VERSION_ATTRIBUTE_RE.findall(path.read_text(encoding="utf-8"))
             if stray:
                 raise VerificationError(
-                    "%s 硬编码版本属性 %s；版本由 build.ps1 从 FrameworkInfo.Version 生成"
+                    "%s 硬编码版本属性 %s；版本由 build.ps1 生成"
                     % (path.relative_to(base), ", ".join(stray)))
     if identity_files < 8:
         raise VerificationError("收集到的 AssemblyInfo.cs 少于 8 个，目录结构可能已变化")
@@ -468,6 +463,21 @@ def verify_version_single_source(base):
     for token in ("Get-SoD2SEVersion", "Get-SoD2SEAssemblyVersion", "AssemblyInformationalVersion"):
         if token not in build_text:
             raise VerificationError("build.ps1 没有通过 %s 生成版本属性" % token)
+    if "mod.json" not in build_text or "pluginVersionSource" not in build_text:
+        raise VerificationError("build.ps1 没有按插件声明生成程序集版本")
+    plugin_versions = {}
+    for root in roots:
+        for plugin in sorted((root / "Plugins").iterdir()):
+            if not plugin.is_dir() or not list(plugin.glob("*.cs")):
+                continue
+            manifest_path = plugin / "mod.json"
+            if not manifest_path.is_file():
+                raise VerificationError("%s 缺少 mod.json" % plugin.relative_to(base))
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            if manifest.get("id") != plugin.name or not re.fullmatch(
+                    r"\d+\.\d+\.\d+(?:-[A-Za-z0-9.-]+)?", str(manifest.get("version", ""))):
+                raise VerificationError("%s 的 ID 或版本无效" % manifest_path.relative_to(base))
+            plugin_versions[plugin.name] = manifest["version"]
 
     for name in ("package.ps1", "package_mo2.ps1", "install_mo2_preview.ps1"):
         path = next((candidate for candidate in (base / name, base / "source" / name)
@@ -494,8 +504,8 @@ def verify_version_single_source(base):
             raise VerificationError(
                 "%s 的 framework 字段为 %s，没有包含 %s" % (path, framework, version))
 
-    print("PASS: framework version " + version + " is defined once and "
-          "build.ps1 stamps every assembly from it")
+    print("PASS: framework version " + version + " and " + str(len(plugin_versions)) +
+          " plugin manifest versions are stamped from their own sources")
     return version
 
 

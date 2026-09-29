@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "id": "SkipStartupIntro",
+  "name": "跳过启动介绍 - Skip Startup Intro",
+  "version": "0.1.1-preview",
+  "publish": true,
+  "requires": [],
+  "files": [
+    {"input": "source:Mods/SkipStartupIntro/Root/StateOfDecay2/Content/Movies/Logos.bk2", "target": "Root/StateOfDecay2/Content/Movies/Logos.bk2"}
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "id": "UnlimitedFollowers",
+  "name": "无限随从 - Unlimited Followers",
+  "version": "0.6.1-preview",
+  "publish": true,
+  "requires": ["SoD2SE Framework"],
+  "files": [
+    {"input": "build:Plugins/UnlimitedFollowers.dll", "target": "Root/Plugins/UnlimitedFollowers.dll"}
+  ]
+}

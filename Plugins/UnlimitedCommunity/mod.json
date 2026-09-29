@@ -1,0 +1,11 @@
+{
+  "schema": 1,
+  "id": "UnlimitedCommunity",
+  "name": "社区招募无上限 - Unlimited Community Recruitment",
+  "version": "0.6.1-preview",
+  "publish": true,
+  "requires": ["SoD2SE Framework"],
+  "files": [
+    {"input": "build:Plugins/UnlimitedCommunity.dll", "target": "Root/Plugins/UnlimitedCommunity.dll"}
+  ]
+}
