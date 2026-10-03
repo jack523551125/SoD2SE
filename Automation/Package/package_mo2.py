@@ -104,6 +104,8 @@ def discover_mods(source_root: Path = SOURCE_ROOT) -> list[Mod]:
     seen: set[str] = set()
     for group in ('Plugins', 'Mods'):
         directory = source_root / group
+        if not directory.is_dir():
+            continue
         for folder in sorted((p for p in directory.iterdir() if p.is_dir()), key=lambda p: p.name.lower()):
             manifest = folder / 'mod.json'
             if not manifest.is_file():
