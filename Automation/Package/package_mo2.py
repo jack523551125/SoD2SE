@@ -7,6 +7,12 @@ the game rather than managed as an MO2 Mod.
 
 from __future__ import annotations
 
+# Standalone script execution resolves imports from its source-owning project.
+import sys as _layout_sys
+from pathlib import Path as _LayoutPath
+_layout_sys.path.insert(0, str(_LayoutPath(__file__).resolve().parents[2]))
+
+from Automation.source_layout import work_root
 import argparse
 import hashlib
 import json
@@ -18,7 +24,7 @@ from pathlib import Path, PurePosixPath
 from zipfile import ZIP_DEFLATED, ZipFile, ZipInfo
 
 
-SOURCE_ROOT = Path(__file__).resolve().parent
+SOURCE_ROOT = Path(__file__).resolve().parents[2]
 VERSION_RE = re.compile(r'^\d+\.\d+\.\d+(?:-[A-Za-z0-9.-]+)?$')
 ID_RE = re.compile(r'^[A-Za-z][A-Za-z0-9]*$')
 FRAMEWORK_RE = re.compile(r'public\s+const\s+string\s+Version\s*=\s*"([^"]+)"\s*;')
@@ -49,7 +55,7 @@ def safe_relative(value: str) -> PurePosixPath:
     return path
 
 
-def read_mod(path: Path) -> Mod:
+def read_mod(path: Path, expected_id: str | None = None) -> Mod:
     try:
         data = json.loads(path.read_text(encoding='utf-8'))
     except (OSError, UnicodeError, json.JSONDecodeError) as error:
@@ -57,7 +63,7 @@ def read_mod(path: Path) -> Mod:
     if not isinstance(data, dict) or data.get('schema') != 1:
         raise PackageError(f"Unsupported Mod manifest: {path}")
     mod_id, name, version = data.get('id'), data.get('name'), data.get('version')
-    if not isinstance(mod_id, str) or not ID_RE.fullmatch(mod_id) or mod_id != path.parent.name:
+    if not isinstance(mod_id, str) or not ID_RE.fullmatch(mod_id) or mod_id != (expected_id if expected_id is not None else path.parent.name):
         raise PackageError(f"Mod ID must equal its folder name: {path}")
     if not isinstance(name, str) or not name.strip() or '\n' in name or '\r' in name:
         raise PackageError(f"Invalid display name: {path}")
@@ -196,8 +202,8 @@ def prepare_framework(source_root: Path, build_root: Path, output: Path) -> tupl
 
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--build-dir', type=Path, default=SOURCE_ROOT / 'compiled')
-    parser.add_argument('--output-dir', type=Path, default=SOURCE_ROOT.parent.parent / 'outputs')
+    parser.add_argument('--build-dir', type=Path, default=work_root(SOURCE_ROOT) / 'build')
+    parser.add_argument('--output-dir', type=Path, default=SOURCE_ROOT.parent.parent / 'dist')
     parser.add_argument('--native-settings-asset', type=Path)
     parser.add_argument('--id', action='append', default=[], help='Package one Mod ID (repeatable)')
     parser.add_argument('--include-framework', action='store_true')

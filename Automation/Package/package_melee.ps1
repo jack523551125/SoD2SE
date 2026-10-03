@@ -1,16 +1,18 @@
-﻿[CmdletBinding()]
+[CmdletBinding()]
 param([string]$OutputDirectory = '')
+$projectRoot = (Split-Path -Parent (Split-Path -Parent $PSScriptRoot))
+
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 # The melee-only preview used to carry its own copy of the version, the ZIP
 # names and a Docs folder.  Both the version and the "no Docs in a mod package"
-# rule now live in package_mo2.ps1, so this script only forwards.
-$forwarder = Join-Path $PSScriptRoot 'package_mo2.ps1'
+# rule now live in Automation/Package/package_mo2.ps1, so this script only forwards.
+$forwarder = Join-Path $projectRoot 'Automation/Package/package_mo2.ps1'
 if (-not (Test-Path -LiteralPath $forwarder -PathType Leaf)) { throw "找不到 MO2 打包脚本：$forwarder" }
 
-. (Join-Path $PSScriptRoot 'Environment.ps1')
-$version = Get-SoD2SEVersion -SourceRoot $PSScriptRoot
+. (Join-Path $projectRoot 'Automation/Environment.ps1')
+$version = Get-SoD2SEVersion -SourceRoot $projectRoot
 
 $arguments = @{}
 if (-not [string]::IsNullOrWhiteSpace($OutputDirectory)) { $arguments['OutputDirectory'] = $OutputDirectory }

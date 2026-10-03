@@ -1,4 +1,6 @@
-﻿# Shared lookups for the build, packaging, verification and install scripts.
+
+$projectRoot = (Split-Path -Parent $PSScriptRoot)
+# Shared lookups for the build, packaging, verification and install scripts.
 #
 # Two things used to be repeated in every script: the framework version and one
 # developer machine's absolute paths.  Both now come from one place:
@@ -86,7 +88,7 @@ function Resolve-SoD2GameExecutable {
     if ($env:SOD2_GAME_DIR) { $candidates.Add((Join-Path $env:SOD2_GAME_DIR $relative)) }
     if ($env:SOD2_GAME_DIR) { $candidates.Add((Join-Path $env:SOD2_GAME_DIR 'StateOfDecay2.exe')) }
 
-    $hintRoots = @($HintFileDirectory, $PSScriptRoot, (Get-Location).Path) |
+    $hintRoots = @($HintFileDirectory, $projectRoot, (Get-Location).Path) |
         Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Unique
     foreach ($directory in $hintRoots) {
         foreach ($name in 'SoD2SE.GamePath.txt', 'SOD2SE_GAME_PATH.txt') {
@@ -139,7 +141,7 @@ function Resolve-Mo2DataRoot {
     $candidates.Add($MoDataRoot)
     $candidates.Add($env:SOD2_MO2_DATA)
 
-    $hintRoots = @($HintFileDirectory, $PSScriptRoot, (Get-Location).Path) |
+    $hintRoots = @($HintFileDirectory, $projectRoot, (Get-Location).Path) |
         Where-Object { -not [string]::IsNullOrWhiteSpace($_) } | Select-Object -Unique
     foreach ($directory in $hintRoots) {
         foreach ($name in 'SoD2SE.Mo2Path.txt', 'SOD2SE_MO2_PATH.txt') {
@@ -166,4 +168,13 @@ function Resolve-Mo2DataRoot {
     throw ("找不到 MO2 实例目录（需要同时包含 mods 和 profiles）。" + [Environment]::NewLine +
         "请用 -MoDataRoot 指定，或设置 SOD2_MO2_DATA，或把路径写进 SoD2SE.Mo2Path.txt。" +
         [Environment]::NewLine + "已尝试：" + [Environment]::NewLine + '  ' + ($tried -join ([Environment]::NewLine + '  ')))
+}
+
+function Get-SoD2SEWorkRoot {
+    param([Parameter(Mandatory=$true)][string]$SourceRoot)
+    $workspace = Split-Path -Parent (Split-Path -Parent $SourceRoot)
+    if (Test-Path -LiteralPath (Join-Path $workspace 'workspace.toml')) {
+        return (Join-Path $workspace '.work/SoD2SE')
+    }
+    return (Join-Path $SourceRoot '.work')
 }

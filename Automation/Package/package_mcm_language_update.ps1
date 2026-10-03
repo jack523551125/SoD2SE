@@ -2,15 +2,17 @@
 param(
     [Parameter(Mandatory = $true)][string]$BuildDirectory,
     [Parameter(Mandatory = $true)][string]$McmSettingsAsset,
-    [string]$OutputDirectory = (Join-Path $PSScriptRoot '..\..\outputs')
+    [string]$OutputDirectory = (Join-Path (Split-Path -Parent (Split-Path -Parent $PSScriptRoot)) '..\..\dist')
 )
+$projectRoot = (Split-Path -Parent (Split-Path -Parent $PSScriptRoot))
+
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 # Compatibility entry point. Versions and payloads come from each Mod's
 # mod.json and the supplied build, never from this script or an MO2 install.
-& (Join-Path $PSScriptRoot 'package_mo2.ps1') `
+& (Join-Path $projectRoot 'Automation/Package/package_mo2.ps1') `
     -BuildDirectory $BuildDirectory `
     -OutputDirectory $OutputDirectory `
     -NativeSettingsAsset $McmSettingsAsset `

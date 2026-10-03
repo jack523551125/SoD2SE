@@ -1,35 +1,37 @@
-﻿[CmdletBinding()]
+[CmdletBinding()]
 param(
     [string]$PackageDirectory = '',
     [string]$ZipPath = '',
     [switch]$CleanPackageDirectory
 )
+$projectRoot = (Split-Path -Parent (Split-Path -Parent $PSScriptRoot))
+
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-if (Test-Path -LiteralPath (Join-Path $PSScriptRoot 'Core\SoD2SE.Core.cs')) {
-    $sourceRoot = $PSScriptRoot
+if (Test-Path -LiteralPath (Join-Path $projectRoot 'Core\SoD2SE.Core.cs')) {
+    $sourceRoot = $projectRoot
 } else {
-    $sourceRoot = Join-Path $PSScriptRoot 'source'
+    $sourceRoot = Join-Path $projectRoot 'source'
 }
 
 # Shared lookups: FrameworkInfo.Version is the only version literal, so the
 # package name, the release manifest and every MO2 meta.ini agree by
 # construction.
-$environmentScript = Join-Path $PSScriptRoot 'Environment.ps1'
+$environmentScript = Join-Path $projectRoot 'Automation/Environment.ps1'
 if (-not (Test-Path -LiteralPath $environmentScript -PathType Leaf)) { throw "找不到共享脚本：$environmentScript" }
 . $environmentScript
 $version = Get-SoD2SEVersion -SourceRoot $sourceRoot
 
 if ([string]::IsNullOrWhiteSpace($PackageDirectory)) {
-    $PackageDirectory = Join-Path $PSScriptRoot "..\..\outputs\SoD2SE-CommunityMods-v$version"
+    $PackageDirectory = Join-Path $projectRoot "..\..\dist\SoD2SE-CommunityMods-v$version"
 }
 if ([string]::IsNullOrWhiteSpace($ZipPath)) {
-    $ZipPath = Join-Path $PSScriptRoot "..\..\outputs\SoD2SE-CommunityMods-v$version.zip"
+    $ZipPath = Join-Path $projectRoot "..\..\dist\SoD2SE-CommunityMods-v$version.zip"
 }
-$metadataRoot = $PSScriptRoot
-$buildScript = Join-Path $sourceRoot 'build.ps1'
+$metadataRoot = $projectRoot
+$buildScript = Join-Path $sourceRoot 'Automation/Build/build.ps1'
 if (-not (Test-Path -LiteralPath $buildScript -PathType Leaf)) { throw "找不到构建脚本：$buildScript" }
 
 $packagePath = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($PackageDirectory)
@@ -56,21 +58,29 @@ try {
     Copy-Item -LiteralPath (Join-Path $compiled 'SoD2SE.Loader.exe'), (Join-Path $compiled 'SoD2SE.Core.dll'), (Join-Path $compiled 'SoD2SE.GameApi.dll') -Destination $staging -Force
     [IO.Directory]::CreateDirectory((Join-Path $staging 'Plugins')) | Out-Null
     Get-ChildItem -LiteralPath (Join-Path $compiled 'Plugins') | Copy-Item -Destination (Join-Path $staging 'Plugins') -Recurse -Force
-    Get-ChildItem -LiteralPath $metadataRoot -File | Where-Object { $_.Name -like '*patch-manifest.json' -or $_.Name -in @('README.zh-CN.md','VERIFICATION.zh-CN.md','COMMUNITY.zh-CN.md','MCM.zh-CN.md','MELEE.zh-CN.md','UI.zh-CN.md') -or $_.Name -like 'verify_*.py' } | Copy-Item -Destination $staging -Force
-    Copy-Item -LiteralPath (Join-Path $metadataRoot 'Research') -Destination $staging -Recurse -Force
-    Copy-Item -LiteralPath (Join-Path $sourceRoot 'verify_all.ps1'), (Join-Path $sourceRoot 'Environment.ps1'), (Join-Path $PSScriptRoot 'package.ps1'), (Join-Path $PSScriptRoot 'package_mo2.ps1') -Destination $staging -Force
+    Get-ChildItem -LiteralPath $metadataRoot -File | Where-Object { $_.Name -like '*patch-manifest.json' -or $_.Name -eq 'README.zh-CN.md' } | Copy-Item -Destination $staging -Force
+    foreach ($folder in 'Research','Docs','Automation') {
+        Copy-Item -LiteralPath (Join-Path $metadataRoot $folder) -Destination $staging -Recurse -Force
+    }
+    foreach ($entry in 'package.ps1','package_mo2.ps1','verify_all.ps1') {
+        Copy-Item -LiteralPath (Join-Path $sourceRoot $entry) -Destination $staging -Force
+    }
 
     $sourceDestination = Join-Path $staging 'source'
-    [IO.Directory]::CreateDirectory((Join-Path $sourceDestination 'Core')) | Out-Null
-    [IO.Directory]::CreateDirectory((Join-Path $sourceDestination 'GameApi')) | Out-Null
-    [IO.Directory]::CreateDirectory((Join-Path $sourceDestination 'Loader')) | Out-Null
-    Copy-Item -LiteralPath (Join-Path $sourceRoot 'Plugins') -Destination $sourceDestination -Recurse -Force
+    [IO.Directory]::CreateDirectory($sourceDestination) | Out-Null
+    foreach ($folder in 'Core','GameApi','Loader','Plugins','Mods','Tests','Automation') {
+        Copy-Item -LiteralPath (Join-Path $sourceRoot $folder) -Destination $sourceDestination -Recurse -Force
+    }
+    foreach ($entry in 'build.ps1','package.ps1','package_mo2.ps1','verify_all.ps1') {
+        Copy-Item -LiteralPath (Join-Path $sourceRoot $entry) -Destination $sourceDestination -Force
+    }
     $nativeRoot = Join-Path $sourceRoot 'Native'
     $nativeDestination = Join-Path $sourceDestination 'Native'
     [IO.Directory]::CreateDirectory($nativeDestination) | Out-Null
-    Get-ChildItem -LiteralPath $nativeRoot -File |
-    Where-Object { $_.Extension -notin '.lib', '.exp', '.obj', '.pdb', '.ilk', '.log' } |
-    Copy-Item -Destination $nativeDestination -Force
+    Copy-Item -LiteralPath (Join-Path $nativeRoot 'CMakeLists.txt') -Destination $nativeDestination
+    foreach ($folder in 'src','tests') {
+        Copy-Item -LiteralPath (Join-Path $nativeRoot $folder) -Destination $nativeDestination -Recurse
+    }
     $imguiDestination = Join-Path $nativeDestination 'vendor\imgui'
     [IO.Directory]::CreateDirectory((Join-Path $imguiDestination 'backends')) | Out-Null
     Get-ChildItem -LiteralPath (Join-Path $nativeRoot 'vendor\imgui') -File | Where-Object { $_.Extension -in '.cpp','.h','.txt' } | Copy-Item -Destination $imguiDestination
@@ -82,13 +92,6 @@ try {
     foreach ($name in 'CMakeLists.txt','LICENSE.txt','cmake','include','src') {
         Copy-Item -LiteralPath (Join-Path $nativeRoot "vendor\minhook\$name") -Destination $minhookDestination -Recurse
     }
-    if (Test-Path -LiteralPath (Join-Path $sourceRoot 'Tests')) {
-        Copy-Item -LiteralPath (Join-Path $sourceRoot 'Tests') -Destination $sourceDestination -Recurse -Force
-    }
-    Copy-Item -LiteralPath (Join-Path $sourceRoot 'build.ps1'), (Join-Path $sourceRoot 'Environment.ps1') -Destination $sourceDestination -Force
-    Get-ChildItem -LiteralPath (Join-Path $sourceRoot 'Core') -Filter '*.cs' -File | Copy-Item -Destination (Join-Path $sourceDestination 'Core') -Force
-    Get-ChildItem -LiteralPath (Join-Path $sourceRoot 'GameApi') -Filter '*.cs' -File | Copy-Item -Destination (Join-Path $sourceDestination 'GameApi') -Force
-    Get-ChildItem -LiteralPath (Join-Path $sourceRoot 'Loader') -Filter '*.cs' -File | Copy-Item -Destination (Join-Path $sourceDestination 'Loader') -Force
     Get-ChildItem -LiteralPath $staging -Directory -Recurse -Force |
         Where-Object { $_.Name -eq '__pycache__' } |
         Sort-Object FullName -Descending |
