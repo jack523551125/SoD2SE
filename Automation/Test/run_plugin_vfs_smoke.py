@@ -1,3 +1,9 @@
+
+# Standalone script execution resolves imports from its source-owning project.
+import sys as _layout_sys
+from pathlib import Path as _LayoutPath
+_layout_sys.path.insert(0, str(_LayoutPath(__file__).resolve().parents[2]))
+from Automation.source_layout import work_root
 import argparse
 import tempfile
 import shutil
@@ -14,7 +20,7 @@ parser = argparse.ArgumentParser(description="Run the actual SoD2SE launch path 
 parser.add_argument("--mo2-path", type=Path, required=True)
 parser.add_argument("--plugin-source", type=Path, required=True)
 parser.add_argument("--case", choices=["all", "mcm", "melee", "roguelite", "both", "followers", "community", "none"])
-parser.add_argument("--build-dir", type=Path, default=Path(__file__).resolve().parents[1] / "compiled")
+parser.add_argument("--build-dir", type=Path, default=work_root(Path(__file__).resolve().parents[2]) / "build")
 args = parser.parse_args()
 if args.case is None:
     for case in ("all", "mcm", "melee", "roguelite", "both", "followers", "community", "none"):
@@ -28,7 +34,7 @@ build = args.build_dir.resolve()
 harness = root / "PluginDiscoverySmoke.exe"
 subprocess.run([str(Path(os.environ["WINDIR"]) / "Microsoft.NET/Framework64/v4.0.30319/csc.exe"),
     "/nologo", "/platform:x64", "/target:exe", "/warnaserror+", "/out:" + str(harness),
-    str(Path(__file__).with_name("PluginDiscoverySmoke.cs"))], check=True)
+    str(Path(__file__).resolve().parents[2] / 'Tests/Loader/PluginDiscoverySmoke.cs')], check=True)
 dll_dirs = [os.add_dll_directory(str(p)) for p in [mo, mo / "dlls"]]
 lib = ctypes.WinDLL(str(mo / "usvfs_x64.dll"))
 lib.usvfsCreateParameters.restype = ctypes.c_void_p

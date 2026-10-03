@@ -5,6 +5,8 @@ param(
     [string]$ProfileName = 'Default',
     [string]$BuildDirectory = ''
 )
+$projectRoot = (Split-Path -Parent (Split-Path -Parent $PSScriptRoot))
+
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'

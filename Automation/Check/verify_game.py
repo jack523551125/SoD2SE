@@ -1,4 +1,10 @@
 """Read-only verification for the fixed SoD2SE target executable."""
+
+# Standalone script execution resolves imports from its source-owning project.
+import sys as _layout_sys
+_layout_sys.dont_write_bytecode = True
+from pathlib import Path as _LayoutPath
+_layout_sys.path.insert(0, str(_LayoutPath(__file__).resolve().parents[2]))
 import hashlib
 import json
 import struct
@@ -187,14 +193,14 @@ def verify_recruitment_layout(data, sections, patches):
 
 def main():
     if len(sys.argv) != 2:
-        raise VerificationError("用法：python verify_game.py <StateOfDecay2-Win64-Shipping.exe>")
+        raise VerificationError("用法：python Automation/Check/verify_game.py <StateOfDecay2-Win64-Shipping.exe>")
     try:
         data = Path(sys.argv[1]).read_bytes()
     except OSError as error:
         raise VerificationError(str(error))
     sections = read_pe_sections(data)
     digest = hashlib.sha256(data).hexdigest().upper()
-    manifests = sorted(Path(__file__).parent.glob('*patch-manifest.json'))
+    manifests = sorted(Path(__file__).resolve().parents[2].glob('*patch-manifest.json'))
     if not manifests:
         raise VerificationError('No patch manifests found')
     combined = []

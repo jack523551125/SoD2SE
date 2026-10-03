@@ -10,7 +10,7 @@
 | 4 | 加载器生命周期 | 单实例、启动/附加、取消、进程退出和 Ctrl+C 清理 | `--help`、`--attach`、取消路径和退出清理检查 | 已完成 |
 | 5 | 插件契约与隔离 | 程序集发现、元数据、重复 ID、初始化失败和逆序关闭 | 插件发现自测；失败清理路径 | 已完成 |
 | 6 | 构建与发布可重复性 | x64 编译参数、警告策略、源码/二进制同步和包布局 | 独立目录重编译；产物哈希和包清单 | 已完成 |
-| 7 | 静态验证与清单一致性 | PE 解析、RVA/字节/跳转目标、JSON 与 C# 清单漂移 | `verify_game.py`、`verify_sources.py`、`verify_release.py` | 已完成 |
+| 7 | 静态验证与清单一致性 | PE 解析、RVA/字节/跳转目标、JSON 与 C# 清单漂移 | `Automation/Check/verify_game.py`、`Automation/Check/verify_sources.py`、`Automation/Check/verify_release.py` | 已完成 |
 | 8 | 测试、诊断与文档 | 自测覆盖、错误信息、使用限制、验证记录和最终审计 | 全量回归、最终压缩包、逐项审计 | 已完成 |
 
 每轮记录实际改动、验证命令和结果；没有通过该轮验收时，不进入下一轮。最后一轮必须重新检查八个方面，而不是只依赖中间轮次的结果。
@@ -19,28 +19,28 @@
 
 - 会话缓存进程 ID 和持久化句柄，创建后通过 `GetProcessId` 校验句柄身份；释放时关闭句柄并拒绝后续操作。
 - 自测增加重复 `Dispose`、释放后调用、句柄生命周期检查。
-- 验证：`build.ps1`、`SoD2SE.Loader.exe --self-test`、`verify_sources.py` 均通过。
+- 验证：`Automation/Build/build.ps1`、`SoD2SE.Loader.exe --self-test`、`Automation/Check/verify_sources.py` 均通过。
 
 ## 第 2 轮记录
 
 - `Write` 不再让页保护恢复异常覆盖原始写入错误，并保留原始异常堆栈。
 - 事务支持可注入写入器进行故障测试；自测覆盖混合状态还原、第二次写入失败后的回滚和冲突拒绝。
 - 暂停恢复失败时先尝试还原补丁，再重试恢复目标进程。
-- 验证：编译、框架自测和 `verify_sources.py` 均通过。
+- 验证：编译、框架自测和 `Automation/Check/verify_sources.py` 均通过。
 
 ## 第 3 轮记录
 
 - `PatchSpec` 构造时即拒绝无操作替换和不能覆盖写入范围的上下文。
 - 统一 `FrameworkInfo.IsSha256` 校验，覆盖大小写、长度和非十六进制字符。
 - 自测增加无效上下文和 SHA256 格式拒绝。
-- 验证：编译、框架自测、`verify_sources.py` 和 `verify_game.py` 均通过。
+- 验证：编译、框架自测、`Automation/Check/verify_sources.py` 和 `Automation/Check/verify_game.py` 均通过。
 
 ## 第 4 轮记录
 
 - 将主入口拆为自测、交互运行、启动/附加、插件运行和清理函数，减少嵌套生命周期路径。
 - 统一 Ctrl+C 处理，等待直接启动的游戏进程期间也能取消；启动进程和游戏进程均有明确释放路径。
 - 保留单实例互斥，增加无游戏 `--attach` 和 `--help` 回归检查。
-- 验证：编译、自测、`--help`、无游戏 `--attach`（退出码 1）和 `verify_sources.py` 均通过。
+- 验证：编译、自测、`--help`、无游戏 `--attach`（退出码 1）和 `Automation/Check/verify_sources.py` 均通过。
 
 ## 第 5 轮记录
 
@@ -48,28 +48,28 @@
 - 插件 ID 增加 ASCII 格式和长度校验；自测覆盖合法与非法 ID。
 - 内置插件的初始化/关闭加入锁和重复初始化保护，避免并发或重复调用覆盖活动会话。
 - README 示例同步更新。
-- 验证：编译、自测、`verify_sources.py` 和 `verify_game.py` 均通过。
+- 验证：编译、自测、`Automation/Check/verify_sources.py` 和 `Automation/Check/verify_game.py` 均通过。
 
 ## 第 6 轮记录
 
-- 新增 `package.ps1`，从临时 staging 目录重新编译、复制源码和文档，避免把旧的 `compiled` 或残留 DLL 带入发布包。
+- 新增 `Automation/Package/package.ps1`，从临时 staging 目录重新编译、复制源码和文档，避免把旧的 `compiled` 或残留 DLL 带入发布包。
 - 发布包新增 `RELEASE-MANIFEST.json`，记录目标版本、文件大小和 SHA256；构建参数继续使用 x64、警告视为错误和高熵 ASLR。
 - 已用发布脚本重建目录和 zip，并从包内源码独立重编译。
 - 验证：包内自测、源码一致性检查、游戏 EXE 检查和独立目录重编译均通过。
 
 ## 第 7 轮记录
 
-- 新增 `verify_release.py`，校验发布清单中的每个文件、大小和 SHA256，并拒绝清单遗漏、额外文件、绝对路径和目录穿越路径。
-- 强化 `verify_sources.py`，同时检查补丁表的唯一性、长度/RVA/上下文覆盖、目标 SHA256、Steam AppID 和插件 API 版本，降低 JSON 与 C# 漂移风险。
+- 新增 `Automation/Check/verify_release.py`，校验发布清单中的每个文件、大小和 SHA256，并拒绝清单遗漏、额外文件、绝对路径和目录穿越路径。
+- 强化 `Automation/Check/verify_sources.py`，同时检查补丁表的唯一性、长度/RVA/上下文覆盖、目标 SHA256、Steam AppID 和插件 API 版本，降低 JSON 与 C# 漂移风险。
 - 发布脚本把发布校验器一并放入包内，包内校验可以在脱离源码目录的情况下完成。
 - 验证：框架自测、源码校验、游戏 PE/补丁校验、包内四项校验和包内源码独立重编译均通过。
 
 ## 第 8 轮记录
 
-- 新增 `verify_all.ps1`，把开发目录构建、框架自测、源码/游戏静态校验、重新打包、包内校验、包内源码独立重编译和 ZIP 解包校验串成一个可重复入口。
+- 新增 `Automation/Check/verify_all.ps1`，把开发目录构建、框架自测、源码/游戏静态校验、重新打包、包内校验、包内源码独立重编译和 ZIP 解包校验串成一个可重复入口。
 - 发布包同时携带该脚本；在发布目录执行时会自动切换为离线包回归模式，避免依赖源码目录。
 - README 和验证记录补充一键回归命令、游戏根目录直接启动方式，并明确目标版本、尚未覆盖的真实游戏流程和退出清理限制。
-- 验证：`verify_all.ps1` 开发目录全量回归、发布目录离线回归均通过；最终 ZIP 已重新生成。
+- 验证：`Automation/Check/verify_all.ps1` 开发目录全量回归、发布目录离线回归均通过；最终 ZIP 已重新生成。
 
 ## 最终八项审计
 
@@ -83,7 +83,7 @@
 | 加载器生命周期 | `--help`、`--attach`、单实例互斥、取消和逆序清理实现检查 |
 | 插件契约与隔离 | API 版本、ID/元数据、重复 ID、初始化失败清理和内置插件锁测试 |
 | 构建与发布可重复性 | x64/警告策略、包内源码独立重编译、ZIP 解包自测和发布清单 |
-| 静态验证与清单一致性 | `verify_sources.py`、`verify_game.py`、`verify_release.py` 全部通过 |
-| 测试、诊断与文档 | `verify_all.ps1` 开发目录与发布目录两种模式均通过，README/验证记录同步 |
+| 静态验证与清单一致性 | `Automation/Check/verify_sources.py`、`Automation/Check/verify_game.py`、`Automation/Check/verify_release.py` 全部通过 |
+| 测试、诊断与文档 | `Automation/Check/verify_all.ps1` 开发目录与发布目录两种模式均通过，README/验证记录同步 |
 
 最终结论：固定目标 EXE 的离线检查全部通过；没有进行实际游戏流程或多人联机测试。

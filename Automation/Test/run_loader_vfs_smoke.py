@@ -1,3 +1,9 @@
+
+# Standalone script execution resolves imports from its source-owning project.
+import sys as _layout_sys
+from pathlib import Path as _LayoutPath
+_layout_sys.path.insert(0, str(_LayoutPath(__file__).resolve().parents[2]))
+from Automation.source_layout import work_root
 import argparse
 import tempfile
 import ctypes
@@ -10,10 +16,10 @@ from pathlib import Path
 
 parser = argparse.ArgumentParser(description="Run the actual SoD2SE launch path inside private USVFS; no real game is started.")
 parser.add_argument("--mo2-path", type=Path, required=True)
-parser.add_argument("--build-dir", type=Path, default=Path(__file__).resolve().parents[1] / "compiled")
+parser.add_argument("--build-dir", type=Path, default=work_root(Path(__file__).resolve().parents[2]) / "build")
 parser.add_argument("--game-root", type=Path,
                     help="Real game folder used as the third probe target.  "
-                         "Defaults to the same lookup Environment.ps1 uses, then "
+                         "Defaults to the same lookup Automation/Environment.ps1 uses, then "
                          "to the temporary root, so the test never depends on "
                          "one machine's drive layout.")
 args = parser.parse_args()
@@ -22,7 +28,7 @@ root = Path(tempfile.mkdtemp(prefix="SoD2SE-vfs-smoke-"))
 
 
 def detect_game_root():
-    """Mirrors Environment.ps1: explicit path, env var, then a hint file."""
+    """Mirrors Automation/Environment.ps1: explicit path, env var, then a hint file."""
     explicit = os.environ.get("SOD2_GAME_DIR")
     if explicit and Path(explicit).is_dir():
         return Path(explicit)
@@ -31,7 +37,7 @@ def detect_game_root():
         candidate = Path(executable)
         if candidate.is_file():
             return candidate.parents[3] if len(candidate.parents) > 3 else candidate.parent
-    for directory in (Path(__file__).resolve().parents[1], Path.cwd()):
+    for directory in (Path(__file__).resolve().parents[2], Path.cwd()):
         for name in ("SoD2SE.GamePath.txt", "SOD2SE_GAME_PATH.txt"):
             hint = directory / name
             if not hint.is_file():
@@ -51,7 +57,7 @@ build = args.build_dir.resolve()
 harness = root / "LoaderVfsSmoke.exe"
 subprocess.run([str(Path(os.environ["WINDIR"]) / "Microsoft.NET/Framework64/v4.0.30319/csc.exe"),
     "/nologo", "/platform:x64", "/target:exe", "/warnaserror+", "/out:" + str(harness),
-    str(Path(__file__).with_name("LoaderVfsSmoke.cs"))], check=True)
+    str(Path(__file__).resolve().parents[2] / 'Tests/Loader/LoaderVfsSmoke.cs')], check=True)
 dll_dirs = [os.add_dll_directory(str(p)) for p in [mo, mo / "dlls"]]
 lib = ctypes.WinDLL(str(mo / "usvfs_x64.dll"))
 lib.usvfsCreateParameters.restype = ctypes.c_void_p

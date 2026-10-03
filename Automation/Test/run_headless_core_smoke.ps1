@@ -2,6 +2,11 @@
 param(
     [Parameter(Mandatory = $true)][string]$BuildDirectory
 )
+$projectRoot = (Split-Path -Parent (Split-Path -Parent $PSScriptRoot))
+$testRoot = Join-Path $projectRoot 'Tests'
+. (Join-Path $projectRoot 'Automation/Environment.ps1')
+$nativeBuildRoot = Join-Path (Get-SoD2SEWorkRoot -SourceRoot $projectRoot) 'native'
+
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
@@ -26,13 +31,13 @@ try {
     $common = @('/nologo', '/target:exe', '/platform:x64', '/optimize+', '/warn:4', '/warnaserror+', '/codepage:65001',
         '/reference:System.dll', '/reference:System.Core.dll', "/reference:$core")
     $mcmExe = Join-Path $temp 'McmSmoke.exe'
-    & $compiler @common "/out:$mcmExe" (Join-Path $PSScriptRoot 'McmSmoke.cs')
+    & $compiler @common "/out:$mcmExe" (Join-Path $testRoot 'UI/McmSmoke.cs')
     if ($LASTEXITCODE -ne 0) { throw "MCM smoke 编译失败：$LASTEXITCODE" }
     & $mcmExe
     if ($LASTEXITCODE -ne 0) { throw "MCM smoke 失败：$LASTEXITCODE" }
 
     $apiExe = Join-Path $temp 'GameApiSmoke.exe'
-    & $compiler @common "/reference:$gameApi" "/out:$apiExe" (Join-Path $PSScriptRoot 'GameApiSmoke.cs')
+    & $compiler @common "/reference:$gameApi" "/out:$apiExe" (Join-Path $testRoot 'GameApi/GameApiSmoke.cs')
     if ($LASTEXITCODE -ne 0) { throw "Game API smoke 编译失败：$LASTEXITCODE" }
     & $apiExe
     if ($LASTEXITCODE -ne 0) { throw "Game API smoke 失败：$LASTEXITCODE" }

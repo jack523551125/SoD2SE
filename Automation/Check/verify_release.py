@@ -1,4 +1,10 @@
 """Verify the file hashes and exact layout recorded in RELEASE-MANIFEST.json."""
+
+# Standalone script execution resolves imports from its source-owning project.
+import sys as _layout_sys
+_layout_sys.dont_write_bytecode = True
+from pathlib import Path as _LayoutPath
+_layout_sys.path.insert(0, str(_LayoutPath(__file__).resolve().parents[2]))
 import hashlib
 import json
 import sys
@@ -10,7 +16,7 @@ class VerificationError(Exception):
 
 
 def main():
-    base = Path(sys.argv[1]).resolve() if len(sys.argv) == 2 else Path(__file__).resolve().parent
+    base = Path(sys.argv[1]).resolve() if len(sys.argv) == 2 else Path(__file__).resolve().parents[2]
     manifest_path = base / "RELEASE-MANIFEST.json"
     try:
         manifest = json.loads(manifest_path.read_text(encoding="utf-8-sig"))

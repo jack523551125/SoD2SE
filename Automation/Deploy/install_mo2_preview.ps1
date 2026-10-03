@@ -1,17 +1,19 @@
-﻿[CmdletBinding()]
+[CmdletBinding()]
 param(
     [string]$MoDataRoot = '',
     [Parameter(Mandatory=$true)][string]$PackageDirectory,
     [string]$GameDirectory = '',
     [string]$ProfileName = 'Default'
 )
+$projectRoot = (Split-Path -Parent (Split-Path -Parent $PSScriptRoot))
+
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 # Shared lookups: the version comes from Core/SoD2SE.Core.cs, and both install
 # roots are resolved (parameter, environment variable, hint file, discovery)
 # instead of being pinned to one machine.
-$environmentScript = Join-Path $PSScriptRoot 'Environment.ps1'
+$environmentScript = Join-Path $projectRoot 'Automation/Environment.ps1'
 if (-not (Test-Path -LiteralPath $environmentScript -PathType Leaf)) { throw "找不到共享脚本：$environmentScript" }
 . $environmentScript
 
@@ -19,9 +21,9 @@ if (Get-Process StateOfDecay2*,SoD2SE.Loader -ErrorAction SilentlyContinue) {
     throw '请先退出游戏与 SoD2SE 加载器；游戏正在使用的文件不会被替换。'
 }
 
-$instance = Resolve-Mo2DataRoot -MoDataRoot $MoDataRoot -HintFileDirectory $PSScriptRoot
+$instance = Resolve-Mo2DataRoot -MoDataRoot $MoDataRoot -HintFileDirectory $projectRoot
 if ([string]::IsNullOrWhiteSpace($GameDirectory)) {
-    $game = Get-SoD2GameDirectoryFromExecutable -GameExePath (Resolve-SoD2GameExecutable -HintFileDirectory $PSScriptRoot)
+    $game = Get-SoD2GameDirectoryFromExecutable -GameExePath (Resolve-SoD2GameExecutable -HintFileDirectory $projectRoot)
 } else {
     $game = [IO.Path]::GetFullPath((Resolve-Path -LiteralPath $GameDirectory).ProviderPath)
 }
@@ -30,7 +32,7 @@ $packages = [IO.Path]::GetFullPath((Resolve-Path -LiteralPath $PackageDirectory)
 if (-not (Test-Path -LiteralPath $mods -PathType Container)) { throw "找不到 MO2 mods 目录：$mods" }
 if (-not (Test-Path -LiteralPath (Join-Path $game 'StateOfDecay2.exe') -PathType Leaf)) { throw "找不到游戏根目录：$game" }
 
-$version = Get-SoD2SEVersion -SourceRoot $PSScriptRoot
+$version = Get-SoD2SEVersion -SourceRoot $projectRoot
 
 # Directory names match the name= field inside each meta.ini, which is what
 # MO2 itself uses when the archive is installed from the downloads pane.

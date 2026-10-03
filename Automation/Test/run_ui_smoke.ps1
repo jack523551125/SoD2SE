@@ -1,13 +1,18 @@
-﻿[CmdletBinding()]
+[CmdletBinding()]
 param(
     [Parameter(Mandatory=$true)][string]$BuildDirectory
 )
+$projectRoot = (Split-Path -Parent (Split-Path -Parent $PSScriptRoot))
+$testRoot = Join-Path $projectRoot 'Tests'
+. (Join-Path $projectRoot 'Automation/Environment.ps1')
+$nativeBuildRoot = Join-Path (Get-SoD2SEWorkRoot -SourceRoot $projectRoot) 'native'
+
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 # Resolve through the PowerShell provider so a relative path means what the
 # caller typed, not what the host process happens to have as its cwd.
 $build = $ExecutionContext.SessionState.Path.GetUnresolvedProviderPathFromPSPath($BuildDirectory)
-$source = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot 'UiFrameworkSmoke.cs'))
+$source = [IO.Path]::GetFullPath((Join-Path $testRoot 'UI/UiFrameworkSmoke.cs'))
 $compilerCandidates = @(
     (Join-Path $env:WINDIR 'Microsoft.NET\Framework64\v4.0.30319\csc.exe'),
     (Join-Path $env:WINDIR 'Microsoft.NET\Framework\v4.0.30319\csc.exe')

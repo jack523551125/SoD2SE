@@ -4,6 +4,12 @@ Windows x64 only. Does not start, attach to, or modify the game. The population
 getter is replaced by a controlled test stub; all tested gate instructions come
 from the hash-verified game EXE and the shipped patch manifest.
 """
+
+# Standalone script execution resolves imports from its source-owning project.
+import sys as _layout_sys
+_layout_sys.dont_write_bytecode = True
+from pathlib import Path as _LayoutPath
+_layout_sys.path.insert(0, str(_LayoutPath(__file__).resolve().parents[2]))
 import ctypes
 import hashlib
 import json
@@ -13,7 +19,7 @@ import sys
 from pathlib import Path
 
 sys.dont_write_bytecode = True
-from verify_game import VerificationError, read_pe_sections, read_rva
+from Automation.Check.verify_game import VerificationError, read_pe_sections, read_rva
 
 
 class NativeRoutine:
@@ -57,10 +63,10 @@ def require(condition, message):
 
 def main():
     require(os.name == 'nt' and ctypes.sizeof(ctypes.c_void_p) == 8, 'Requires Windows x64 Python')
-    require(len(sys.argv) == 2, 'Usage: python verify_recruitment.py <game.exe>')
+    require(len(sys.argv) == 2, 'Usage: python Automation/Check/verify_recruitment.py <game.exe>')
     data = Path(sys.argv[1]).read_bytes()
     sections = read_pe_sections(data)
-    manifest = json.loads((Path(__file__).parent / 'community-patch-manifest.json').read_text(encoding='utf-8'))
+    manifest = json.loads((Path(__file__).resolve().parents[2] / 'community-patch-manifest.json').read_text(encoding='utf-8'))
     require(hashlib.sha256(data).hexdigest().upper() == manifest['sha256'].upper(), 'Game EXE SHA256 mismatch')
     start, end = 0x1C0000, 0x292000
     pointer, integer = ctypes.c_void_p, ctypes.c_int

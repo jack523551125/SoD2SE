@@ -1,4 +1,10 @@
 """Verify that the built-in C# patch table matches patch-manifest.json."""
+
+# Standalone script execution resolves imports from its source-owning project.
+import sys as _layout_sys
+_layout_sys.dont_write_bytecode = True
+from pathlib import Path as _LayoutPath
+_layout_sys.path.insert(0, str(_LayoutPath(__file__).resolve().parents[2]))
 import json
 import re
 import sys
@@ -194,7 +200,7 @@ def strip_comments(text):
 def verify_game_path_single_source(base):
     """The shipping executable is named once, in FrameworkInfo.
 
-    Environment.ps1 locates the game for the verification, packaging and
+    Automation/Environment.ps1 locates the game for the verification, packaging and
     install scripts; it may describe the folder layout but must not spell the
     executable a second time, because renaming it in Core alone would leave
     every script hunting for a stale file.
@@ -207,17 +213,17 @@ def verify_game_path_single_source(base):
         raise VerificationError("GameExecutableName 没有从 GameProcessName 派生")
 
     environment = next((candidate for candidate in
-                        (base / "Environment.ps1", base / "source" / "Environment.ps1")
+                        (base / "Automation/Environment.ps1", base / "source" / "Automation/Environment.ps1")
                         if candidate.is_file()), None)
     if environment is None:
-        raise VerificationError("找不到 Environment.ps1")
+        raise VerificationError("找不到 Automation/Environment.ps1")
     relative = GAME_RELATIVE_RE.search(environment.read_text(encoding="utf-8"))
     if relative is None:
-        raise VerificationError("Environment.ps1 没有给出游戏主程序的相对路径")
+        raise VerificationError("Automation/Environment.ps1 没有给出游戏主程序的相对路径")
     executable = relative.group(1).replace('/', '\\').split('\\')[-1]
     if executable != match.group(1) + ".exe":
         raise VerificationError(
-            "Environment.ps1 使用的主程序 %s 与 FrameworkInfo.GameProcessName（%s.exe）不一致"
+            "Automation/Environment.ps1 使用的主程序 %s 与 FrameworkInfo.GameProcessName（%s.exe）不一致"
             % (executable, match.group(1)))
 
     # The Game API targets the same file: naming the module or its hash again
@@ -234,26 +240,26 @@ def verify_game_path_single_source(base):
 
 
 def verify_shortcut_defaults_single_source(base):
-    """Core/McmKeys.cs owns the shortcut defaults and the accepted key table.
+    """Core/UI/McmKeys.cs owns the shortcut defaults and the accepted key table.
 
-    Core/Mcm.cs and the loader overlay both used to spell F1 as a bare 112 or
+    Core/UI/Mcm.cs and the loader overlay both used to spell F1 as a bare 112 or
     0x70, so changing the default menu key meant editing three files and hoping
     they stayed in step.  The C# table itself is compared with the native
-    windows in Native/McmProtocol.h by verify_protocol.py.
+    windows in Native/src/Mcm/McmProtocol.h by Automation/Check/verify_protocol.py.
     """
-    keys_source = read_source_file(base, 'Core/McmKeys.cs')
+    keys_source = read_source_file(base, 'Core/UI/McmKeys.cs')
     keys = parse_csharp_int_constants(keys_source)
     for name in ('FunctionKeyFirst', 'FunctionKeyLast', 'ReservedKey', 'MenuKey',
                  'MenuModifiers', 'ChoiceKey', 'ChoiceModifiers'):
         if name not in keys:
-            raise VerificationError('Core/McmKeys.cs 没有定义 ' + name)
+            raise VerificationError('Core/UI/McmKeys.cs 没有定义 ' + name)
     if not keys['FunctionKeyFirst'] <= keys['MenuKey'] <= keys['FunctionKeyLast']:
         raise VerificationError('默认菜单快捷键不在功能键范围内')
     if not (keys['FunctionKeyFirst'] <= keys['ChoiceKey'] <= keys['FunctionKeyLast'] and
             keys['ChoiceKey'] != keys['MenuKey']):
         raise VerificationError('默认升级快捷键必须是与菜单键不同的功能键')
 
-    mcm_source = read_source_file(base, 'Core/Mcm.cs')
+    mcm_source = read_source_file(base, 'Core/UI/Mcm.cs')
     for name in ('ReadNumber("mcm.shortcut-key", McmKeys.MenuKey)',
                  'ReadNumber("mcm.shortcut-modifiers", McmKeys.MenuModifiers)',
                  'ReadNumber("mcm.choice-shortcut-key", McmKeys.ChoiceKey)',
@@ -261,12 +267,12 @@ def verify_shortcut_defaults_single_source(base):
                  'values["mcm.shortcut-key"] = McmKeys.MenuKey',
                  'values["mcm.choice-shortcut-key"] = McmKeys.ChoiceKey'):
         if name not in mcm_source:
-            raise VerificationError('Core/Mcm.cs 没有读取 ' + name)
+            raise VerificationError('Core/UI/Mcm.cs 没有读取 ' + name)
     bare = SHORTCUT_DEFAULT_RE.search(strip_comments(mcm_source))
     if bare:
         token = bare.group(1) or bare.group(2)
         raise VerificationError(
-            'Core/Mcm.cs 写死了快捷键默认值 %s=%s；请改用 McmKeys'
+            'Core/UI/Mcm.cs 写死了快捷键默认值 %s=%s；请改用 McmKeys'
             % (bare.group(0).strip(), token))
 
     overlay_source = read_source_file(base, 'Loader/McmOverlay.cs')
@@ -276,7 +282,7 @@ def verify_shortcut_defaults_single_source(base):
     if literal:
         raise VerificationError(
             'Loader/McmOverlay.cs 写死了快捷键 0x70；请改用 McmKeys.MenuKey')
-    print("PASS: the MCM shortcut defaults and key table live once in Core/McmKeys.cs")
+    print("PASS: the MCM shortcut defaults and key table live once in Core/UI/McmKeys.cs")
 
 
 def read_source_file(base, relative):
@@ -296,13 +302,18 @@ def verify_native_module_names(base):
     templates = {
         'Mcm': {
             'cmake': 'Native/CMakeLists.txt',
-            'fallback': 'Native/build_native.ps1',
+            'fallback': 'Automation/Build/Native.ps1',
             'managed': 'Plugins/Mcm/Mcm.cs',
         },
         'MeleeSpeed': {
             'cmake': 'Native/CMakeLists.txt',
-            'fallback': 'Native/build_native.ps1',
+            'fallback': 'Automation/Build/Native.ps1',
             'managed': 'Plugins/MeleeSpeed/MeleeSpeed.cs',
+        },
+        'Growth': {
+            'cmake': 'Native/CMakeLists.txt',
+            'fallback': 'Automation/Build/Native.ps1',
+            'managed': 'Loader/Program.cs',
         },
     }
     shared = set(templates)
@@ -319,13 +330,15 @@ def verify_native_module_names(base):
                     '%s 中的原生模块名 %s 应为 %s'
                     % (relative, ', '.join(sorted(names)) or '（无）', ', '.join(sorted(wanted))))
             if kind == 'managed':
-                match = MODULE_PATH_RE.search(source)
+                match = MODULE_PATH_RE.search(source) if module != 'Growth' else re.search(
+                    r'Path\.Combine\(AppDomain\.CurrentDomain\.BaseDirectory,\s*"Plugins",\s*"([^"]+)",\s*"([^"]+\.dll)"\)', source)
                 if match is None:
                     raise VerificationError('%s 没有按插件子目录加载原生模块' % relative)
-                if match.group(1) != module:
+                directory = 'Roguelite' if module == 'Growth' else module
+                if match.group(1) != directory or match.group(2) != expected + '.dll':
                     raise VerificationError(
                         '%s 从子目录 %s 加载 %s，目录名应为 %s'
-                        % (relative, match.group(1), match.group(2), module))
+                        % (relative, match.group(1), match.group(2), directory))
     print("PASS: native module names agree across CMake, the fallback build and the managed loaders")
 
 
@@ -369,7 +382,7 @@ def verify_roguelite_defaults_single_source(base):
 
 
 def verify_growth_ui_routing_and_load_status(base):
-    native = (base / 'Native' / 'McmNative.cpp').read_text(encoding='utf-8')
+    native = read_source_file(base, 'Native/src/Mcm/McmNative.cpp')
     native_code = strip_comments(native)
     visible = re.search(r'bool\s+ChoiceModalVisible\s*\(\s*\)\s*\{\s*return\s+([^;]+);', native_code)
     if visible is None or 'choiceOpen' not in visible.group(1):
@@ -383,16 +396,16 @@ def verify_growth_ui_routing_and_load_status(base):
     if not re.search(r'surfaceIndex\s*>=\s*0\s*&&\s*!ChoiceModalVisible\(\)[\s\S]{0,180}ApplyVisibility\(false,\s*openSurface\s*==\s*surfaceIndex\s*\?\s*-1\s*:\s*surfaceIndex\)', native_code):
         raise VerificationError('已注册的玩法界面快捷键未连接到界面宿主')
 
-    loader = (base / 'Loader' / 'Program.cs').read_text(encoding='utf-8')
+    loader = read_source_file(base, 'Loader/Program.cs')
     if 'mcm.MarkLoaded(plugin.Id, true)' not in loader:
         raise VerificationError('MCM 的插件加载状态必须表示 Initialize 成功，而不是玩法能力已激活')
     if 'mcm.MarkLoaded(plugin.Id, active)' in loader:
         raise VerificationError('Loader 仍把玩法停用误报为 DLL 未加载')
-    settings_model = (base / 'Native' / 'NativeSettingsModel.h').read_text(encoding='utf-8')
+    settings_model = read_source_file(base, 'Native/src/Mcm/NativeSettingsModel.h')
     if 'return Reply::Number(pages[index].loaded);' not in settings_model:
         raise VerificationError('原版 MCM 设置页必须读取插件初始化状态')
 
-    roguelite = (base / 'Plugins' / 'Roguelite' / 'Roguelite.cs').read_text(encoding='utf-8')
+    roguelite = read_source_file(base, 'Plugins/Roguelite/Roguelite.cs')
     for token in ('StateOfDecay2Capabilities.NativeProgressionUi', 'StateOfDecay2Capabilities.RogueliteKillEvents',
                   'StateOfDecay2Capabilities.SurvivorIdentity', 'StateOfDecay2Capabilities.SurvivorAttributes',
                   'StateOfDecay2Capabilities.SinglePlayerPause'):
@@ -413,7 +426,7 @@ def verify_growth_ui_routing_and_load_status(base):
             raise VerificationError('原版 UI 候选没有对应的唯一研究记录：' + str(candidate_id))
         if not str(candidate.get('confidence', '')).startswith('static-registration'):
             raise VerificationError('原版 UI 候选不应在证据不足时标记为运行时可用：' + str(candidate_id))
-    game_api = (base / 'GameApi' / 'StateOfDecay2GameApi.cs').read_text(encoding='utf-8')
+    game_api = read_source_file(base, 'GameApi/StateOfDecay2GameApi.cs')
     if not re.search(r'capabilities\.Declare\(StateOfDecay2Capabilities\.NativeProgressionUi,\s*false,', game_api):
         raise VerificationError('原版 UI 能力未确认时必须保持关闭')
     print('PASS: F1/F2 routing is exclusive, MCM status is truthful, and native UI candidates remain gated')
@@ -427,7 +440,7 @@ def verify_version_single_source(base):
         raise VerificationError("Core/SoD2SE.Core.cs 没有 FrameworkInfo.Version")
     version = match.group(1)
 
-    # No source file may carry version attributes: build.ps1 generates them
+    # No source file may carry version attributes: Automation/Build/build.ps1 generates them
     # from Core for framework binaries and each plugin's mod.json for plugins.
     roots = []
     for root in (base, base / "source"):
@@ -443,28 +456,28 @@ def verify_version_single_source(base):
             stray = VERSION_ATTRIBUTE_RE.findall(path.read_text(encoding="utf-8"))
             if stray:
                 raise VerificationError(
-                    "%s 仍然硬编码版本属性 %s；版本由 build.ps1 生成"
+                    "%s 仍然硬编码版本属性 %s；版本由 Automation/Build/build.ps1 生成"
                     % (path.relative_to(base), ", ".join(stray)))
-        for path in sorted(root.glob("Plugins/*/*.cs")) + sorted(root.glob("*/*.cs")):
+        for path in sorted(set(root.glob("Plugins/*/*.cs")) | set(root.glob("*/*.cs")) | set(root.glob("Core/**/*.cs"))):
             stray = VERSION_ATTRIBUTE_RE.findall(path.read_text(encoding="utf-8"))
             if stray:
                 raise VerificationError(
-                    "%s 硬编码版本属性 %s；版本由 build.ps1 生成"
+                    "%s 硬编码版本属性 %s；版本由 Automation/Build/build.ps1 生成"
                     % (path.relative_to(base), ", ".join(stray)))
     if identity_files < 8:
         raise VerificationError("收集到的 AssemblyInfo.cs 少于 8 个，目录结构可能已变化")
 
     # The generator itself has to keep reading the one version literal.
-    build_script = next((candidate for candidate in (base / "build.ps1", base / "source" / "build.ps1")
+    build_script = next((candidate for candidate in (base / "Automation/Build/build.ps1", base / "source" / "Automation/Build/build.ps1")
                          if candidate.is_file()), None)
     if build_script is None:
-        raise VerificationError("找不到 build.ps1")
+        raise VerificationError("找不到 Automation/Build/build.ps1")
     build_text = build_script.read_text(encoding="utf-8")
     for token in ("Get-SoD2SEVersion", "Get-SoD2SEAssemblyVersion", "AssemblyInformationalVersion"):
         if token not in build_text:
-            raise VerificationError("build.ps1 没有通过 %s 生成版本属性" % token)
+            raise VerificationError("Automation/Build/build.ps1 没有通过 %s 生成版本属性" % token)
     if "mod.json" not in build_text or "pluginVersionSource" not in build_text:
-        raise VerificationError("build.ps1 没有按插件声明生成程序集版本")
+        raise VerificationError("Automation/Build/build.ps1 没有按插件声明生成程序集版本")
     plugin_versions = {}
     for root in roots:
         for plugin in sorted((root / "Plugins").iterdir()):
@@ -479,7 +492,7 @@ def verify_version_single_source(base):
                 raise VerificationError("%s 的 ID 或版本无效" % manifest_path.relative_to(base))
             plugin_versions[plugin.name] = manifest["version"]
 
-    for name in ("package.ps1", "package_mo2.ps1", "install_mo2_preview.ps1"):
+    for name in ("Automation/Package/package.ps1", "Automation/Package/package_mo2.ps1", "Automation/Deploy/install_mo2_preview.ps1"):
         path = next((candidate for candidate in (base / name, base / "source" / name)
                      if candidate.is_file()), None)
         if path is None:
@@ -487,12 +500,12 @@ def verify_version_single_source(base):
         literals = SCRIPT_VERSION_RE.findall(path.read_text(encoding="utf-8"))
         if literals:
             raise VerificationError(
-                "%s 仍然硬编码版本 %s；请改用 Environment.ps1 的 Get-SoD2SEVersion"
+                "%s 仍然硬编码版本 %s；请改用 Automation/Environment.ps1 的 Get-SoD2SEVersion"
                 % (path.relative_to(base), ", ".join(literals)))
 
     # The research target records the mod version it documents.  The root
     # patch manifests name the game build instead, so they are checked against
-    # the research database by verify_research.py rather than here.
+    # the research database by Automation/Check/verify_research.py rather than here.
     targets = sorted((base / "Research").glob("*/*/target.json"))
     if base.joinpath("source", "Research").is_dir():
         targets += sorted((base / "source" / "Research").glob("*/*/target.json"))
@@ -510,7 +523,7 @@ def verify_version_single_source(base):
 
 
 def main():
-    base = Path(__file__).resolve().parent
+    base = Path(__file__).resolve().parents[2]
     manifests = sorted(base.glob('*patch-manifest.json'))
     if not manifests:
         raise VerificationError('No patch manifests found')

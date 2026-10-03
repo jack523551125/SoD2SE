@@ -8,9 +8,9 @@
 - 成长总览的数据模型包含当前幸存者、等级、经验、待领取升级和八种强化的当前效果/已选择次数。它仍由现有自绘覆盖层显示，不是原版 Character/Community UI。
 - MCM 的“本次运行”状态现在只表示插件 DLL 是否成功初始化；它不再把缺少游戏接口误报为插件未加载。成长插件另行明确显示玩法能力状态及未验证原因。
 - 原版 CharacterUI/CommunityUI 接入是交付门槛。静态资料目前确认了资产、Iggy 电影播放器和相关符号，但没有确认能创建/载入自定义 Iggy 资源、扩展原版页面或接管其导航；成长玩法因此保持停用，当前覆盖层只算开发原型。本轮不生成可玩发行包，也不安装到 MO2。
-- 继续离线扫描 CharacterUI/CommunityUI 的资产字符串，并从固定版本 `FNameNativePtrPair` 表登记 15 个 UI 生命周期/技能页候选入口。多个地址是经虚表转发的反射分发桩、没有普通直接调用点；资料只标为静态候选，不进入运行时 Hook。新增 `Research/tools/scan_uasset_symbols.py` 让资产名称扫描可复现。
+- 继续离线扫描 CharacterUI/CommunityUI 的资产字符串，并从固定版本 `FNameNativePtrPair` 表登记 15 个 UI 生命周期/技能页候选入口。多个地址是经虚表转发的反射分发桩、没有普通直接调用点；资料只标为静态候选，不进入运行时 Hook。新增 `Research/tools/Assets/scan_uasset_symbols.py` 让资产名称扫描可复现。
 - 后续静态调查确认角色/社区资产引用 `/Script/IggyPlugin`、`IggyPlayer`、`IggyValue` 和 `CommonUIMoviePlayer`。在当前导出树的 1100 个 `.uasset` 中，有 41 个含 IggyPlugin、24 个含 CommonUIMoviePlayer；没有发现 `.iggy/.swf/.gfx/.umap` 文件。又登记 11 个播放器生命周期、资源路径和输入转发候选；它们仍全部是静态证据，没有成为运行时能力。
-- 修复逆向工具的路径依赖：新增标准库 PE 解析器 `Research/tools/pe_static.py`，`extract_native_pairs.py` 和 `analyze_selected.py` 接受调用者指定的本机 EXE 与输出目录，不再引用缺失的 `Research/native-analysis`。本机离线重跑得到 8692 个注册对、152 个名字和 166 个候选注册项；相对分支数量明确标为原始字节初筛。
+- 修复逆向工具的路径依赖：新增标准库 PE 解析器 `Research/tools/Native/pe_static.py`，`extract_native_pairs.py` 和 `analyze_selected.py` 接受调用者指定的本机 EXE 与输出目录，不再引用缺失的 `Research/native-analysis`。本机离线重跑得到 8692 个注册对、152 个名字和 166 个候选注册项；相对分支数量明确标为原始字节初筛。
 - `python -m unittest discover Research/tools -p 'test_*.py' -v` 的 5 项工具结构/资产扫描测试通过；Research、源码能力门控、协议校验通过。没有因此改变玩法启用状态或打包/安装。
 - 工具盘点确认当前工作区没有找到匹配版本的 Blueprint 编辑/烘焙工具；已有 `u4pak` 文档没有证明能打包 SoD2 使用的资源格式，而 `SoD2-Editor` 需要连接运行中的游戏，因此没有使用。
 - 新增无窗口 `run_headless_core_smoke.ps1`，验证 MCM 已加载状态和固定版本 Game API 能力门控。构建、源码校验、MCM ABI 校验、逆向资料校验、成长逻辑烟测、UI 框架烟测和近战原生 81,888 组策略测试全部通过。
@@ -31,26 +31,26 @@
 
 本轮把散落在多个文件里的同一事实收成单一来源，并让校验脚本在它们重新分叉时直接失败。
 
-- MCM 快捷键默认值：新增 `Core\McmKeys.cs` 集中默认菜单键 F1、升级提示键 F2、接受按键范围、修饰键位和 Alt+F4 保留规则。`Core\Mcm.cs` 不再写 `"112"`/`"113"`，加载器覆盖层不再写 `0x70`，并按 MCM 中实际配置的快捷键与修饰键开关窗口。
-- 原生录制与托管校验共用一张按键表：`Native\McmProtocol.h` 新增 `Shortcut*` 常量，`McmNative.cpp` 的 `ValidKey` 与 `Modifiers` 全部改用它们（选项数字范围也改为按 `MaxChoiceCards` 推导）。`verify_protocol.py` 现在把这张表与 `Core\McmKeys.cs` 逐项比对，并要求原生代码必须引用每个常量。
-- 近战：`Native\MeleeProtocol.h` 新增 `RateNormal = 100`，`MeleeSpeed.cs`、`MeleePolicy.h`、`MeleeTest.cpp` 不再出现 100/1023/43 这类裸数字（位打包布局改为 `RateBits`/`RateMask`/`ScopeBitFirst`/`ActiveBit`）。四类武器与三种作用范围的 ID 在插件内只声明一次，MCM 页、属性修饰器和通道发布共用同一列表。
-- 游戏路径与哈希：Game API 的 `ShippingModule`、`TargetSha256` 改为引用 `FrameworkInfo`；游戏数据目录名收敛为 `FrameworkInfo.GameDataFolderName`，`verify_sources.py` 会拒绝 Game API 内的 `.exe` 字面量和任何生产代码里的 `"StateOfDecay2"` 字面量。
+- MCM 快捷键默认值：新增 `Core\UI\McmKeys.cs` 集中默认菜单键 F1、升级提示键 F2、接受按键范围、修饰键位和 Alt+F4 保留规则。`Core\UI\Mcm.cs` 不再写 `"112"`/`"113"`，加载器覆盖层不再写 `0x70`，并按 MCM 中实际配置的快捷键与修饰键开关窗口。
+- 原生录制与托管校验共用一张按键表：`Native\src\Mcm\McmProtocol.h` 新增 `Shortcut*` 常量，`McmNative.cpp` 的 `ValidKey` 与 `Modifiers` 全部改用它们（选项数字范围也改为按 `MaxChoiceCards` 推导）。`Automation/Check/verify_protocol.py` 现在把这张表与 `Core\UI\McmKeys.cs` 逐项比对，并要求原生代码必须引用每个常量。
+- 近战：`Native\src\Melee\MeleeProtocol.h` 新增 `RateNormal = 100`，`MeleeSpeed.cs`、`MeleePolicy.h`、`MeleeTest.cpp` 不再出现 100/1023/43 这类裸数字（位打包布局改为 `RateBits`/`RateMask`/`ScopeBitFirst`/`ActiveBit`）。四类武器与三种作用范围的 ID 在插件内只声明一次，MCM 页、属性修饰器和通道发布共用同一列表。
+- 游戏路径与哈希：Game API 的 `ShippingModule`、`TargetSha256` 改为引用 `FrameworkInfo`；游戏数据目录名收敛为 `FrameworkInfo.GameDataFolderName`，`Automation/Check/verify_sources.py` 会拒绝 Game API 内的 `.exe` 字面量和任何生产代码里的 `"StateOfDecay2"` 字面量。
 - 成长默认值：MCM 注册改用共用的 `RogueliteSettings` 默认实例，`AddXp`/`AddInt` 调用点不得再出现数字默认值，避免页面默认值与运行时默认值分叉。
-- 原生模块文件名：`verify_sources.py` 比对 `Native\CMakeLists.txt` 的 `OUTPUT_NAME`、`Native\build_native.ps1` 的回退构建和两个插件里的运行时加载路径，并检查插件子目录名。
+- 原生模块文件名：`Automation/Check/verify_sources.py` 比对 `Native\CMakeLists.txt` 的 `OUTPUT_NAME`、`Automation\Build\Native.ps1` 的回退构建和两个插件里的运行时加载路径，并检查插件子目录名。
 - 源码换行统一为 `Core`/`GameApi`/`Loader`/`Plugins`/`Native`/`Tests`/`Research` 下的 `.cs`/`.h`/`.cpp`/`.py` 使用 LF 且不带 BOM；`.ps1` 保持 CRLF + UTF-8 BOM，因为 PowerShell 需要 BOM 才能正确读取中文。
 - 负向验证：把上述任一处改回字面量或改错数值，对应校验都会失败。已实际执行 12 个负向用例（快捷键默认值、覆盖层按键、原生模块名、托管加载目录、数据目录名、成长默认值、Game API 模块名、Game API 哈希、header 与 C# 按键表分叉、C# 按键表本身、原生不再引用按键表、近战基准倍率），全部被捕获；未改动的副本作为对照正常通过。
-- 保留项（未合并，此说明供后续排查）：`Core\Ui.cs` 的 `UiShortcut.Describe` 与 `Native\McmNative.cpp` 的 `KeyName` 仍是两套按键显示名。托管那份用于 Mod 接口与加载器覆盖层提示，游戏内文案由原生按 Windows 键名绘制，因此导航键会显示成 `Nav1` 与 `Page Up` 两种写法。两边的键位取值范围都来自 `McmKeys`/`Shortcut*`，判定不会分叉，只是显示文案不同。
-- 自动化：`build.ps1`、`Native\build\Release\MeleeNativeTest.exe`（81888 组）、`verify_all.ps1`（开发目录、发布目录、独立重编译、ZIP 解包四轮全集）、`run_mcm_integration_smoke.ps1`、`run_growth_screen_preview.ps1 -Mode growth` 与 `-Mode settings` 全部通过。本版本只做静态分析和自动化测试，没有启动、注入或读取运行中的游戏。
+- 保留项（未合并，此说明供后续排查）：`Core\UI\Ui.cs` 的 `UiShortcut.Describe` 与 `Native\src\Mcm\McmNative.cpp` 的 `KeyName` 仍是两套按键显示名。托管那份用于 Mod 接口与加载器覆盖层提示，游戏内文案由原生按 Windows 键名绘制，因此导航键会显示成 `Nav1` 与 `Page Up` 两种写法。两边的键位取值范围都来自 `McmKeys`/`Shortcut*`，判定不会分叉，只是显示文案不同。
+- 自动化：`Automation/Build/build.ps1`、`Native\build\Release\MeleeNativeTest.exe`（81888 组）、`Automation/Check/verify_all.ps1`（开发目录、发布目录、独立重编译、ZIP 解包四轮全集）、`run_mcm_integration_smoke.ps1`、`run_growth_screen_preview.ps1 -Mode growth` 与 `-Mode settings` 全部通过。本版本只做静态分析和自动化测试，没有启动、注入或读取运行中的游戏。
 
 ## 0.6.0-preview：模块界面框架与 MCM ABI 6（2026-09-23）
 
-- 新增 `Core\Ui.cs`：`UiRegistry`/`UiSurface`/`UiNode` 面向插件的界面 API，支持注册、注销、按键分配与持久化、电平式开关、修订号校验的按钮动作和宿主状态回写。
+- 新增 `Core\UI\Ui.cs`：`UiRegistry`/`UiSurface`/`UiNode` 面向插件的界面 API，支持注册、注销、按键分配与持久化、电平式开关、修订号校验的按钮动作和宿主状态回写。
 - MCM ABI 由 5 升到 6：v5 的固定“成长”块替换为通用界面块（6 个界面、96 行、每界面 24 行），并用 `static_assert` 固定 `offsetof(State, uiSurfaces) == 119896`、`offsetof(State, uiNodes) == 122852`、`sizeof(State) == 176620`。
-- 原生宿主改为通用界面渲染：`Native\UiTheme.h` 提供统一主题与控件，`McmNative.cpp` 的 `SurfaceWindow` 绘制任意插件界面，`ChoiceOverlay` 作为唯一模态；删除了硬编码的成长窗口，MCM 设置页新增“界面快捷键”录制。
+- 原生宿主改为通用界面渲染：`Native\src\Mcm\UiTheme.h` 提供统一主题与控件，`McmNative.cpp` 的 `SurfaceWindow` 绘制任意插件界面，`ChoiceOverlay` 作为唯一模态；删除了硬编码的成长窗口，MCM 设置页新增“界面快捷键”录制。
 - 幸存者成长改为声明式界面：注册 `survivor-roguelite.growth` 且不占按键，作为三选一提示的归属界面；设置页与玩法页面不再是同一个窗口。
 - 移除 `McmGrowthState`/`McmGrowthBuff`/`McmGrowthBus` 旧协议代码，避免两套界面协议并存。
 - 自动化通过：`run_ui_smoke.ps1`（注册、按键分配与持久化、保留键与重复键拒绝、行上限、构建回调、动作派发、可见性握手）、`run_roguelite_smoke.ps1`（成长曲线、原子存档、卡片一次性、去重、上限、饱和、衰减下限、声明式界面）、以及 `run_mcm_integration_smoke.ps1`（真实 D3D11 宿主：F1/Esc、Ctrl+Shift+M、旧绑定失效、输入拦截与恢复、ResizeBuffers、快捷键保存、插件界面打开/绘制/按钮动作回传、关停）。
-- 新增 `Tests\GrowthScreenPreview.cs` 与 `run_growth_screen_preview.ps1`：用真实原生宿主渲染成长页并输出截图。本次运行发布 17 行、绘制 88.5 万非背景像素，验证了「Mod 主动打开界面」这条不使用按键的路径，以及 `-Mode settings` 下 MCM 设置页的新「界面快捷键」区。
+- 新增 `Tests\Growth\GrowthScreenPreview.cs` 与 `run_growth_screen_preview.ps1`：用真实原生宿主渲染成长页并输出截图。本次运行发布 17 行、绘制 88.5 万非背景像素，验证了「Mod 主动打开界面」这条不使用按键的路径，以及 `-Mode settings` 下 MCM 设置页的新「界面快捷键」区。
 - 修复：游戏窗口没有焦点时，宿主原本会消费并丢弃 Mod 的界面打开请求，导致切回游戏后界面不再出现；现在请求保持待处理，直到窗口恢复焦点。
 - 修复：没有独立按键的界面在标题栏显示「未设置」，现在显示其归属功能的快捷键（成长页显示升级提示键 F2）。
 - 调整：玩法界面外壳改为 960×960、设置面板改为 1080×820（均按显示分辨率收缩），并收紧分区间距；成长页的八种强化改为单行键值行，一页内即可看全进度与全部强化。
@@ -96,13 +96,13 @@
 - `SoD2SE.Loader.exe --self-test`：通过框架内存补丁写入、幂等、还原和冲突保护测试。
 - `--self-test`：通过不可变补丁描述、输入拷贝、无操作补丁、进程句柄生命周期、重叠补丁和跨页补丁拒绝测试。
 - `--self-test`：通过插件发现和两个插件的元数据加载测试。
-- `verify_sources.py`：通过 C# 补丁表与 JSON 清单一致性检查。
-- `verify_release.py`：通过发布目录布局和每个文件的 SHA256 清单检查。
-- `verify_game.py`：通过 EXE SHA256、x64 PE、两个插件共 13 个补丁点的原始字节/上下文检查，以及随从跳转与社区玩家标识、辅助叶函数、unwind 范围和真实人数函数保护检查。
-- `verify_recruitment.py`：4224 个原版/修改后真实 x64 机器码测试通过，覆盖玩家与 NPC、软/硬门槛、整组加入、内联门槛、非人数拒绝条件和原生数组追加。测试环境使用预分配数组和部分引擎回调替身。
-- `source/Tests/run_memory_smoke.ps1`：真实插件 DLL 在私有惰性映像中以两个顺序加载/还原，完成一致性、幂等、冲突和部分写入故障回滚测试。
+- `Automation/Check/verify_sources.py`：通过 C# 补丁表与 JSON 清单一致性检查。
+- `Automation/Check/verify_release.py`：通过发布目录布局和每个文件的 SHA256 清单检查。
+- `Automation/Check/verify_game.py`：通过 EXE SHA256、x64 PE、两个插件共 13 个补丁点的原始字节/上下文检查，以及随从跳转与社区玩家标识、辅助叶函数、unwind 范围和真实人数函数保护检查。
+- `Automation/Check/verify_recruitment.py`：4224 个原版/修改后真实 x64 机器码测试通过，覆盖玩家与 NPC、软/硬门槛、整组加入、内联门槛、非人数拒绝条件和原生数组追加。测试环境使用预分配数组和部分引擎回调替身。
+- `source/Automation/Test/run_memory_smoke.ps1`：真实插件 DLL 在私有惰性映像中以两个顺序加载/还原，完成一致性、幂等、冲突和部分写入故障回滚测试。
 - 同一测试脚本中的 `ThreadSafetySmoke`：专用子进程暂停后检查 RIP 和栈返回地址，繁忙时拒绝写入，空闲时写入/还原，随后子进程正常恢复。没有借用游戏进程做这些测试。
-- `verify_all.ps1`：按构建、包内自测、源码/游戏/清单校验、独立重编译和 ZIP 解包顺序执行上述检查。
+- `Automation/Check/verify_all.ps1`：按构建、包内自测、源码/游戏/清单校验、独立重编译和 ZIP 解包顺序执行上述检查。
 
 这些检查只验证启动路径解析、框架契约和固定版本补丁，不代表其他版本一定兼容。启动器可以尝试运行其他版本或其他发行渠道的文件；插件发现目标版本不匹配时会拒绝写入。
 
@@ -112,12 +112,12 @@
 EBF0A73E164BAA701F74655585F262F8E38A32B1F6DC5057303489BA5B333ECE
 ```
 
-尚未在实际游戏流程中验证第 13 人招募、特殊任务、多人模式、角色切换、扩容分配和存档重载。社区招募范围与资产中的独立人数剧情条件见 `COMMUNITY.zh-CN.md`。框架不会在没有检测到目标 SHA256 时写入进程；离线验证没有修改游戏或存档。
+尚未在实际游戏流程中验证第 13 人招募、特殊任务、多人模式、角色切换、扩容分配和存档重载。社区招募范围与资产中的独立人数剧情条件见 `Docs/Products/COMMUNITY.zh-CN.md`。框架不会在没有检测到目标 SHA256 时写入进程；离线验证没有修改游戏或存档。
 
 ## 0.3.1：MO2 兼容回归（2026-09-19）
 
 - SoD2 Support Suite 0.1.5：65 项自动化回归、ruff 检查与格式检查通过。
-- `Tests/run_loader_vfs_smoke.py --mo2-path E:\S\MO` 使用真实 USVFS 创建独立会话；调用实际加载器的直接启动代码，子进程读取虚拟 PAK、Cooked 和根目录文件成功，并验证子进程 USVFS 模块。没有运行真实游戏或创建实体目标文件。
+- `Automation/Test/run_loader_vfs_smoke.py --mo2-path E:\S\MO` 使用真实 USVFS 创建独立会话；调用实际加载器的直接启动代码，子进程读取虚拟 PAK、Cooked 和根目录文件成功，并验证子进程 USVFS 模块。没有运行真实游戏或创建实体目标文件。
 - 实际 MO2 的原有 `SoD2SE.Loader` 启动项直接创建游戏 PID 35660；日志确认 USVFS=True，两个原生插件初始化成功。
 - 只读句柄检查证实该游戏进程打开 MO2 私有构建目录中的 8 个 Mod PAK。具体 Mod 内容和长期存档效果仍需逐项验收。
 - 用户已确认前版两个原生插件在游戏内生效。本次未改变原生补丁表。
@@ -127,7 +127,7 @@ EBF0A73E164BAA701F74655585F262F8E38A32B1F6DC5057303489BA5B333ECE
 
 - 框架允许零插件启动；原生补丁表未变化。
 - MO 支持插件 0.1.6：73 项自动化测试及原生 MO2 安装窗口测试通过。
-- `Tests/run_plugin_vfs_smoke.py --mo2-path E:\S\MO --plugin-source <MO支持插件的plugins目录>`：四个独立 USVFS 会话，实际 CLR 插件发现分别验证两者启用/单独启用/全部停用。
+- `Automation/Test/run_plugin_vfs_smoke.py --mo2-path E:\S\MO --plugin-source <MO支持插件的plugins目录>`：四个独立 USVFS 会话，实际 CLR 插件发现分别验证两者启用/单独启用/全部停用。
 - 22:18:53 本机 MO2 实际启动游戏 PID 32128；实体 Plugins 目录为空，通过虚拟目录加载两个 DLL 并成功初始化。
 
 ## 0.3.3：MCM MVP（2026-09-19）

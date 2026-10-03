@@ -1,18 +1,23 @@
-﻿[CmdletBinding()]
+[CmdletBinding()]
 param(
     [Parameter(Mandatory=$true)][string]$BuildDirectory,
     [Parameter(Mandatory=$true)][string]$NativeRenderTest,
     [string]$OutputDirectory = '',
     [ValidateSet('growth','settings')][string]$Mode = 'growth'
 )
+$projectRoot = (Split-Path -Parent (Split-Path -Parent $PSScriptRoot))
+$testRoot = Join-Path $projectRoot 'Tests'
+. (Join-Path $projectRoot 'Automation/Environment.ps1')
+$nativeBuildRoot = Join-Path (Get-SoD2SEWorkRoot -SourceRoot $projectRoot) 'native'
+
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 if ([string]::IsNullOrWhiteSpace($OutputDirectory)) {
     # The preview folder follows the framework version instead of a literal, so
     # screenshots never land in an older release's directory.
-    . (Join-Path $PSScriptRoot '..\Environment.ps1')
-    $version = Get-SoD2SEVersion -SourceRoot (Join-Path $PSScriptRoot '..')
-    $OutputDirectory = Join-Path $PSScriptRoot "..\..\..\outputs\SoD2SE-$version\ui-preview"
+    . (Join-Path $testRoot '..\Automation/Environment.ps1')
+    $version = Get-SoD2SEVersion -SourceRoot (Join-Path $testRoot '..')
+    $OutputDirectory = Join-Path $testRoot "..\..\..\.work\previews\SoD2SE-$version\ui-preview"
 }
 $build = (Resolve-Path -LiteralPath $BuildDirectory).ProviderPath
 $native = (Resolve-Path -LiteralPath $NativeRenderTest).ProviderPath
@@ -38,7 +43,7 @@ try {
     & $compiler /nologo /target:exe /platform:x64 /optimize+ /warn:4 /warnaserror+ /codepage:65001 `
         /reference:System.dll /reference:System.Core.dll /reference:System.Numerics.dll `
         "/reference:$(Join-Path $build 'SoD2SE.Core.dll')" "/reference:$(Join-Path $build 'SoD2SE.GameApi.dll')" `
-        "/reference:$(Join-Path $build 'Plugins\Roguelite.dll')" /out:$exe (Join-Path $PSScriptRoot 'GrowthScreenPreview.cs')
+        "/reference:$(Join-Path $build 'Plugins\Roguelite.dll')" /out:$exe (Join-Path $testRoot 'Growth/GrowthScreenPreview.cs')
     if ($LASTEXITCODE -ne 0) { throw "成长界面预览编译失败：$LASTEXITCODE" }
     # 1080p-sized client area so the screenshot shows what a normal session
     # sees, not the small verification window.

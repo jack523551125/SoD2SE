@@ -1,5 +1,7 @@
 # 游戏内界面框架（SoD2SE 0.6.0-preview）
 
+2026-09-29更新：幸存者成长v2不再注册本文描述的旧三选一覆盖层；改用 `Core/Growth/GrowthRuntime.cs` 的原版页面适配协议，但生产适配器尚未实现。本文其余成长页说明属于旧开发预览，见[当前成长实现状态](../ROGUELITE.zh-CN.md)。通用旧界面框架继续保留兼容。
+
 这个框架让插件在游戏画面里拥有自己的界面，而不是把玩法数据塞进 MCM 配置页。插件只描述「这一页有哪些行」，绘制、排版、输入拦截、快捷键和窗口外壳由框架统一负责，所以所有 Mod 的界面看起来是同一套东西。
 
 ## 它是什么，不是什么
@@ -139,16 +141,16 @@ sealed class SamplePlugin : ISoD2Plugin
 ## 打包与版本
 
 - 界面依赖 MCM 插件及其原生伴随库；没有 MCM 时 `UiRegistry.Current` 为 null，插件应静默退化为无界面。
-- 当前协议为 MCM ABI 6。`Native/McmProtocol.h` 里的 `static_assert` 和 `Plugins/Mcm/Mcm.cs` 的偏移常量必须同步修改，任何一侧单独升级都会被拒绝。
+- 当前协议为 MCM ABI 6。`Native/src/Mcm/McmProtocol.h` 里的 `static_assert` 和 `Plugins/Mcm/Mcm.cs` 的偏移常量必须同步修改，任何一侧单独升级都会被拒绝。
 - 框架（Loader/Core/GameApi）与插件包必须同版本更新。MO2 面板显示的版本来自压缩包里的 `meta.ini`。
 - `SoD2SE-Framework-MO2-*.zip` 放在游戏根目录，不作为 MO2 Mod 安装，也不包含 `meta.ini`。插件包安装到 MO2，包内是 `Root\Plugins\...`。
 
 ## 测试
 
 ```powershell
-.\build.ps1 -OutputDirectory .\compiled
-.\Tests\run_ui_smoke.ps1 -BuildDirectory .\compiled
-.\Tests\run_mcm_integration_smoke.ps1 -BuildDirectory .\compiled -NativeRenderTest .\Native\build\Release\McmRenderTest.exe
+.\Automation/Build/build.ps1 -OutputDirectory .\compiled
+.\Automation\Test\run_ui_smoke.ps1 -BuildDirectory .\compiled
+.\Automation\Test\run_mcm_integration_smoke.ps1 -BuildDirectory .\compiled -NativeRenderTest .\Native\build\Release\McmRenderTest.exe
 ```
 
 第一个测试覆盖注册、快捷键分配与持久化、行上限、构建回调、动作派发和宿主可见性握手，不启动游戏。第二个测试会创建真实 D3D11 窗口并短暂抢占键盘焦点约 20 秒，验证宿主能打开插件界面、绘制内容并把按钮动作回传给插件；它不使用游戏进程。

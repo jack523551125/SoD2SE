@@ -1,4 +1,4 @@
-"""Cross-check the MCM ABI in Native/McmProtocol.h against every consumer.
+"""Cross-check the MCM ABI in Native/src/Mcm/McmProtocol.h against every consumer.
 
 The header is the single source of truth.  The C# bridge, the native host and
 the test harnesses all have to agree with it byte for byte, so this script
@@ -6,12 +6,18 @@ recomputes the packed layout from the struct declarations and then compares:
 
 * the header's own ``static_assert`` block,
 * every named constant in Plugins/Mcm/Mcm.cs,
-* the offsets named in Tests/McmIntegrationSmoke.cs and Tests/GrowthScreenPreview.cs,
+* the offsets named in Tests/UI/McmIntegrationSmoke.cs and Tests/Growth/GrowthScreenPreview.cs,
 * the command ids the native host writes,
 
 It also rejects raw numbers at wire sites, because a bare offset in a call such
 as ``view.Write(60, 1)`` is exactly how a layout change goes unnoticed.
 """
+
+# Standalone script execution resolves imports from its source-owning project.
+import sys as _layout_sys
+_layout_sys.dont_write_bytecode = True
+from pathlib import Path as _LayoutPath
+_layout_sys.path.insert(0, str(_LayoutPath(__file__).resolve().parents[2]))
 import re
 import sys
 from pathlib import Path
@@ -66,8 +72,9 @@ def resolve_count(token, constants):
 
 
 class Header:
-    def __init__(self, path):
-        text = strip_comments(path.read_text(encoding='utf-8'))
+    def __init__(self, path, source=None, pack=4):
+        text = strip_comments(path.read_text(encoding='utf-8') if source is None else source)
+        self.pack = pack
         self.path = path
         self.constants = {}
         for block in CONST_RE.findall(text):
@@ -99,22 +106,22 @@ class Header:
                 if statement.strip():
                     fields.extend(split_declaration(statement.strip(), self.constants))
             self.members[name] = fields
-        self.offsets, self.sizes, self.field_sizes = {}, {}, {}
+        self.offsets, self.sizes, self.field_sizes, self.alignments = {}, {}, {}, {}
         for name in self.members:
             self._layout(name)
         self.asserts = ASSERT_RE.findall(text)
 
     def _align(self, offset, alignment):
-        alignment = min(alignment, 4)  # the header compiles with pack(4)
+        alignment = min(alignment, self.pack)
         return (offset + alignment - 1) // alignment * alignment
 
     def _size_of(self, type_name):
         if type_name in INT_TYPES:
-            return INT_TYPES[type_name], 4
+            return INT_TYPES[type_name], INT_TYPES[type_name]
         if type_name in CHAR_TYPES:
             return CHAR_TYPES[type_name], 1
         if type_name in self.sizes:
-            return self.sizes[type_name], 4
+            return self.sizes[type_name], self.alignments[type_name]
         raise VerificationError('未知字段类型：' + type_name)
 
     def _layout(self, name):
@@ -134,6 +141,7 @@ class Header:
             offset += total
         size = self._align(offset, largest)
         self.sizes[name] = size
+        self.alignments[name] = min(largest, self.pack)
         return size
 
     def offset_of(self, struct, field):
@@ -366,8 +374,8 @@ def locate(base, relative):
 
 
 def main():
-    base = Path(__file__).resolve().parent
-    header_path = locate(base, 'Native/McmProtocol.h')
+    base = Path(__file__).resolve().parents[2]
+    header_path = locate(base, 'Native/src/Mcm/McmProtocol.h')
     header = Header(header_path)
     if not header.commands:
         raise VerificationError('McmProtocol.h 没有定义命令编号')
@@ -376,18 +384,18 @@ def main():
 
     checked = 0
     for relative in ('Plugins/Mcm/Mcm.cs',
-                     'Tests/McmIntegrationSmoke.cs',
-                     'Tests/GrowthScreenPreview.cs'):
+                     'Tests/UI/McmIntegrationSmoke.cs',
+                     'Tests/Growth/GrowthScreenPreview.cs'):
         path = locate(base, relative)
         checked += compare_constants(relative, parse_csharp_constants(path), expected)
         check_no_bare_offsets(path, relative)
 
-    native = locate(base, 'Native/McmNative.cpp')
+    native = locate(base, 'Native/src/Mcm/McmNative.cpp')
     native_text = strip_comments(native.read_text(encoding='utf-8'))
     for match in re.finditer(r'\bCommand\s*\(\s*(\d+)', native_text):
-        raise VerificationError('Native/McmNative.cpp 使用裸命令编号：' + match.group(1))
+        raise VerificationError('Native/src/Mcm/McmNative.cpp 使用裸命令编号：' + match.group(1))
     native_contract_sources = [native_text]
-    for relative in ('Native/NativeSettingsModel.h', 'Native/NativeSettingsIggyTest.cpp'):
+    for relative in ('Native/src/Mcm/NativeSettingsModel.h', 'Native/tests/Mcm/NativeSettingsIggyTest.cpp'):
         path = locate(base, relative)
         native_contract_sources.append(strip_comments(path.read_text(encoding='utf-8')))
     used_commands = set()
@@ -405,19 +413,19 @@ def main():
     # Option widgets are chosen by the enum above; a bare digit here is how the
     # two sides drift apart while both still compile.
     for match in re.finditer(r'option\s*\.\s*type\s*[!=]=\s*\d', native_text):
-        raise VerificationError('Native/McmNative.cpp 用裸数字判断选项类型：' + match.group(0))
+        raise VerificationError('Native/src/Mcm/McmNative.cpp 用裸数字判断选项类型：' + match.group(0))
 
-    core_source = locate(base, 'Core/Mcm.cs')
+    core_source = locate(base, 'Core/UI/Mcm.cs')
     option_types = parse_csharp_enum(core_source, 'McmOptionType')
     if not header.option_types:
         raise VerificationError('McmProtocol.h 没有定义 OptionType 枚举')
     if len(header.option_types) != len(option_types):
-        raise VerificationError('McmProtocol.h 与 Core/Mcm.cs 的选项类型数量不一致')
+        raise VerificationError('McmProtocol.h 与 Core/UI/Mcm.cs 的选项类型数量不一致')
     for member, value in option_types.items():
         name = 'Option' + member
         if header.option_types.get(name) != value:
             raise VerificationError(
-                'McmProtocol.h 的 %s=%s 与 Core/Mcm.cs 的 McmOptionType.%s=%s 不一致'
+                'McmProtocol.h 的 %s=%s 与 Core/UI/Mcm.cs 的 McmOptionType.%s=%s 不一致'
                 % (name, header.option_types.get(name), member, value))
 
     # Shortcut capture: native and managed layers share one numeric table.
@@ -441,24 +449,24 @@ def main():
         'ShortcutShiftModifier': 'ShiftModifier',
         'ShortcutMaxModifiers': 'MaxModifiers',
     }
-    managed_keys = parse_csharp_constants(locate(base, 'Core/McmKeys.cs'))
+    managed_keys = parse_csharp_constants(locate(base, 'Core/UI/McmKeys.cs'))
     for header_name, managed_name in sorted(shortcut_names.items()):
         if header_name not in header.constants:
             raise VerificationError('McmProtocol.h 没有定义 ' + header_name)
         if managed_name not in managed_keys:
-            raise VerificationError('Core/McmKeys.cs 没有定义 ' + managed_name)
+            raise VerificationError('Core/UI/McmKeys.cs 没有定义 ' + managed_name)
         if header.constants[header_name] != managed_keys[managed_name]:
             raise VerificationError(
-                'McmProtocol.h 的 %s=%s 与 Core/McmKeys.cs 的 %s=%s 不一致'
+                'McmProtocol.h 的 %s=%s 与 Core/UI/McmKeys.cs 的 %s=%s 不一致'
                 % (header_name, header.constants[header_name],
                    managed_name, managed_keys[managed_name]))
     used_shortcuts = set(re.findall(r'\bmcm::(Shortcut[A-Za-z0-9_]+)', native_text))
     unknown_shortcuts = used_shortcuts.difference(header.constants)
     if unknown_shortcuts:
-        raise VerificationError('Native/McmNative.cpp 使用了未声明的快捷键常量：' + ', '.join(sorted(unknown_shortcuts)))
+        raise VerificationError('Native/src/Mcm/McmNative.cpp 使用了未声明的快捷键常量：' + ', '.join(sorted(unknown_shortcuts)))
 
     # Melee speed channel: same rule, one header and one managed bridge.
-    melee_path = locate(base, 'Native/MeleeProtocol.h')
+    melee_path = locate(base, 'Native/src/Melee/MeleeProtocol.h')
     melee = Header(melee_path)
     melee_asserts = melee.check_asserts()
     melee_relative = 'Plugins/MeleeSpeed/MeleeSpeed.cs'
@@ -466,17 +474,87 @@ def main():
     melee_checked = compare_constants(melee_relative, parse_csharp_constants(melee_source),
                                       expected_melee_constants(melee))
     check_no_bare_offsets(melee_source, melee_relative)
-    melee_native = strip_comments(locate(base, 'Native/MeleeNative.cpp').read_text(encoding='utf-8'))
+    melee_native = strip_comments(locate(base, 'Native/src/Melee/MeleeNative.cpp').read_text(encoding='utf-8'))
     for token in ('melee::ChannelMagic', 'melee::ChannelVersion'):
         if token not in melee_native:
-            raise VerificationError('Native/MeleeNative.cpp 没有引用 ' + token)
+            raise VerificationError('Native/src/Melee/MeleeNative.cpp 没有引用 ' + token)
     if re.search(r'0x314c454d', melee_native):
-        raise VerificationError('Native/MeleeNative.cpp 仍然硬编码通道魔数')
+        raise VerificationError('Native/src/Melee/MeleeNative.cpp 仍然硬编码通道魔数')
 
     print('PASS: MCM ABI v%s matches %d static_asserts, %d named constants and %d option types; '
           'melee channel v%s matches %d static_asserts and %d named constants'
           % (header.constants['Version'], asserts, checked, len(option_types),
              melee.constants['ChannelVersion'], melee_asserts, melee_checked))
+    growth = Header(locate(base, 'Native/src/Shared/ui/GrowthUiProtocol.h'))
+    growth_asserts = growth.check_asserts()
+    growth_managed = locate(base, 'Core/Growth/GrowthNativeUiChannel.cs')
+    constants = parse_csharp_constants(growth_managed)
+    expected = dict(growth.constants)
+    expected.update(HeaderSize=growth.offset_of('State', 'rows'), RowSize=growth.size_of('Row'),
+                    StringOffset=growth.offset_of('State', 'text'), CommandOffset=growth.offset_of('State', 'command'), Capacity=growth.size_of('State'))
+    offsets = {'Magic': 'magic', 'Version': 'version', 'Capacity': 'capacity', 'Shutdown': 'shutdown', 'Heartbeat': 'heartbeat', 'Busy': 'busy',
+               'Token': 'token', 'RowCount': 'rowCount', 'TextBytes': 'textBytes', 'HeaderText': 'headerOffset', 'StatusText': 'statusOffset',
+               'Request': 'request', 'Acknowledged': 'acknowledged', 'Result': 'result'}
+    expected.update({name + 'Offset': growth.offset_of('State', member) for name, member in offsets.items()})
+    expected.update(RowTitleOffset=growth.offset_of('Row', 'titleOffset'), RowDescriptionOffset=growth.offset_of('Row', 'descriptionOffset'),
+                    CommandTokenOffset=growth.offset_of('Command', 'token'), CommandRowOffset=growth.offset_of('Command', 'row'),
+                    CommandCountOffset=growth.offset_of('Command', 'count'), CommandSelectionsOffset=growth.offset_of('Command', 'selections'))
+    compare_constants('Core/Growth/GrowthNativeUiChannel.cs', constants, expected)
+    check_no_bare_offsets(growth_managed, 'Core/Growth/GrowthNativeUiChannel.cs')
+    native_growth_text = strip_comments(growth.path.read_text(encoding='utf-8'))
+    def growth_enum(name):
+        body = re.search(r'enum\s+' + name + r'\s*:\s*int\s*\{([^}]+)\}', native_growth_text).group(1)
+        return {member.strip(): i for i, member in enumerate(body.split(','))}
+    managed_page = locate(base, 'Core/Growth/GrowthPagePresenter.cs')
+    if parse_csharp_enum(managed_page, 'GrowthPageOp') != growth_enum('Op'):
+        raise VerificationError('Growth Iggy RPC operation IDs differ')
+    native_kinds = growth_enum('RowKind'); native_kinds['Confirm'] = native_kinds.pop('Confirmation')
+    if parse_csharp_enum(managed_page, 'GrowthPageRowKind') != native_kinds:
+        raise VerificationError('Growth Iggy row kind IDs differ')
+    print('PASS: growth UI ABI v%s matches %s static_asserts, %s named constants, 13 RPC operations and 7 row kinds'
+          % (growth.constants['Version'], growth_asserts, len(expected)))
+    check_growth_host(base)
+
+
+def check_growth_host(base):
+    path = locate(base, 'Native/src/Growth/GrowthHostProtocol.h')
+    source = strip_comments(path.read_text(encoding='utf-8'))
+    state = re.search(r'enum class State\s*:\s*uint32_t\s*\{([^}]+)\};', source).group(1)
+    states = {name.strip(): int(value.strip()) for name, value in (entry.split('=') for entry in state.split(','))}
+    # Normalize only syntactic initializers/std::array/strong enum. The existing
+    # independent layout calculator still derives all sizes from actual fields.
+    normalized = re.sub(r'enum class State\s*:\s*uint32_t\s*\{[^}]+\};', '', source)
+    normalized = normalized.replace('{}', '')
+    normalized = re.sub(r'std::array<(\w+),\s*(\w+)>\s+(\w+)', r'\1 \3[\2]', normalized)
+    def fields(match):
+        body = re.sub(r'\s*=\s*[^,;]+', '', match.group(2))
+        return 'struct ' + match.group(1) + ' {' + re.sub(r'\bState\s+', 'uint32_t ', body) + '};'
+    normalized = STRUCT_RE.sub(fields, normalized)
+    native = Header(path, normalized, pack=8)
+    native.check_asserts()
+    managed = locate(base, 'Core/Growth/GrowthNativeConnection.cs')
+    if parse_csharp_enum(managed, 'GrowthNativeState') != states:
+        raise VerificationError('Native growth host lifecycle states differ')
+    expected = {'Version': native.constants['Version'], 'Size': native.size_of('Channel'), 'ActorSize': native.size_of('Actor')}
+    for name, field in [('Magic','magic'),('Version','version'),('Size','size'),('OwnerPid','ownerPid'),('NonceLow','nonceLow'),
+                        ('NonceHigh','nonceHigh'),('Heartbeat','heartbeat'),('Stop','stopRequested'),('HostPid','hostPid'),('Reserved','reserved')]:
+        expected[name + 'Offset'] = native.offset_of('Header', field)
+    for name, field in [('FrameSerial','frameSerial'),('State','state'),('Error','error'),('World','world'),('GameMode','gameMode'),
+                        ('GameInstance','gameInstance'),('Enclave','enclave'),('Controller','controller'),('RawCampaignMode','rawCampaignMode'),
+                        ('Flags','flags'),('ActorCount','actorCount'),('ControlledActor','controlledActor'),('Actors','actors')]:
+        expected[name + 'Offset'] = native.offset_of('Channel','snapshot') + native.offset_of('Snapshot',field)
+    for name, field in [('Character','character'),('Pawn','pawn'),('Component','component'),('CandidateLocalId','candidateLocalId'),
+                        ('Flags','flags'),('CandidateNarrativeId','candidateNarrativeId'),('CandidateEntityId','candidateEntityId'),
+                        ('RawPawnMode','rawPawnMode'),('Reserved','reserved')]:
+        expected['Actor' + name + 'Offset'] = native.offset_of('Actor',field)
+    expected['TokenSerialOffset'] = native.offset_of('Token', 'serial')
+    expected['ChannelOffset'] = native.offset_of('Channel', 'header')
+    compare_constants('Core/Growth/GrowthNativeConnection.cs', parse_csharp_constants(managed), expected)
+    check_no_bare_offsets(managed, 'Core/Growth/GrowthNativeConnection.cs')
+    magic = re.search(r'const uint Magic\s*=\s*(0x[0-9a-fA-F]+)', managed.read_text(encoding='utf-8'))
+    if not magic or int(magic.group(1),16) != native.constants['Magic']:
+        raise VerificationError('Native growth host channel magic differs')
+    print('PASS: native growth host ABI v%d matches %d field/size constants and %d lifecycle states' % (native.constants['Version'], len(expected), len(states)))
 
 
 if __name__ == '__main__':
