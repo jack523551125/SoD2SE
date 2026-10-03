@@ -135,6 +135,7 @@ switch ($Command) {
             $managedTests = @()
             if ($manifest -and $manifest.id -eq 'Mcm') { $managedTests = @('McmSmoke.cs') }
             if ($manifest -and $manifest.id -eq 'Roguelite') { $managedTests = @('RogueliteSmoke.cs') }
+            $productTestExecuted = $manifest -and $manifest.id -eq 'SkipStartupIntro'
             if ($manifest -and $manifest.id -eq 'Roguelite') {
                 $nativeCache = Join-Path $output 'native-build'
                 & cmake --build $nativeCache --config Release --target GrowthUiTest GrowthHostWireTest --parallel
@@ -181,6 +182,7 @@ switch ($Command) {
                     try { & $testExe; if ($LASTEXITCODE -ne 0) { throw "Managed test failed: $testName ($LASTEXITCODE)." } }
                     finally { Pop-Location }
                 }
+                $productTestExecuted = $true
             }
             if ($manifest -and $manifest.id -eq 'Roguelite') {
                 $compilerCandidates = @(
@@ -222,8 +224,13 @@ switch ($Command) {
                     & $exe
                     if ($LASTEXITCODE -ne 0) { throw "Native test failed: $name ($LASTEXITCODE)." }
                 }
+                $productTestExecuted = $true
             }
-            Write-Output 'PASS: product offline build/test entrypoint completed.'
+            if ($productTestExecuted) {
+                Write-Output 'PASS: product offline build and available product checks completed.'
+            } else {
+                Write-Output 'SKIPPED: build passed, but this product has no existing product-specific offline test fixture.'
+            }
         }
     }
 }
