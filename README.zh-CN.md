@@ -1,23 +1,20 @@
-# SoD2SE 0.6.0-preview：双语游戏内 MCM、模块界面框架、社区招募、无限随从与幸存者成长插件
+# SoD2SE 0.6.0-preview：框架、Core 与语义化 GameApi
 
-开发维护入口：[目录与资料导航](Docs/INDEX.zh-CN.md)、[研究状态与未完成项](Docs/RESEARCH-STATUS.zh-CN.md)、[原版设置菜单接入研究](Docs/NATIVE-SETTINGS-UI.zh-CN.md)、[维护与验证](Docs/MAINTENANCE.zh-CN.md)。
+开发维护入口：[目录与资料导航](Docs/INDEX.zh-CN.md)、[维护与验证](Docs/MAINTENANCE.zh-CN.md)。研究状态和原版设置资源证据由 workspace 的 [ReverseEngineering submodule](../../ReverseEngineering/Topics/README.md) 维护。
 
 
-本包包含 `UnlimitedCommunity.dll`、`UnlimitedFollowers.dll`、`MeleeSpeed.dll`、`Mcm.dll` 和 `Roguelite.dll` 开发原型。幸存者成长具备纯逻辑的经验、升级候选和强化展示模型，但击杀归属、跨社区身份、原生属性入口、单人暂停以及原版 Character/Community UI 均未完成验证，插件会保持玩法停用。**它不是可玩的成长 Mod 发布包；当前 UI 仅是开发覆盖层，不能当作原版角色界面。**
+本仓库拥有 SoD2SE Core、GameApi、共享 native runtime 和框架构建入口。MCM、MeleeSpeed、UnlimitedCommunity、UnlimitedFollowers、NativeModSettingsEntry、SkipStartupIntro 与 Roguelite 均由各自的 Git 仓库维护；Roguelite 仍是 prototype，`publish=false`。共享组件不在 Packages 中保留重复 runtime 源码。
 
 这是《腐烂国度 2》的最小外置原生插件框架。加载器可以放在游戏根目录，直接读取并创建游戏 EXE；启动阶段不调用 Steam，也不检查发行渠道。插件本身仍只兼容清单中记录的目标版本。
 
-文件组成：
+框架文件组成：
 
 - `SoD2SE.Loader.exe`：从自身目录及父目录寻找游戏根目录，直接创建游戏启动程序或主程序，等待实际游戏进程后加载插件。它是 Windows GUI bootstrap，正常启动不会弹出命令行窗口，独立启动时前台进程会立即返回，隐藏的后台 worker 继续等待游戏并加载插件。MO2 启动时保留原始 GUI 进程直到游戏结束，以便 MO2 跟踪运行状态。
 - `SoD2SE.Core.dll`：提供版本校验、进程会话、暂停/恢复、内存补丁、上下文校验和失败回滚。
-- `Plugins\UnlimitedFollowers.dll`：具体的无限随从插件，只声明两处补丁。
-- `Plugins\UnlimitedCommunity.dll`：玩家社区招募插件，包含 11 处补丁描述；保留 NPC 人数门槛和真实社区人数。
-- `Plugins\MeleeSpeed.dll` 与 `Plugins\MeleeSpeed\SoD2SE.MeleeSpeed.Native.dll`：四类近战攻速插件及原生动作/动画钩子。
-- `Plugins\Mcm.dll` 和 `Plugins\Mcm\SoD2SE.Mcm.Native.dll`：独立的游戏内配置菜单插件及 DX11 渲染组件，同时作为所有 Mod 界面（含升级提示）的宿主。
-- `Plugins\Roguelite.dll`：幸存者成长核心；数据保存在 `%LOCALAPPDATA%\StateOfDecay2\SoD2SE\Roguelite\progress.dat`，需要已验证的游戏事件能力才会在游戏内接收击杀。
+- 产品仓库各自构建并打包自己的插件与资源；workspace dispatcher 调用相同产品入口。
+- SoD2SE 的共享 Core、GameApi、shared native contracts 与 vendor 依赖由本仓库维护，不通过产品源码 junction 组合。
 
-`SoD2SE-CommunityMods-v0.6.0-preview.zip` 是历史开发归档，不是当前 MO2 安装包。当前由 `package_mo2.ps1` 自动发现 `mod.json` 中标为发布的 Mod，每个独立 ZIP 只放运行文件与 `meta.ini`，不包含 `Docs`；框架 ZIP 只放 Loader/Core/GameApi，不包含 `meta.ini`。操作见 [离线发布](Docs/RELEASE.zh-CN.md)。
+`SoD2SE-CommunityMods-v0.6.0-preview.zip` 是历史开发归档，保留原始字节。当前每个产品仓库独立生成安装包和 release；本仓库的框架包只包含框架运行文件。操作见 [离线发布](Docs/RELEASE.zh-CN.md)。
 
 托管插件 DLL 由加载器加载，并通过框架 API 修改游戏进程内存。MCM 另将自己的原生渲染组件加载进游戏进程，在游戏画面中绘制菜单。框架不会修改磁盘上的 EXE、PAK 或存档。
 
@@ -39,17 +36,17 @@ MCM 包声明版本 `0.6.3-preview` 已移除旧的 `F1` 设置覆盖层，也�
 
 无限随从和社区招募插件在 MCM 注册页面与本次加载状态，不再提供启用开关；启停通过 MO2 左栏管理，也没有未实现的随从人数或社区人数滑块。近战攻速配置保存在 `%LOCALAPPDATA%\StateOfDecay2\SoD2SE\mcm.ini`；也可通过环境变量 `SOD2SE_MCM_CONFIG` 指定文件。默认不同 MO2 配置档共用该文件。MCM 取消勾选后不加载菜单，不影响其他已启用插件的独立加载。
 
-MO2 独立包结构为 `Root\Plugins\Mcm.dll` 与 `Root\Plugins\Mcm\SoD2SE.Mcm.Native.dll`；支持插件需要能够把 `Root` 虚拟到游戏根目录。Loader/Core/GameApi ABI 仍为 0.6.0；本次 MCM 更新还需要替换兼容的 `SoD2SE.Core.dll`，不更新其他 Mod 包。使用 MO2 时不要同时把 MO2 管理的插件 DLL 复制到实体 `Plugins` 目录。MCM 不再提供语言选项，每次启动会跟随游戏配置或 Steam 中该游戏的实际语言，并自动选择中文或 English。详细能力、限制和开发接口见 `MCM.zh-CN.md`。
+MO2 独立包结构为 `Root\Plugins\Mcm.dll` 与 `Root\Plugins\Mcm\SoD2SE.Mcm.Native.dll`；支持插件需要能够把 `Root` 虚拟到游戏根目录。Loader/Core/GameApi ABI 仍为 0.6.0；本次 MCM 更新还需要替换兼容的 `SoD2SE.Core.dll`，不更新其他 Mod 包。使用 MO2 时不要同时把 MO2 管理的插件 DLL 复制到实体 `Plugins` 目录。MCM 不再提供语言选项，每次启动会跟随游戏配置或 Steam 中该游戏的实际语言，并自动选择中文或 English。详细能力、限制和开发接口见 `Docs/Products/MCM.zh-CN.md`。
 
-近战攻速插件四类倍率上限为 1000%（10 倍），动画速度和攻击动作使用同一倍率；配置范围和持久化行为见 `MELEE.zh-CN.md`。
+近战攻速插件四类倍率上限为 1000%（10 倍），动画速度和攻击动作使用同一倍率；配置范围和持久化行为见 `Docs/Products/MELEE.zh-CN.md`。
 
-幸存者成长原型的数据模型包括当前角色、等级、经验、待领取升级和八种强化；它现在由 ImGui 覆盖层绘制，尚未接入游戏原版的 Iggy/电影播放器 UI。`F2` 管成长预览和升级候选；`F1` 不再打开 MCM 设置菜单。击杀归属、稳定角色身份、属性、单人暂停和原版 UI 五项门控仍关闭，勾选 MCM 设置不会让玩法生效。**在原版角色/社区 UI 接通并完成验收前，请不要把此原型当作可玩成长 Mod 安装。**
+幸存者成长0.2.0-preview已实现十二项属性、技巧／超级奖励、两个主动槽、独立角色存档及公共输入服务。新版使用原版页面适配协议，不再注册旧覆盖层升级窗口；生产游戏适配器尚未实现，击杀归属、稳定身份、属性、死亡拦截和原版UI仍未接通。纯逻辑与模拟适配器测试不能替代游戏内验收。详见[实现与接入状态](Docs/ROGUELITE.zh-CN.md)。**当前不是可玩成长Mod。**
 
 ## 模块界面框架（0.6.0-preview）
 
 插件可以在游戏画面里拥有自己的玩法界面。插件声明内容，MCM 原生伴随库负责绘制和排版。每个插件最多注册 6 个界面，每个界面最多 24 行，全局合计 96 行；行类型有分区标题、正文、键值、进度条、列表项、按钮、提示和分隔线。默认快捷键 F2–F7；旧 MCM 菜单里的按键录制随 F1 设置覆盖层移除，尚未迁移到游戏原版设置页。
 
-这里需要说清楚边界：这不是游戏原生界面控件，也没有接入原版 Iggy 电影播放器的导航和输入流；它是 D3D11 绘制、模仿原版观感的覆盖层。协议升级为 MCM ABI 6，v5 的固定“成长”块换成通用界面块，因此旧版 `Mcm.dll` 会被拒绝加载，框架和插件包必须同版本更新。开发接口、线程约定和测试命令见 `UI.zh-CN.md`。
+这里需要说清楚边界：这不是游戏原生界面控件，也没有接入原版 Iggy 电影播放器的导航和输入流；它是 D3D11 绘制、模仿原版观感的覆盖层。协议升级为 MCM ABI 6，v5 的固定“成长”块换成通用界面块，因此旧版 `Mcm.dll` 会被拒绝加载，框架和插件包必须同版本更新。开发接口、线程约定和测试命令见 `Docs/Products/UI.zh-CN.md`。
 
 ## 固定版本逆向资料库
 
@@ -62,13 +59,13 @@ python .\Research\sync_research.py
 python .\Research\validate_research.py
 ```
 
-`sync_research.py` 会把统一补丁表导出为根目录的 `patch-manifest.json` 和 `community-patch-manifest.json`；`verify_research.py` 还会检查目标 SHA256、13 条补丁、210 个函数记录和 14 组结构体/IPC 字段是否一致。新游戏版本应新建独立的 Build 目录，不能覆盖 `16535856`。
+`sync_research.py` 会把统一补丁表导出为根目录的 `patch-manifest.json` 和 `community-patch-manifest.json`；`Automation/Check/verify_research.py` 还会检查目标 SHA256、13 条补丁、210 个函数记录和 14 组结构体/IPC 字段是否一致。新游戏版本应新建独立的 Build 目录，不能覆盖 `16535856`。
 
 ## Core 与 Game API
 
 `SoD2SE.Core.dll` 的运行时服务不承载版本专用 RVA、guard 或对象偏移：它提供统一 Hook Broker、标准事件总线、属性修改器堆栈、能力检测/降级、带所有权的暂停租约、事务式补丁和生命周期管理。`SoD2SE.GameApi.dll` 是 Update 38.2 的版本专用层，登记本版本 RVA、guard、补丁表和原生 Hook 元数据。加载器仍保留 SoD2 的进程名和根目录启动路径兼容逻辑；这部分属于启动壳，未混入 Core 的游戏内存服务。三个 gameplay Mod 通过能力 ID 和 Broker 请求服务，不再各自复制逆向地址；事件和配置只使用值类型与稳定 token，不长期保存 UObject 原始指针。近战策略在管理线程合成后以原子快照交给原生热路径。暂停能力未验证时，成长插件不会挂起线程或伪造暂停，会保留待领取升级并报告原因。
 
-同一事实只在一个文件里定义：进程名、可执行名、启动器和游戏数据目录名在 `FrameworkInfo`，MCM 快捷键默认值与接受范围在 `Core\McmKeys.cs`，原生录制范围在 `Native\McmProtocol.h` 的 `Shortcut*`，近战倍率语义（25–1000、100 为原速）在 `Native\MeleeProtocol.h`，游戏版本 RVA、guard 和对象偏移只在 `Research\StateOfDecay2\16535856`。`verify_sources.py`、`verify_protocol.py`、`verify_native.py` 会拒绝这些值被第二处写死或与镜像分叉，因此改默认值只需改一处并重跑 `verify_all.ps1`。
+同一事实只在一个文件里定义：进程名、可执行名、启动器和游戏数据目录名在 `FrameworkInfo`，MCM 快捷键默认值与接受范围在 `Core\UI\McmKeys.cs`，原生录制范围在 `Native\src\Mcm\McmProtocol.h` 的 `Shortcut*`，近战倍率语义（25–1000、100 为原速）在 `Native\src\Melee\MeleeProtocol.h`，游戏版本 RVA、guard 和对象偏移只在 `Research\StateOfDecay2\16535856`。`Automation/Check/verify_sources.py`、`Automation/Check/verify_protocol.py`、`Automation/Check/verify_native.py` 会拒绝这些值被第二处写死或与镜像分叉，因此改默认值只需改一处并重跑 `Automation/Check/verify_all.ps1`。
 
 ## 使用
 
@@ -145,12 +142,12 @@ public sealed class MyPlugin : ISoD2Plugin
 在本目录执行：
 
 ```powershell
-.\build.ps1
+.\Automation/Build/build.ps1
 ```
 
 默认输出到 `compiled`。需要 Windows .NET Framework 4.x C# 编译器、CMake 3.20+、Visual Studio 2022 C++ 工具链及 Windows SDK，固定生成 x64 文件。ImGui 和 MinHook 源码及许可证随包提供，构建不需要下载依赖。
 
-压缩包中的源码位于 `source` 子目录，独立重编译时运行 `.\source\build.ps1`；一键验证脚本位于压缩包根目录。
+压缩包中的源码位于 `source` 子目录，独立重编译时运行 `.\source\Automation/Build/build.ps1`；一键验证脚本位于压缩包根目录。
 
 运行框架自测：
 
@@ -163,19 +160,19 @@ public sealed class MyPlugin : ISoD2Plugin
 如果需要检查源码中的补丁表没有和清单漂移，可以运行：
 
 ```powershell
-python .\verify_sources.py
+python .\Automation/Check/verify_sources.py
 ```
 
 检查发布目录是否严格匹配文件哈希清单：
 
 ```powershell
-python .\verify_release.py
+python .\Automation/Check/verify_release.py
 ```
 
 开发环境可以运行一键全量回归（会重新编译、打包、解包并检查源码、游戏 EXE、发布清单和包内自测）：
 
 ```powershell
-.\verify_all.ps1
+.\Automation/Check/verify_all.ps1
 ```
 
 脚本默认使用开发机上的目标 EXE；如果游戏安装在其他位置，可传入 `-GameExePath`。这只是验证脚本读取文件，不会启动 Steam 或修改游戏文件。
@@ -191,3 +188,5 @@ python .\verify_release.py
 ## 限制
 
 这是固定补丁版本、单机优先的最小框架。启动器的路径解析和进程创建不绑定游戏版本，但插件的 RVA、原始字节和上下文只针对 Update 38.2 / Build 16535856。尚未实测多人模式、所有任务、车辆、角色切换和存档重载行为。无限随从只解除数量判断，仍保留重复角色、任务占用、关系和其他原版条件。社区招募插件不等于任意人数都能稳定运行，且没有改写建造者遗产等资产中的独立人数剧情条件。
+
+内部实体目录及新命令见 [INTERNAL_LAYOUT.md](Docs/INTERNAL_LAYOUT.md)。默认构建和原生缓存已统一到工作区 `.work/SoD2SE`；旧 compiled 目录已分类归档。

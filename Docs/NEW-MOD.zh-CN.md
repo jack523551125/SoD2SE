@@ -1,25 +1,11 @@
-# 新增 Mod 项目
+# 新增独立 Mod 产品
 
-DLL Mod 的唯一可编辑源码建在 `Plugins/<Id>`；资源 Mod 建在 `Mods/<Id>`。`Id` 使用英文字母开头的字母数字名称，与目录名完全一致。每个目录必须有 `mod.json`，声明 `schema: 1`、`id`、中英文预设 `name`、`version`、`publish`、`requires` 和 `files`。文件映射的 `input` 可使用 `build:`（新构建输出）、`source:`（源码树）或 `external:`（明确传入的固定版本生成资产）；`target` 是 MO2 虚拟安装路径，以 `Root/` 或 `Saved/` 开头。
+每个 Mod 是单独的 Git 仓库，拥有自己的 README/DESIGN/AGENTS、`project.toml`、`src/mod.json`、build/check/test/package 入口和 release 工作流。workspace 只在 `workspace.toml` 登记项目并通过 submodule 固定产品 revision；不要把新产品源码放进 SoD2SE `Plugins/` 或 `Mods/`，也不要添加源码 junction。
 
-例如托管插件：
+托管产品通常维护 `src/`、`tests/managed/`；含原生组件的产品还维护 `native/src/`、`native/tests/` 和产品自己的 `native/CMakeLists.txt`。资源型产品维护它自己的资源相对路径与 manifest。`project.toml` 的 `source.owner` 和 `source.version_file` 都相对于产品仓库根目录。
 
-```json
-{
-  "schema": 1,
-  "id": "Example",
-  "name": "示例 - Example",
-  "version": "0.1.0-preview",
-  "publish": false,
-  "requires": ["SoD2SE Framework"],
-  "files": [
-    {"input": "build:Plugins/Example.dll", "target": "Root/Plugins/Example.dll"}
-  ]
-}
-```
+产品 `src/mod.json` 声明 `schema`、`id`、中英文名称、原有 `version`、`publish`、依赖和文件映射。`input` 可使用 `build:`、`source:` 或显式传入的 `external:`；`target` 是 MO2 虚拟安装路径，以 `Root/` 或 `Saved/` 开头。保持当前版本和安装路径不变，原版输入缺失时报告 `SKIPPED`，不要伪造生成资产。
 
-开发期间保持 `publish: false`，使批量打包跳过未验收原型；单独传 `-Ids Example` 仍可生成测试包。`build.ps1` 自动编译包含 C# 源码的插件目录，并从对应 `mod.json` 生成程序集版本。需要共用游戏接口时修改 `Core`/`GameApi` 的公开契约、测试与研究证据；原生组件需明确加入 `Native/build_native.ps1`，并在 `files` 中声明产物。不要从 MO2 已安装目录复制 DLL。
+需要共享运行时代码时依赖固定 revision 的 SoD2SE source checkout，使用产品 `dependencies.lock.json` 检查 revision。Core、GameApi、现有共享 native runtime 与 vendor 仍归 SoD2SE；Packages 保留契约和使用说明，不复制 runtime 实现。产品 CMake 调用 SoD2SE 提供的 native helper，但产品专属 target/source/test 留在产品仓库。
 
-源码树和目录导航的关系见工作区 [README.zh-CN.md](../../../README.zh-CN.md)。如果需要在根工作区 `Projects` 下增加可见入口，新增项目 README，再把 `Source` 的相对映射写进 `workspace-links.json`，运行 `Initialize-Workspace.ps1` 创建联接点。此入口是导航，源码依然由 `SoD2SE` 仓库管理。
-
-运行 `build.ps1`、对应单元测试、`verify_sources.py`、`package_mo2.ps1 -ValidateOnly`，最后按 [发布说明](RELEASE.zh-CN.md)用全新输出目录打包。研究结论应写入 `Research/StateOfDecay2/16535856` 并注明固定版本证据；不要把原始游戏资产纳入 Git 或安装包。
+从 workspace root 运行 `Automation/dev.ps1 build/check/test/package <ID>`，或从产品 checkout 调用该仓库自己的脚本。根 Automation 仅做协调；产品脚本不得依赖 `Projects/SoD2SE/Plugins/...` 的旧路径。原始游戏文件、dump、解包资源和第三方 checkout 不进入产品仓库或安装包。

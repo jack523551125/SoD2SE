@@ -1,37 +1,27 @@
-# 开发与资料导航
+# SoD2SE 开发与资料导航
 
 ## 维护入口
 
-- [项目说明](../README.zh-CN.md)：框架、安装和现有插件。
-- [研究状态与未完成项](RESEARCH-STATUS.zh-CN.md)：证据边界和后续研究。
-- [维护与验证](MAINTENANCE.zh-CN.md)：静态检查、产物管理与归档恢复。
-- [新增 Mod](NEW-MOD.zh-CN.md)：项目目录、声明文件和构建接入。
-- [离线发布](RELEASE.zh-CN.md)：统一版本、打包输入与 MO2 包结构。
-- [固定版本详细研究](../Research/StateOfDecay2/16535856/README.zh-CN.md)。
-- [测试说明](../Tests/README.md)。
-- [MCM](../MCM.zh-CN.md)、[界面协议](../UI.zh-CN.md)、[近战攻速](../MELEE.zh-CN.md)、[社区招募](../COMMUNITY.zh-CN.md)。
-- [原版设置菜单接入研究](NATIVE-SETTINGS-UI.zh-CN.md)：固定版本资源链、离线文字实验与新增控件的阻塞条件。
+- [SoD2SE 说明](../README.zh-CN.md)：框架、Core、GameApi 和共享 native runtime。
+- [仓库内部布局](INTERNAL_LAYOUT.md)：本仓库源码边界和独立命令。
+- [维护与验证](MAINTENANCE.zh-CN.md)：离线检查、产物和恢复边界。
+- [新增 Mod](NEW-MOD.zh-CN.md)：产品入口和现有兼容接口。
+- [框架离线打包](RELEASE.zh-CN.md)：框架包与独立产品包的边界。
+- [测试说明](../Tests/README.md)：本仓库测试范围。
+- [共享界面协议](Products/UI.zh-CN.md)：SoD2SE Core 的界面契约。
 
-## 代码与数据职责
+## 独立产品与研究仓库
 
-| 目录/文件 | 职责 |
-|---|---|
-| Core | 通用框架、会话、共享服务与插件协议 |
-| GameApi | 固定版本游戏接口与能力门控 |
-| Loader | 直接启动与插件加载 |
-| Plugins | 无限随从、社区招募、近战攻速、MCM、幸存者成长 |
-| Native | 原生模块及其依赖 |
-| Research/StateOfDecay2/16535856 | 此版本的签名、结构、证据报告和能力状态 |
-| Research/tools | 离线报告生成器及其单元测试 |
-| Research/sync_research.py | 从唯一补丁表同步派生清单 |
-| Research/validate_research.py | 研究数据结构和报告一致性校验 |
-| Tests | 框架、插件与协议测试 |
-| compiled | 默认编译输出，可重新生成，不是源代码 |
+产品源码、测试、manifest 和 release 输入位于各自仓库：
 
-## 旧资料与外部依赖
+- [MCM](../../MCM/README.zh-CN.md)
+- [MeleeSpeed](../../MeleeSpeed/README.zh-CN.md)
+- [UnlimitedCommunity](../../UnlimitedCommunity/README.zh-CN.md)
+- [UnlimitedFollowers](../../UnlimitedFollowers/README.zh-CN.md)
+- [NativeModSettingsEntry](../../NativeModSettingsEntry/README.zh-CN.md)
+- [SkipStartupIntro](../../SkipStartupIntro/README.zh-CN.md)
+- [Roguelite prototype](../../../Labs/Roguelite/README.zh-CN.md)
+- [ReverseEngineering 研究状态](../../../ReverseEngineering/Topics/RESEARCH-STATUS.zh-CN.md)
+- [原版设置菜单研究](../../../ReverseEngineering/Topics/NATIVE-SETTINGS-UI.zh-CN.md)
 
-早期的 assets、各类 UI/配置/近战/招募分析、re-extract、recruitment-tests 与 native-mod 已归入 `E:\CODE\SoD2_MOD_Dev\ReverseEngineering\Legacy\Work`；它们尚未逐文件证明完全重复，保留作历史参考，不作为更新后的权威定义。disasm-libs、native-tools、SoD2-Editor、sod2-tools、u4pak 同处该目录，仍是独立工具或第三方参考项目，不将其授权归属混入自研源码。旧 work 下的同名目录是兼容目录联接点。
-
-完整离线资产导出位于 `E:\CODE\SoD2_MOD_Dev\ReverseEngineering\Inputs\16535856\SoD2StaticFullUassetExportsFinal`，和源码同属总工作目录，但不在源码 Git 仓库内。本项目源码不能单独替代所有报告的原始输入；每个生成器的参数和报告中的 source/hash 决定复现要求。游戏文件与大规模资产导出不应加入对外 Mod 包。
-
-E 盘离线资料已经分类整理到 `E:\CODE\SoD2_MOD_Dev\ReverseEngineering`，目录说明与 `move-manifest-2026-09-24.json` 位于该目录根部。旧路径 `E:\SoD2Research` 已移走，其目录联接点归档在总工作目录的 `LegacyLinks/SoD2Research`。历史 JSON 中的 export_root_name 是保持不变的目录名，不是失效的绝对路径。
+本仓库不跟踪产品内部源码，也不依赖源码 junction。Core、GameApi 和共享 native runtime 由 SoD2SE 拥有；ReverseEngineering 只收录经审查的自著工具、测试、文档和证据。游戏原件、dump、解包资源、私人数据、第三方 checkout 和未审查生成输出留在受保护的本地数据中。

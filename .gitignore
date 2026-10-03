@@ -25,3 +25,8 @@
 *.iggy
 *.sav
 *.tmp
+
+/.work/
+
+# Protected fixed-build inputs remain local and outside repository history.
+/Research/StateOfDecay2/

@@ -1,0 +1,17 @@
+# SoD2SE design boundary
+
+Product: SoD2SE. Current status: preview. This repository owns Core, GameApi, shared native runtime, and framework automation. The machine-readable entry is project.toml; version authority is `Core/SoD2SE.Core.cs`.
+
+This is an independent Git repository. Its build/release scripts must work independently of workspace navigation. Do not assume another repository's Core or GameApi snapshot can replace its files.
+
+Invariants: no game-file mutation; preserve version guards, ABI, existing package paths and save behavior. Gameplay changes are outside the directory migration. Production access uses GameApi; evidence remains research.
+
+Validation: use the root Automation/dev.ps1 commands. Offline tests do not certify gamepad coverage, localization completeness, save compatibility or game integration. Existing implementation is C#/C++ or Python; Rust and C ABI adoption is a separate task.
+
+## Responsibilities and interactions
+
+Core owns lifecycle, configuration, events and runtime services; GameApi owns semantic fixed-build capabilities; shared Native code and pinned vendor dependencies are consumed by product-owned native builds. MCM, MeleeSpeed, UnlimitedCommunity, UnlimitedFollowers, NativeModSettingsEntry, SkipStartupIntro and Roguelite are separate repositories. ReverseEngineering owns reviewed research evidence and tools, not a runtime API. This repository does not rely on source junctions.
+
+## Current physical source layout
+
+Core uses Runtime/Input/UI/Interop/Growth directories within the same assembly. Native/src and Native/tests separate implementation and tests by Growth/Mcm/Melee/Shared; vendor remains isolated. Automation owns actual Build/Check/Package/Deploy/Test scripts. Research/tools and Research/tests use semantic topic packages. Tests groups managed fixtures by consumer. See [internal layout](Docs/INTERNAL_LAYOUT.md) for commands, source ownership and compatibility details.
