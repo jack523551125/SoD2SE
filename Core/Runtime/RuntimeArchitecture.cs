@@ -738,6 +738,8 @@ namespace SoD2SE
         public IGameEventBus Events { get; private set; }
         public PropertyModifierStack Properties { get; private set; }
         public IGamePauseService Pause { get; private set; }
+        // Shared by all plugins when the session has a verified input source.
+        public InputActionRegistry InputActions { get; private set; }
 
         internal GameRuntime(IGameSession session, IGameVersionApi api, IHookBroker hooks, IGameEventBus events,
             PropertyModifierStack properties, IGamePauseService pause)
@@ -748,6 +750,8 @@ namespace SoD2SE
             Events = events;
             Properties = properties;
             Pause = pause ?? new UnavailablePauseService("游戏会话没有提供暂停服务。");
+            var input = session as IGameInputSession;
+            InputActions = input == null ? null : input.InputActions;
         }
     }
 

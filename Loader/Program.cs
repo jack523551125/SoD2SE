@@ -244,7 +244,7 @@ namespace SoD2SE.Loader
                         WriteStatus("MCM 已停用 " + (discoveredPlugins.Count - plugins.Count) + " 个插件。");
                     using (var game = StartOrAttachGame(attachOnly, explicitGameExe,
                         HasArg(args, "--direct-main") || mo2, GetGameLaunchArguments(args), mo2))
-                        RunPlugins(game, plugins);
+                        RunPlugins(game, plugins, HasArg(args, "--growth-native-observe"));
                     WriteStatus("框架已退出。");
                     return 0;
                 }
@@ -349,7 +349,7 @@ namespace SoD2SE.Loader
             finally { if (game != null) game.Dispose(); }
         }
 
-        static void RunPlugins(Process game, IList<ISoD2Plugin> plugins)
+        static void RunPlugins(Process game, IList<ISoD2Plugin> plugins, bool observeGrowthNative)
         {
             WriteStatus("已找到游戏进程，正在加载固定版本框架 " + FrameworkInfo.Version + "...");
             var gameApi = StateOfDecay2GameApi.Create();
@@ -384,7 +384,19 @@ namespace SoD2SE.Loader
                         }
                     }
                     WriteStatus("框架已运行。MCM 界面由独立插件提供；游戏退出后内存修改消失。");
-                    while (!game.HasExited && !StopRequested.WaitOne(500)) { }
+                    GrowthNativeConnection growth = null;
+                    if (observeGrowthNative) {
+                        growth = session.StartGrowthNativeObservation(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Plugins", "Roguelite", "SoD2SE.Growth.Native.dll"));
+                        WriteStatus("原生成长观察已启动；仅采集战役和角色快照，玩法仍受能力门控保护。 / Native growth observation started; gameplay remains gated.");
+                    }
+                    string previous = null;
+                    while (!game.HasExited && !StopRequested.WaitOne(500)) {
+                        if (growth == null) continue;
+                        var snapshot = growth.Latest;
+                        string state = growth.Failure != null ? "连接失败 / Connection failed: " + growth.Failure.Message : snapshot == null ? "AwaitingFrame" :
+                            snapshot.State + " / actors=" + snapshot.Actors.Count + " / controlled=" + snapshot.ControlledActor + " / error=" + snapshot.Error;
+                        if (state != previous) { WriteStatus("原生成长观察 / Native growth observation: " + state); previous = state; }
+                    }
                 }
                 finally
                 {
@@ -577,6 +589,7 @@ namespace SoD2SE.Loader
             WriteStatus("--direct-main：直接启动 Win64 主程序，不使用游戏根目录引导程序");
             WriteStatus("--mo2：由 MO2 启动、直接创建主程序并检查 USVFS；不允许接管外部游戏进程");
             WriteStatus("--attach：只附加已经运行的游戏，不启动游戏");
+            WriteStatus("--growth-native-observe：启动原生成长快照观察；不启用成长玩法 / Observe native growth sources; gameplay stays gated");
             WriteStatus("--console：为诊断模式创建控制台窗口");
             WriteStatus("--diagnose-launch：显示并记录启动路径和环境，不启动游戏");
             WriteStatus("--self-test：执行框架和插件发现自测，不接触游戏");

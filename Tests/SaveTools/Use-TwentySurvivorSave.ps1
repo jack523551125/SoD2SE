@@ -3,16 +3,19 @@ param(
     [ValidateSet('Apply','Restore','Check')][string]$Action = 'Check',
     [string]$SaveDirectory = "$env:LOCALAPPDATA\StateOfDecay2\Saved\Steam\76561199522486171\2535459487534871\Release\v2"
 )
+$projectRoot = (Split-Path -Parent (Split-Path -Parent $PSScriptRoot))
+$testRoot = Join-Path $projectRoot 'Tests'
+
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 $target = (Resolve-Path -LiteralPath $SaveDirectory).ProviderPath
 $names = @('SaveGame_Vanilla_0.sav','SaveUser.sav')
-$statePath = Join-Path $PSScriptRoot 'active-test.json'
+$statePath = Join-Path $testRoot 'active-test.json'
 if (Get-Process -Name 'StateOfDecay2','StateOfDecay2-Win64-Shipping','SoD2SE.Loader' -ErrorAction SilentlyContinue) {
     throw 'Exit the game and SoD2SE Loader before switching saves.'
 }
 foreach ($name in $names) {
-    foreach ($dir in @($target,(Join-Path $PSScriptRoot 'Original'),(Join-Path $PSScriptRoot 'Test20'))) {
+    foreach ($dir in @($target,(Join-Path $testRoot 'Original'),(Join-Path $testRoot 'Test20'))) {
         if (!(Test-Path -LiteralPath (Join-Path $dir $name) -PathType Leaf)) { throw "Missing save: $dir\$name" }
     }
 }
@@ -20,11 +23,11 @@ if ($Action -eq 'Check') { Write-Output "Ready. Community slot 0 and SaveUser wi
 if ($Action -eq 'Apply') {
     if (Test-Path -LiteralPath $statePath) { throw 'A test session is already active. Restore it first.' }
     foreach ($name in $names) {
-        if ((Get-FileHash -LiteralPath (Join-Path $target $name)).Hash -ne (Get-FileHash -LiteralPath (Join-Path $PSScriptRoot "Original\$name")).Hash) {
+        if ((Get-FileHash -LiteralPath (Join-Path $target $name)).Hash -ne (Get-FileHash -LiteralPath (Join-Path $testRoot "Original\$name")).Hash) {
             throw 'Your live save has changed since the fixture was made. Nothing was overwritten. Regenerate the fixture from the current save.'
         }
     }
-    $source = Join-Path $PSScriptRoot 'Test20'
+    $source = Join-Path $testRoot 'Test20'
 } else {
     if (!(Test-Path -LiteralPath $statePath)) { throw 'No active test backup was found.' }
     $state = Get-Content -LiteralPath $statePath -Raw | ConvertFrom-Json
@@ -34,7 +37,7 @@ if ($Action -eq 'Apply') {
         if ((Get-FileHash -LiteralPath (Join-Path $source $name)).Hash -ne $state.hashes.$name) { throw 'Backup integrity check failed.' }
     }
 }
-$backup = Join-Path $PSScriptRoot ('Backups\' + $Action + '-' + [DateTime]::Now.ToString('yyyyMMdd-HHmmss') + '-' + [Guid]::NewGuid().ToString('N'))
+$backup = Join-Path $testRoot ('Backups\' + $Action + '-' + [DateTime]::Now.ToString('yyyyMMdd-HHmmss') + '-' + [Guid]::NewGuid().ToString('N'))
 [IO.Directory]::CreateDirectory($backup) | Out-Null
 $hashes = @{}
 foreach ($name in $names) {

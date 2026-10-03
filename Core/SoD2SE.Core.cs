@@ -274,6 +274,8 @@ namespace SoD2SE
         IntPtr processHandle;
         readonly Dictionary<string, IList<PatchSpec>> active = new Dictionary<string, IList<PatchSpec>>(StringComparer.OrdinalIgnoreCase);
         readonly GameRuntime runtime;
+        GrowthNativeConnection growthNative;
+        bool growthNativeAttempted;
         bool disposed;
 
         public GameSession(Process process) : this(process, new GenericGameApi()) { }
@@ -318,6 +320,20 @@ namespace SoD2SE
         public IntPtr ModuleBase { get { return moduleBase; } }
         public string ExePath { get { return exePath; } }
         public GameRuntime Runtime { get { return runtime; } }
+
+        // Explicit bootstrap observation, not the gameplay adapter. Lifecycle
+        // is owned by this session so closing the Loader withdraws its lease.
+        public GrowthNativeConnection StartGrowthNativeObservation(string nativeLibrary)
+        {
+            lock (sync) {
+                EnsureUsable();
+                if (growthNative != null) return growthNative;
+                if (growthNativeAttempted) throw new InvalidOperationException("原生成长模块本次启动已经尝试过，请重新启动游戏。 / Native growth startup was already attempted; restart the game.");
+                growthNativeAttempted = true;
+                growthNative = GrowthNativeConnection.Start(process, nativeLibrary);
+                return growthNative;
+            }
+        }
 
         public int Apply(string pluginId, string expectedSha256, IList<PatchSpec> patches)
         {
@@ -465,6 +481,11 @@ namespace SoD2SE
             lock (sync)
             {
                 if (disposed) return;
+                if (growthNative != null) {
+                    try { growthNative.Dispose(); }
+                    catch (Exception error) { Trace.WriteLine("关闭原生成长连接失败：" + error.Message); }
+                    finally { growthNative = null; }
+                }
                 foreach (var item in active.ToArray())
                 {
                     try { Restore(item.Key, item.Value); }
