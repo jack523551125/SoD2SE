@@ -7,17 +7,13 @@ from pathlib import Path
 from unittest.mock import patch
 from zipfile import ZipFile
 
-import package_mo2
+from Automation.Package import package_mo2
 
 
 class CatalogTests(unittest.TestCase):
-    def test_real_catalog_covers_each_source_folder(self):
+    def test_products_are_no_longer_discovered_from_framework_repository(self):
         mods = package_mo2.discover_mods()
-        self.assertEqual({mod.id for mod in mods}, {
-            'Mcm', 'MeleeSpeed', 'Roguelite', 'UnlimitedCommunity',
-            'UnlimitedFollowers', 'NativeModSettingsEntry', 'SkipStartupIntro',
-        })
-        self.assertFalse(next(mod for mod in mods if mod.id == 'Roguelite').publish)
+        self.assertEqual(mods, [])
         self.assertEqual(package_mo2.framework_version(), '0.6.0-preview')
 
     def test_rejects_traversal_and_wrong_manifest_id(self):
