@@ -9,8 +9,10 @@ _Static_assert(offsetof(sod2se_host,owner)==16,"Owner ABI");
 static int registered;
 static int32_t request(void *context,uint64_t owner,sod2se_utf8 operation,sod2se_utf8 input,uint8_t *output,uint32_t capacity,uint32_t *used) {
     (void)context; (void)input;
-    if(owner!=7 || capacity<2 || operation.len!=17 || memcmp(operation.data,"settings.register",17)) return SOD2SE_INVALID;
-    memcpy(output,"{}",2); *used=2; registered++; return 0;
+    if(owner!=7 || capacity<2) return SOD2SE_INVALID;
+    if(operation.len==17 && !memcmp(operation.data,"settings.register",17)) registered++;
+    else if(operation.len!=20 || memcmp(operation.data,"translation.register",20)) return SOD2SE_INVALID;
+    memcpy(output,"{}",2); *used=2; return 0;
 }
 int main(int argc,char **argv) {
     if(argc!=3) return 1;

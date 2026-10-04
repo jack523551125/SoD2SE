@@ -28,7 +28,7 @@ fn no_links(path: &Path) -> Result<(), i32> {
     }
     Ok(())
 }
-fn identity(file: &fs::File) -> Result<[u64; 2], i32> {
+pub(crate) fn identity(file: &fs::File) -> Result<[u64; 2], i32> {
     #[cfg(windows)]
     {
         use std::os::windows::io::AsRawHandle;

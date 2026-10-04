@@ -13,6 +13,7 @@ use std::{
 };
 
 pub struct Services {
+    state: sod2se_services::state::Store,
     pub settings: Registry,
     pub ui: UiRegistry,
     pub owners: BTreeMap<u64, String>,
@@ -31,6 +32,7 @@ pub struct Services {
 impl Services {
     pub fn open(path: PathBuf, game_verified: bool) -> Result<Self, i32> {
         Ok(Self {
+            state: sod2se_services::state::Store::open(&path.join("state"))?,
             settings: Registry::open(path.join("settings.json"))?,
             ui: UiRegistry::default(),
             owners: BTreeMap::new(),
@@ -51,6 +53,24 @@ impl Services {
         let module = self.owners.get(&owner).ok_or(INVALID)?.clone();
         let string = |name: &str| input[name].as_str().ok_or(INVALID);
         match operation {
+            "state.read" | "state.write" => {
+                if string("scope")? != "profile" {
+                    return Err(UNSUPPORTED);
+                }
+                let schema =
+                    u32::try_from(input["schema"].as_u64().ok_or(INVALID)?).map_err(|_| INVALID)?;
+                if operation == "state.read" {
+                    serde_json::to_value(self.state.read(&module, schema)?).map_err(|_| INTERNAL)
+                } else {
+                    let revision = self.state.write(
+                        &module,
+                        schema,
+                        input["revision"].as_u64().ok_or(INVALID)?,
+                        input.get("value").ok_or(INVALID)?.clone(),
+                    )?;
+                    Ok(json!({"revision":revision}))
+                }
+            }
             "events.subscribe" => {
                 let handle = self.events.subscribe(owner, string("prefix")?.into())?;
                 self.subscriptions.insert(handle, owner);
@@ -96,11 +116,16 @@ impl Services {
             "translation.locale" => Ok(json!(self.catalog.locale)),
             "capabilities" => {
                 #[cfg(windows)]
+                let (followers_active, followers_poisoned) =
+                    (self.followers.active(), self.followers.poisoned());
+                #[cfg(not(windows))]
+                let (followers_active, followers_poisoned) = (false, false);
+                #[cfg(windows)]
                 let ui_ready = sod2se_game_api::native_ui::ready();
                 #[cfg(not(windows))]
                 let ui_ready = false;
                 Ok(
-                    json!({"game_build":sod2se_game_api::GAME_BUILD,"followers":self.game_verified,"native_settings":ui_ready,"live_acceptance":"NOT_RUN"}),
+                    json!({"game_build":sod2se_game_api::GAME_BUILD,"followers":self.game_verified && !followers_poisoned,"followers_active":followers_active,"followers_poisoned":followers_poisoned,"native_settings":ui_ready,"live_acceptance":"NOT_RUN"}),
                 )
             }
             "settings.register" => {
@@ -156,7 +181,11 @@ impl Services {
             }
             "ui.actions" => Ok(json!(self.ui.drain(owner, string("id")?)?)),
             "ui.complete" => {
-                if !self.frontends.contains(&owner) {
+                if !self
+                    .native_session
+                    .pending_extension()
+                    .is_some_and(|id| self.ui.owns(owner, id))
+                {
                     return Err(INVALID);
                 }
                 self.native_session.complete(

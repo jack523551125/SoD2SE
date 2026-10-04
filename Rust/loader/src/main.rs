@@ -73,11 +73,6 @@ fn run() -> Result<(), String> {
         return Ok(());
     }
     let options = parse(std::env::args().skip(1))?;
-    #[cfg(windows)]
-    if !options.diagnose {
-        windows::recover_resources(&options)
-            .map_err(|c| format!("OVERLAY_RECOVERY_REFUSED: {c}"))?;
-    }
     let exe = resolve(&options).map_err(|e| {
         format!(
             "GAME_REFUSED: {e}; required build {}",

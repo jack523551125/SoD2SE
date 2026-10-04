@@ -8,8 +8,7 @@ use windows_sys::Win32::{
 };
 
 fn remote_module(pid: u32, name: &Path) -> Result<usize, i32> {
-    let snapshot =
-        Handle(unsafe { CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, pid) });
+    let snapshot = module_snapshot(pid)?;
     if snapshot.0 == INVALID_HANDLE_VALUE {
         return Err(INTERNAL);
     }
@@ -32,6 +31,20 @@ fn remote_module(pid: u32, name: &Path) -> Result<usize, i32> {
         present = unsafe { Module32NextW(snapshot.0, &mut entry) } != 0;
     }
     Err(INTERNAL)
+}
+fn module_snapshot(pid: u32) -> Result<Handle, i32> {
+    for _ in 0..100 {
+        let handle =
+            unsafe { CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, pid) };
+        if handle != INVALID_HANDLE_VALUE {
+            return Ok(Handle(handle));
+        }
+        if unsafe { GetLastError() } != ERROR_BAD_LENGTH {
+            return Err(INTERNAL);
+        }
+        std::thread::sleep(std::time::Duration::from_millis(20));
+    }
+    Err(sod2se_abi::BUSY)
 }
 fn invoke(process: HANDLE, function: usize, argument: *const c_void) -> Result<u32, i32> {
     let routine: unsafe extern "system" fn(*mut c_void) -> u32 =
@@ -160,6 +173,8 @@ pub(super) fn launch(exe: &Path, options: &Options) -> Result<(), i32> {
     if instance.0.is_null() || unsafe { GetLastError() } == ERROR_ALREADY_EXISTS {
         return Err(sod2se_abi::BUSY);
     }
+    // Never recover an overlay while another loader is using it.
+    recover_resources(options)?;
     let dir = std::env::current_exe()
         .map_err(|_| INTERNAL)?
         .parent()
@@ -181,9 +196,23 @@ pub(super) fn launch(exe: &Path, options: &Options) -> Result<(), i32> {
     )
     .map_err(|_| INVALID)?;
     manifest.verify(&dir)?;
+    let info: serde_json::Value = serde_json::from_slice(
+        &std::fs::read(dir.join("SoD2SE/build-info.json")).map_err(|_| INTERNAL)?,
+    )
+    .map_err(|_| INVALID)?;
+    let revision = info["revision"].as_str().ok_or(INVALID)?;
+    if info["version"].as_str() != Some(env!("CARGO_PKG_VERSION")) {
+        return Err(sod2se_abi::UNSUPPORTED);
+    }
     let (target, ownership) = overlay_paths(&options.profile)?;
     let mut mounted = false;
     let plugins = sod2se_services::plugin::discover(&dir.join("Plugins"))?;
+    if plugins
+        .iter()
+        .any(|(_, m)| m.framework_revision != revision)
+    {
+        return Err(sod2se_abi::UNSUPPORTED);
+    }
     let ui_required = plugins.iter().any(|(_, m)| {
         m.capabilities
             .iter()
@@ -235,9 +264,7 @@ pub(super) fn launch(exe: &Path, options: &Options) -> Result<(), i32> {
     // MO2 launches this exact child with inherited USVFS; never attach or search unrelated games.
     let result = (|| -> Result<(), i32> {
         if options.mo2 {
-            let snapshot = Handle(unsafe {
-                CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, child.id())
-            });
+            let snapshot = module_snapshot(child.id())?;
             if snapshot.0 == INVALID_HANDLE_VALUE {
                 return Err(INTERNAL);
             }

@@ -25,6 +25,7 @@ def release_gate(report, revision, version):
         raise ValueError('Release refused; missing acceptance: ' + ', '.join(missing))
 
 def main(argv=None):
+    import provenance
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--product-root', type=Path, required=True)
     parser.add_argument('--build-root', type=Path, required=True)
@@ -54,6 +55,7 @@ def main(argv=None):
         stage = Path(temporary)
         root = stage / 'Root'
         root.mkdir()
+        provenance.write(product, root/'SoD2SE/Licenses/Cargo' if framework else stage/'Licenses/Cargo')
         def copy(source, target):
             target = root / target
             target.parent.mkdir(parents=True, exist_ok=True)
@@ -66,6 +68,8 @@ def main(argv=None):
             copy(product / 'Rust/abi/include/sod2se.h', 'SoD2SE/SDK/sod2se.h')
             copy(product / 'Rust/locales/template.json', 'SoD2SE/Localization/template.json')
             copy(product / 'Native/vendor/minhook/LICENSE.txt', 'SoD2SE/Licenses/MinHook.txt')
+            copy(product / 'Automation/NativeTest.py', 'SoD2SE/Tools/NativeTest.py')
+            copy(product / 'Docs/NATIVE-TEST.zh-CN.md', 'SoD2SE/Docs/NativeTest.zh-CN.md')
             shutil.copyfile(product / 'Automation/Install-Rust.ps1', stage / 'Install.ps1')
             ui_status = 'SKIPPED'
             if args.native_settings_asset and args.native_ui_receipt:

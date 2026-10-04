@@ -23,6 +23,10 @@ pub struct Session {
     message: String,
 }
 impl Session {
+    pub fn pending_extension(&self) -> Option<&str> {
+        self.pending
+            .and_then(|(index, _)| self.options.get(index).map(|row| row.0.as_str()))
+    }
     /// Advance view revisions only when the republished model exactly matches
     /// the acknowledged snapshot. External edits and structural changes stay stale.
     pub fn refresh(&mut self, models: Vec<(String, Model)>) {

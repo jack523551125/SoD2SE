@@ -34,6 +34,12 @@ Use a specifically selected test community/save and MO2 profile after preserving
 
 Missing fixed inputs remain SKIPPED. No synthetic original asset, accepted save, game process or controller result is substituted.
 
+## Owner-directed test handoff
+
+The owner confirmed Xbox Bluetooth input and reserved live testing for themselves. Preparation/installation is authorized; the agent must leave the game stopped and provide an explicit launch entrypoint. NativeTest.py snapshots and verifies local saves, installs matched packages, switches MCM modes and checks ownership during rollback. Portable MO2 preparation uses a separate program copy/profile; shared test saves are backed up. Formal release eligibility and retiring compatibility repositories remain contingent on the owner's live results.
+
+Additional offline implementation includes profile-scoped persistent state (save scope is unsupported without verified identity), legacy transition/recovery, installation writer locking, module snapshot retries, exact plugin/framework dependency checks in both Loader and Runtime, cross-frontend UI completion ownership, and migration consent guards. Packages now carry locked Cargo source/checksum/license evidence. A clearly labelled optional SDK fixture provides configuration controls without gameplay changes.
+
 ## Additional execution, 2026-10-04
 
 - Reproduced the original settings component from installed build 16535856 through the research-owned parser/movie/container tools. Original asset SHA-256: `d8d320363be69ea9dfb39b5c20c8de5237c642841fe3ac86b00f8115050fe06e`. Generated component SHA-256: `5fa3cdc9e4a3f5aaeee1a7f8ddeae30a42f9bdc98c6f4971338373e4c47c81bd`. Static movie review, container roundtrip and independent CUE4Parse validation passed. Original bytes and generated asset remain protected local data; this is not live acceptance.

@@ -393,6 +393,9 @@ impl FollowerLease {
     pub fn active(&self) -> bool {
         self.owner.is_some()
     }
+    pub fn poisoned(&self) -> bool {
+        self.poisoned
+    }
     pub fn acquire(&mut self, owner: u64) -> Result<(), i32> {
         if owner == 0 || self.poisoned {
             return Err(INTERNAL);

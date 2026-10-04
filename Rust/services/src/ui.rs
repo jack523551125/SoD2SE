@@ -57,6 +57,11 @@ pub struct UiRegistry {
     sequence: u64,
 }
 impl UiRegistry {
+    pub fn owns(&self, owner: u64, id: &str) -> bool {
+        self.extensions
+            .get(id)
+            .is_some_and(|entry| entry.0 == owner)
+    }
     pub fn register(&mut self, owner: u64, extension: Extension) -> Result<(), i32> {
         if extension.target != "settings" {
             return Err(UNSUPPORTED);

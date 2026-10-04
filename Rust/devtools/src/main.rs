@@ -4,6 +4,44 @@ mod report;
 fn run() -> Result<(), String> {
     let mut args = std::env::args().skip(1);
     match args.next().as_deref() {
+        Some("verify-plugins") => {
+            let game:PathBuf=args.next().ok_or("verify-plugins requires the game root")?.into();
+            let package:sod2se_services::install::Manifest=serde_json::from_slice(&std::fs::read(game.join("framework.manifest.json")).map_err(|e|e.to_string())?).map_err(|e|e.to_string())?;
+            package.verify(&game).map_err(|c|format!("PACKAGE_REFUSED: {c}"))?;
+            let info:serde_json::Value=serde_json::from_slice(&std::fs::read(game.join("SoD2SE/build-info.json")).map_err(|e|e.to_string())?).map_err(|e|e.to_string())?;
+            let plugins=sod2se_services::plugin::discover(&game.join("Plugins")).map_err(|c|format!("PLUGIN_PREFLIGHT_REFUSED: {c}"))?;
+            if plugins.iter().any(|(_,manifest)|Some(manifest.framework_revision.as_str())!=info["revision"].as_str()) {return Err("PLUGIN_DEPENDENCY_REFUSED: framework revision mismatch".into());}
+            println!("PASS: {} plugin manifests, ABI, hashes and framework pins",plugins.len());Ok(())
+        },
+        Some("recover-overlay") => {
+            let profile=args.next().ok_or("recover-overlay requires a profile id")?;
+            if !sod2se_services::valid_id(&profile){return Err("Invalid profile id".into());}
+            ensure_stopped()?;
+            let local=PathBuf::from(std::env::var_os("LOCALAPPDATA").ok_or("LOCALAPPDATA unavailable")?);
+            sod2se_services::overlay::recover(
+                &local.join("StateOfDecay2/Saved/Cooked/WindowsNoEditor/StateOfDecay2/Content/Art/UI/settings.uasset"),
+                &local.join("StateOfDecay2/SoD2SE/Rust").join(profile).join("ui-overlay.json")
+            ).map_err(|c|format!("OVERLAY_RECOVERY_REFUSED: {c}; foreign resources preserved"))?;
+            println!("PASS: owned UI overlay recovered");Ok(())
+        },
+        Some("archive-legacy") | Some("restore-legacy") => {
+            let archive=std::env::args().nth(1).as_deref()==Some("archive-legacy");
+            let game:PathBuf=args.next().ok_or("An explicit game root is required")?.into();
+            ensure_stopped()?;
+            sod2se_game_api::verify_image(&game.join("StateOfDecay2/Binaries/Win64").join(sod2se_game_api::SHIPPING)).map_err(|c|format!("GAME_REFUSED: {c}"))?;
+            if archive {
+                let receipt:PathBuf=args.next().ok_or("archive-legacy requires a reviewed hash inventory")?.into();
+                let review=serde_json::from_slice(&std::fs::read(receipt).map_err(|e|e.to_string())?).map_err(|e|e.to_string())?;
+                sod2se_services::legacy::archive(&game,review)
+            } else { sod2se_services::legacy::restore(&game) }
+            .map_err(|c|format!("LEGACY_TRANSITION_REFUSED: {c}; restore only after native uninstall"))?;
+            println!("PASS: reviewed legacy transition processed");Ok(())
+        },
+        Some("recover-settings") => {
+            let path:PathBuf=args.next().ok_or("recover-settings requires an offline settings.json")?.into();
+            sod2se_services::settings::Registry::recover(&path).map_err(|c|format!("SETTINGS_RECOVERY_REFUSED: {c}"))?;
+            println!("PASS: last-good settings restored; damaged input preserved");Ok(())
+        },
         Some("report") => {
             let session: PathBuf = args.next().ok_or("report requires an explicit session.json")?.into();
             let destination: PathBuf = args.next().ok_or("report requires a fresh output JSON path")?.into();

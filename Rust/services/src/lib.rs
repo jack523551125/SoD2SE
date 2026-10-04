@@ -1,10 +1,12 @@
 pub mod diagnostics;
 pub mod events;
 pub mod install;
+pub mod legacy;
 pub mod native_settings;
 pub mod overlay;
 pub mod plugin;
 pub mod settings;
+pub mod state;
 pub mod translation;
 pub mod transport;
 pub mod ui;

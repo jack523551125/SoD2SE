@@ -83,7 +83,7 @@ fn contained(root: &Path, relative: &str) -> Result<std::path::PathBuf, i32> {
     }
     bounded_path(root, relative)
 }
-fn bounded_path(root: &Path, relative: &str) -> Result<std::path::PathBuf, i32> {
+pub(crate) fn bounded_path(root: &Path, relative: &str) -> Result<std::path::PathBuf, i32> {
     if !safe_relative(relative) {
         return Err(INVALID);
     }
@@ -141,6 +141,7 @@ struct Journal {
 pub fn install(package: &Path, destination: &Path) -> Result<(), i32> {
     let package = package.canonicalize().map_err(|_| INTERNAL)?;
     let root = destination.canonicalize().map_err(|_| INTERNAL)?;
+    let _lock = deployment_lock(&root)?;
     let mut after: Manifest = serde_json::from_slice(
         &std::fs::read(package.join("framework.manifest.json")).map_err(|_| INTERNAL)?,
     )
@@ -225,6 +226,7 @@ pub fn install(package: &Path, destination: &Path) -> Result<(), i32> {
 /// Explicit interrupted-install recovery. Rechecks every intended path before changing any file.
 pub fn recover(destination: &Path) -> Result<(), i32> {
     let root = destination.canonicalize().map_err(|_| INTERNAL)?;
+    let _lock = deployment_lock(&root)?;
     let pending = bounded_path(&root, "SoD2SE/install.pending.json")?;
     let journal: Journal = serde_json::from_slice(&std::fs::read(&pending).map_err(|_| INTERNAL)?)
         .map_err(|_| INVALID)?;
@@ -289,6 +291,7 @@ pub fn recover(destination: &Path) -> Result<(), i32> {
 }
 pub fn uninstall(destination: &Path) -> Result<(), i32> {
     let root = destination.canonicalize().map_err(|_| INTERNAL)?;
+    let _lock = deployment_lock(&root)?;
     let pending = bounded_path(&root, "SoD2SE/install.pending.json")?;
     if pending.exists() {
         return Err(sod2se_abi::BUSY);
@@ -332,4 +335,17 @@ pub fn uninstall(destination: &Path) -> Result<(), i32> {
     std::fs::remove_file(bounded_path(&root, "SoD2SE/install.json")?).map_err(|_| INTERNAL)?;
     std::fs::remove_file(pending).map_err(|_| INTERNAL)?;
     Ok(())
+}
+
+pub(crate) fn deployment_lock(root: &Path) -> Result<std::fs::File, i32> {
+    let path = bounded_path(root, "SoD2SE/deployment.lock")?;
+    std::fs::create_dir_all(path.parent().ok_or(INVALID)?).map_err(|_| INTERNAL)?;
+    let mut options = std::fs::OpenOptions::new();
+    options.read(true).write(true).create(true).truncate(false);
+    #[cfg(windows)]
+    {
+        use std::os::windows::fs::OpenOptionsExt;
+        options.share_mode(0);
+    }
+    options.open(path).map_err(|_| sod2se_abi::BUSY)
 }

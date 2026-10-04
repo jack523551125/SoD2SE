@@ -29,6 +29,7 @@ Host functions serialize service access and support plugin workers. Native game 
 | `settings.changes` | `{since}`; bounded change journal. Stale cursors require a fresh snapshot. Restart-scoped settings must be applied by consumers on the next session. |
 | `settings.schema` | `{module}`; returns the stored namespace schema. Registration can declare a supported schema (default 1). |
 | `settings.migrate` | `{revision,from_schema,to_schema,values}`; only the owning Mod may migrate its namespace to its declared schema. Values are validated and the old document backed up before atomic commit. Downgraded Mods are refused. |
+| `state.read` / `state.write` | Owning Mod namespace only. `{scope:"profile",schema}` reads a versioned document; writing adds `{revision,value}` and atomically commits with a last-good backup. Save scope returns unsupported until GameApi supplies a verified durable identity. |
 | `translation.register` | `{locale:{key:text}}`; English fallback required, owned key prefix and placeholder sets validated. |
 | `translation.get` / `translation.locale` | Resolves a key / reads the detected game locale. Translation service has no MCM dependency. |
 | `ui.register` | `{id,target,title,description}`; settings target only; other surfaces return unsupported. |
@@ -47,11 +48,19 @@ Configuration revisions prevent lost updates. Unknown future documents and corru
 
 ## Game and native UI boundary
 
+Schema migration cannot introduce a dangerous nondefault value without consent. An unchanged stored value may carry forward; other dangerous values must migrate to their default and then use acknowledged `settings.set`. Persistent state has a separate format/schema/revision and a 1 MiB limit; malformed/future data is preserved and refused. State is retained when a Mod is removed.
+
 Only `sod2se-game-api` owns fixed-build facts. Follower descriptors use the existing reviewed patch manifest. Full image SHA-256, contexts, page boundaries, paused-thread instruction pointers and active stacks are checked before writes. Restoration verifies the complete expected patched context and refuses foreign changes. Any failed write poisons the lease; no further mutations are permitted in that session.
 
 The Iggy bridge ports the existing reviewed 16535856 callback layout, pinned module hash/export addresses and four-argument resource protocol. It retains no player/result pointer beyond a callback. Resource activation requires a reviewed receipt and matching hashes; unknown versions and missing resources cannot enable this component. Keyboard/gamepad focus and save behavior remain live acceptance gates. The legacy resource protocol cannot carry explicit dangerous-value consent, so dangerous changes are refused there; Developer Tools can send explicit acknowledgement.
 
 ## Player installation, diagnostics and rollback
+
+`archive-legacy <game-root> <reviewed-inventory.json>` archives only the three explicitly allowed legacy framework filenames after exact SHA-256 review. A durable transition record supports interrupted recovery. `restore-legacy <game-root>` requires native uninstall and refuses foreign targets, including identical content with a different file identity. `recover-overlay <profile-id>` removes only a matching framework-owned UI overlay after game exit. `recover-settings <offline-settings.json>` restores last-good configuration with the writer lock and preserves the damaged input.
+
+`verify-plugins <game-root>` validates manifest/ABI/hash and exact framework revision before launch. Loader and Runtime both refuse mismatched dependency pins. Installing, updating, recovering and uninstalling the framework take the same deployment lock.
+
+The package includes `SoD2SE/Tools/NativeTest.py` and a Chinese live-test guide. Explicit test preparation validates package/game inputs, snapshots saves, archives reviewed legacy files and installs a matched test set without starting the game. It provides MCM mode switching, sanitized reporting and ownership-checked rollback. Default offline commands never invoke preparation.
 
 The prerequisite ZIP contains `Root` plus `Install.ps1`. Run the installer once and choose the game root. Install MCM and UnlimitedFollowers separately. Framework files are declared and hashed; existing foreign files block installation. Updates retain backups and a durable pending journal. Interrupted operations use `SoD2SE.DevTools.exe recover-install <game-root>` from the original unpacked package. Uninstall similarly runs from outside the game directory, after game/loader exit, and checks ownership before removing files. Configuration and save data remain outside the removal list. Existing unmanaged legacy installations need a separately reviewed adoption receipt; the installer never claims ownership solely from filenames.
 

@@ -35,6 +35,26 @@ fn start_inner() -> Result<(), i32> {
         .and_then(|p| p.parent())
         .and_then(|p| p.parent())
         .ok_or(INVALID)?;
+    let package: sod2se_services::install::Manifest = serde_json::from_slice(
+        &std::fs::read(root.join("framework.manifest.json")).map_err(|_| INTERNAL)?,
+    )
+    .map_err(|_| INVALID)?;
+    package.verify(root)?;
+    let info: Value = serde_json::from_slice(
+        &std::fs::read(root.join("SoD2SE/build-info.json")).map_err(|_| INTERNAL)?,
+    )
+    .map_err(|_| INVALID)?;
+    let revision = info["revision"].as_str().ok_or(INVALID)?;
+    if info["version"].as_str() != Some(env!("CARGO_PKG_VERSION")) {
+        return Err(UNSUPPORTED);
+    }
+    let discovered = sod2se_services::plugin::discover(&root.join("Plugins"))?;
+    if discovered
+        .iter()
+        .any(|(_, manifest)| manifest.framework_revision != revision)
+    {
+        return Err(UNSUPPORTED);
+    }
     let local = PathBuf::from(std::env::var_os("LOCALAPPDATA").ok_or(INVALID)?);
     let profile = std::env::var("SOD2SE_PROFILE").unwrap_or_else(|_| "default".into());
     if !sod2se_services::valid_id(&profile) {
@@ -50,8 +70,7 @@ fn start_inner() -> Result<(), i32> {
     }
     SERVICES.set(Mutex::new(services)).map_err(|_| BUSY)?;
     LOADED.set(Mutex::new(Vec::new())).map_err(|_| BUSY)?;
-    let plugins = root.join("Plugins");
-    for (path, _) in sod2se_services::plugin::discover(&plugins)? {
+    for (path, _) in discovered {
         load(&path)?;
     }
     // UI resources are inert until an explicit, package-verified receipt is present.

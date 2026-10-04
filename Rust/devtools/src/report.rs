@@ -42,7 +42,8 @@ pub fn export(session: &Path, destination: &Path) -> Result<(), String> {
 fn summary(operation: &str, value: &Value) -> Value {
     match operation {
         "capabilities" => json!({"game_build":value["game_build"].as_u64(),
-            "followers":value["followers"].as_bool(),"native_settings":value["native_settings"].as_bool()}),
+            "followers":value["followers"].as_bool(),"followers_active":value["followers_active"].as_bool(),
+            "followers_poisoned":value["followers_poisoned"].as_bool(),"native_settings":value["native_settings"].as_bool()}),
         "settings.snapshot" => json!({"revision":value["revision"].as_u64(),
             "registered_modules":value["definitions"].as_object().map(|v|v.len())}),
         _ => json!({"count":value.as_array().map(|v|v.len())}),

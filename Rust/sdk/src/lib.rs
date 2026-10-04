@@ -35,6 +35,7 @@ impl Host {
             "ui.actions",
             "ui.extensions",
             "events.poll",
+            "state.read",
         ]
         .contains(&operation)
         {

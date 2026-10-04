@@ -264,7 +264,17 @@ impl Registry {
         }
         let definitions = self.definitions.get(module).ok_or(INVALID)?;
         for (id, value) in &values {
-            definitions.get(id).ok_or(INVALID)?.validate(value)?;
+            let definition = definitions.get(id).ok_or(INVALID)?;
+            definition.validate(value)?;
+            // A schema migration must not silently introduce a dangerous nondefault.
+            // Already stored values may carry forward unchanged; new values require
+            // an explicit, acknowledged settings.set after migration.
+            if definition.risk == "dangerous"
+                && value != &definition.default
+                && self.document.values.get(module).and_then(|v| v.get(id)) != Some(value)
+            {
+                return Err(INVALID);
+            }
         }
         let mut next = self.document.clone();
         next.revision = next.revision.checked_add(1).ok_or(STALE)?;
