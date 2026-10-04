@@ -6,7 +6,7 @@
 
 `Automation/NativeTest.py prepare` 使用显式指定的游戏、存档和解压包路径。它先校验游戏版本与包哈希，复制并校验存档备份，再按已审查的旧版文件清单迁移安装。备份、配置、资源和报告都留在本地。此命令不会启动游戏或切换正在运行的 MO2 实例。
 
-首轮通过独立入口 `SoD2SE.Loader.exe --profile-id rust-acceptance --game-args=-steamlaunch` 启动。不要使用旧 MO2 Default 配置档，它包含其他玩法 Mod。通过新建的 `SoD2SE Rust 测试` 快捷方式启动同一入口。
+当前本机按用户要求使用 `E:\Game\SD2_mod` 的 MO2 配置档 `SoD2SE Rust Test`。MCM、无限随从与验收示例均由 MO2 虚拟映射；只有框架安装在游戏根目录。打开桌面 `SoD2SE Rust 测试` 的 MO2 入口，选择该配置档并运行 `SoD2SE (MO2)`。不要使用含旧版 managed Mod 的 Default 配置档测试 Rust 框架。
 
 测试包包括可选的开发验收示例：一个布尔值和一个 1–10 的整数，只验证配置、翻译和风险标记，不改变玩法。正式的无限随从没有新增数量滑块。
 

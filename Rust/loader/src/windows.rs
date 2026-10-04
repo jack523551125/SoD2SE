@@ -8,6 +8,15 @@ use windows_sys::Win32::{
 };
 
 fn remote_module(pid: u32, name: &Path) -> Result<usize, i32> {
+    for _ in 0..100 {
+        match remote_module_once(pid, name) {
+            Err(sod2se_abi::NOT_FOUND) => std::thread::sleep(std::time::Duration::from_millis(20)),
+            result => return result,
+        }
+    }
+    Err(sod2se_abi::NOT_FOUND)
+}
+fn remote_module_once(pid: u32, name: &Path) -> Result<usize, i32> {
     let snapshot = module_snapshot(pid)?;
     if snapshot.0 == INVALID_HANDLE_VALUE {
         return Err(INTERNAL);
@@ -22,15 +31,59 @@ fn remote_module(pid: u32, name: &Path) -> Result<usize, i32> {
             .position(|&c| c == 0)
             .unwrap_or(entry.szExePath.len());
         let path = PathBuf::from(String::from_utf16_lossy(&entry.szExePath[..n]));
-        if path
-            .to_string_lossy()
-            .eq_ignore_ascii_case(&name.to_string_lossy())
-        {
+        if same_module_path(&path, name) {
             return Ok(entry.modBaseAddr as usize);
         }
         present = unsafe { Module32NextW(snapshot.0, &mut entry) } != 0;
     }
-    Err(INTERNAL)
+    Err(sod2se_abi::NOT_FOUND)
+}
+pub(super) fn injection_self_test() -> Result<(), String> {
+    let executable = std::env::current_exe().map_err(|e| e.to_string())?;
+    let runtime = executable
+        .parent()
+        .ok_or("Missing test binary directory")?
+        .join("sod2se_runtime.dll")
+        .canonicalize()
+        .map_err(|e| e.to_string())?;
+    let mut child = Command::new(&executable)
+        .arg("--inert-host-child")
+        .spawn()
+        .map_err(|e| e.to_string())?;
+    let result = inject(child.id(), &runtime);
+    // This process was created exclusively as an authored non-game ABI fixture.
+    let _ = child.kill();
+    let _ = child.wait();
+    if result != Err(sod2se_abi::UNSUPPORTED) {
+        return Err(format!(
+            "Inert injection expected bootstrap UNSUPPORTED, got {result:?}"
+        ));
+    }
+    println!(
+        "PASS: remote Runtime loaded in an authored inert child; bootstrap refused the foreign image"
+    );
+    Ok(())
+}
+fn same_module_path(left: &Path, right: &Path) -> bool {
+    fn normalize(path: &Path) -> String {
+        let path = path.to_string_lossy().replace('/', "\\");
+        let lower = path.to_lowercase();
+        if let Some(unc) = lower.strip_prefix("\\\\?\\unc\\") {
+            format!("\\\\{unc}")
+        } else {
+            lower.strip_prefix("\\\\?\\").unwrap_or(&lower).to_owned()
+        }
+    }
+    normalize(left) == normalize(right)
+}
+fn diagnostic(code: &str, message: &str) {
+    eprintln!("{code}: {message}");
+    if let Some(local) = std::env::var_os("LOCALAPPDATA") {
+        let _ = sod2se_services::diagnostics::Logger::new(
+            PathBuf::from(local).join("StateOfDecay2/SoD2SE/Rust/loader.jsonl"),
+        )
+        .write(1, "loader", code, message);
+    }
 }
 fn module_snapshot(pid: u32) -> Result<Handle, i32> {
     for _ in 0..100 {
@@ -73,6 +126,7 @@ fn invoke(process: HANDLE, function: usize, argument: *const c_void) -> Result<u
     Ok(result)
 }
 fn inject(pid: u32, runtime: &Path) -> Result<(), i32> {
+    diagnostic("INJECTION_BEGIN", &format!("PID {pid}"));
     let process = Handle(unsafe {
         OpenProcess(
             PROCESS_CREATE_THREAD
@@ -139,8 +193,21 @@ fn inject(pid: u32, runtime: &Path) -> Result<(), i32> {
         }
     }
     result?;
+    diagnostic(
+        "LOAD_LIBRARY_RETURNED",
+        "Remote library call completed; checking full module address",
+    );
     // Confirm the full module address; remote-thread exit codes cannot hold a 64-bit HMODULE.
-    let remote = remote_module(pid, runtime)?;
+    let remote = remote_module(pid, runtime).inspect_err(|_| {
+        diagnostic(
+            "RUNTIME_MODULE_NOT_FOUND",
+            "Library absent or module path mismatch",
+        )
+    })?;
+    diagnostic(
+        "RUNTIME_MODULE_FOUND",
+        "Full Runtime module address resolved",
+    );
     let local = unsafe {
         LoadLibraryExW(
             wide(runtime).as_ptr(),
@@ -157,10 +224,30 @@ fn inject(pid: u32, runtime: &Path) -> Result<(), i32> {
         FreeLibrary(local);
     }
     let status = invoke(process.0, address.ok_or(INTERNAL)?, ptr::null())? as i32;
+    diagnostic("RUNTIME_BOOTSTRAP_RESULT", &format!("status {status}"));
     if status != sod2se_abi::OK {
         return Err(status);
     }
     Ok(())
+}
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn extended_paths_identify_the_same_module_without_basename_matching() {
+        assert!(same_module_path(
+            Path::new(r"\\?\E:\Game\SoD2SE.Runtime.dll"),
+            Path::new(r"E:\Game\SoD2SE.Runtime.dll")
+        ));
+        assert!(same_module_path(
+            Path::new(r"\\?\UNC\server\share\Runtime.dll"),
+            Path::new(r"\\server\share\Runtime.dll")
+        ));
+        assert!(!same_module_path(
+            Path::new(r"E:\Other\Runtime.dll"),
+            Path::new(r"E:\Game\Runtime.dll")
+        ));
+    }
 }
 pub(super) fn launch(exe: &Path, options: &Options) -> Result<(), i32> {
     let instance = Handle(unsafe {

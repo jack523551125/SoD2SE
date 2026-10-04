@@ -36,6 +36,10 @@ Missing fixed inputs remain SKIPPED. No synthetic original asset, accepted save,
 
 ## Owner-directed test handoff
 
+The first owner-run standalone test failed: MCM and UnlimitedFollowers were not effective, and the loader recorded `LAUNCH_FAILED: -4` without Runtime initialization logs. This is a failed live result, not a pass. Investigation found extended-length (`\\?\`) DLL paths were compared literally with ToolHelp's ordinary paths. The Loader now normalizes full Windows paths, retries early module enumeration, and emits injection stage diagnostics. An authored inert child fixture exercises actual remote loading and confirms bootstrap rejects the foreign image; no game is started by this fixture.
+
+The owner requested gameplay Mods only through `E:\Game\SD2_mod`. Physical test plugins are withdrawn; the framework stays in the game root, while matched MCM/follower/example packages use a dedicated native MO2 profile. Subsequent game tests remain the owner's responsibility.
+
 The owner confirmed Xbox Bluetooth input and reserved live testing for themselves. Preparation/installation is authorized; the agent must leave the game stopped and provide an explicit launch entrypoint. NativeTest.py snapshots and verifies local saves, installs matched packages, switches MCM modes and checks ownership during rollback. Portable MO2 preparation uses a separate program copy/profile; shared test saves are backed up. Formal release eligibility and retiring compatibility repositories remain contingent on the owner's live results.
 
 Additional offline implementation includes profile-scoped persistent state (save scope is unsupported without verified identity), legacy transition/recovery, installation writer locking, module snapshot retries, exact plugin/framework dependency checks in both Loader and Runtime, cross-frontend UI completion ownership, and migration consent guards. Packages now carry locked Cargo source/checksum/license evidence. A clearly labelled optional SDK fixture provides configuration controls without gameplay changes.

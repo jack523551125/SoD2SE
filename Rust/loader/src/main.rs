@@ -61,6 +61,10 @@ fn resolve(options: &Options) -> Result<PathBuf, i32> {
     exe.canonicalize().map_err(|_| INTERNAL)
 }
 fn run() -> Result<(), String> {
+    if std::env::args().nth(1).as_deref() == Some("--inert-host-child") {
+        std::thread::sleep(std::time::Duration::from_secs(20));
+        return Ok(());
+    }
     if std::env::args().any(|a| a == "--self-test") {
         assert!(parse(vec!["--attach".into()]).is_err());
         assert!(
@@ -70,6 +74,8 @@ fn run() -> Result<(), String> {
         println!(
             "PASS: native loader refuses foreign images and unsupported arguments; no game launched"
         );
+        #[cfg(windows)]
+        windows::injection_self_test()?;
         return Ok(());
     }
     let options = parse(std::env::args().skip(1))?;
