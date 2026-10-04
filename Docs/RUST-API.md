@@ -57,6 +57,8 @@ The prerequisite ZIP contains `Root` plus `Install.ps1`. Run the installer once 
 
 `doctor <shipping-exe>` checks a file without launching. `verify-package <Root>` verifies package paths/hashes. `connect <session.json>` and `live-check <session.json>` query an explicitly selected running native session. `set <session.json> <mod> <id> <JSON> [--ack-risk]` writes through Registry with optimistic revision checking. Session connection nonces are local-only and must never appear in diagnostic reports. Logs rotate at 2 MiB and contain stable error codes, owner, PID and framework version.
 
+`report <session.json> <new-report.json>` queries capabilities, plugin count, Registry revision/module count and UI extension count. It creates a fresh report and refuses to overwrite earlier evidence. Configuration values, session nonces, local paths and arbitrary response fields are excluded. Failed connections are recorded as FAIL and produce a nonzero exit code. Connectivity PASS does not certify gameplay, saves or keyboard/controller acceptance.
+
 Native preview startup supports game root/shipping EXE selection, direct main startup, raw game arguments, MO2 child tracking and an explicit profile id. MO2 requires its updated native integration; it must map approved UI resources before launch and preserve USVFS on the actual created child. The loader never attaches to an unrelated existing game.
 
 Use the legacy framework and legacy matching plugin packages for rollback until native save/UI/controller acceptance is complete. Candidate status must not be presented as a stable release.

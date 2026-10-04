@@ -1,8 +1,17 @@
 use serde_json::json;
 use std::path::PathBuf;
+mod report;
 fn run() -> Result<(), String> {
     let mut args = std::env::args().skip(1);
     match args.next().as_deref() {
+        Some("report") => {
+            let session: PathBuf = args.next().ok_or("report requires an explicit session.json")?.into();
+            let destination: PathBuf = args.next().ok_or("report requires a fresh output JSON path")?.into();
+            if args.next().is_some() { return Err("Unexpected report argument".into()); }
+            report::export(&session, &destination)?;
+            println!("PASS: diagnostic report exported; live acceptance remains separate");
+            Ok(())
+        },
         Some("doctor") => {
             let image:PathBuf=args.next().ok_or("doctor requires the shipping EXE path")?.into();
             let result=sod2se_game_api::verify_image(&image);
