@@ -1,0 +1,13 @@
+[package]
+name = "sod2se-services"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+sha2.workspace = true
+sod2se-abi.workspace = true
+[target.'cfg(windows)'.dependencies]
+windows-sys.workspace = true
+

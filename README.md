@@ -1,5 +1,7 @@
 # SoD2SE
 
+The staged Rust product is **SoD2SE — State of Decay 2 System Extender**. Native ABI 1, Loader, Runtime, Settings Registry and native UI adapters are owned here. See [native APIs and commands](Docs/RUST-API.md) and [execution/acceptance status](Docs/Migration/Rust/STATUS.md). Select `Automation/dev.ps1 test SoD2SE --rust` for native checks. Legacy managed entrypoints remain available until required live acceptance permits release cutover.
+
 [Existing usage and installation](README.zh-CN.md). Status: preview; this repository owns SoD2SE Core, GameApi, shared native runtime, and framework build entrypoints.
 
 From workspace root: `Automation/dev.ps1 build SoD2SE`, `check SoD2SE`, `test SoD2SE`. A standalone checkout uses `Automation/Build/build.ps1` and `Automation/Test/test.ps1`. Product source lives in its own repository; no build or test requires workspace source junctions. See [DESIGN.md](DESIGN.md) for boundaries.

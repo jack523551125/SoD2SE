@@ -1,0 +1,284 @@
+use super::*;
+use sod2se_game_api::process::{Handle, wide};
+use std::{ffi::c_void, os::windows::process::CommandExt, ptr};
+use windows_sys::Win32::System::Diagnostics::Debug::WriteProcessMemory;
+use windows_sys::Win32::{
+    Foundation::*,
+    System::{Diagnostics::ToolHelp::*, LibraryLoader::*, Memory::*, Threading::*},
+};
+
+fn remote_module(pid: u32, name: &Path) -> Result<usize, i32> {
+    let snapshot =
+        Handle(unsafe { CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, pid) });
+    if snapshot.0 == INVALID_HANDLE_VALUE {
+        return Err(INTERNAL);
+    }
+    let mut entry: MODULEENTRY32W = unsafe { std::mem::zeroed() };
+    entry.dwSize = std::mem::size_of::<MODULEENTRY32W>() as u32;
+    let mut present = unsafe { Module32FirstW(snapshot.0, &mut entry) } != 0;
+    while present {
+        let n = entry
+            .szExePath
+            .iter()
+            .position(|&c| c == 0)
+            .unwrap_or(entry.szExePath.len());
+        let path = PathBuf::from(String::from_utf16_lossy(&entry.szExePath[..n]));
+        if path
+            .to_string_lossy()
+            .eq_ignore_ascii_case(&name.to_string_lossy())
+        {
+            return Ok(entry.modBaseAddr as usize);
+        }
+        present = unsafe { Module32NextW(snapshot.0, &mut entry) } != 0;
+    }
+    Err(INTERNAL)
+}
+fn invoke(process: HANDLE, function: usize, argument: *const c_void) -> Result<u32, i32> {
+    let routine: unsafe extern "system" fn(*mut c_void) -> u32 =
+        unsafe { std::mem::transmute(function) };
+    let thread = Handle(unsafe {
+        CreateRemoteThread(
+            process,
+            ptr::null(),
+            0,
+            Some(routine),
+            argument,
+            0,
+            ptr::null_mut(),
+        )
+    });
+    if thread.0.is_null() {
+        return Err(INTERNAL);
+    }
+    if unsafe { WaitForSingleObject(thread.0, 15000) } != WAIT_OBJECT_0 {
+        return Err(sod2se_abi::BUSY);
+    }
+    let mut result = 0;
+    if unsafe { GetExitCodeThread(thread.0, &mut result) } == 0 {
+        return Err(INTERNAL);
+    }
+    Ok(result)
+}
+fn inject(pid: u32, runtime: &Path) -> Result<(), i32> {
+    let process = Handle(unsafe {
+        OpenProcess(
+            PROCESS_CREATE_THREAD
+                | PROCESS_QUERY_INFORMATION
+                | PROCESS_VM_OPERATION
+                | PROCESS_VM_WRITE
+                | PROCESS_VM_READ,
+            0,
+            pid,
+        )
+    });
+    if process.0.is_null() {
+        return Err(INTERNAL);
+    }
+    let kernel = unsafe { GetModuleHandleW(wide(Path::new("kernel32.dll")).as_ptr()) };
+    let load =
+        unsafe { GetProcAddress(kernel, c"LoadLibraryW".as_ptr().cast()) }.ok_or(INTERNAL)?;
+    let mut owner = ptr::null_mut();
+    if unsafe {
+        GetModuleHandleExW(
+            GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
+            load as *const u16,
+            &mut owner,
+        )
+    } == 0
+    {
+        return Err(INTERNAL);
+    }
+    let owner_path = sod2se_game_api::process::module_path(owner)?;
+    let remote_owner = remote_module(pid, &owner_path)?;
+    let name = wide(runtime);
+    let size = name.len() * 2;
+    let memory = unsafe {
+        VirtualAllocEx(
+            process.0,
+            ptr::null(),
+            size,
+            MEM_COMMIT | MEM_RESERVE,
+            PAGE_READWRITE,
+        )
+    };
+    if memory.is_null() {
+        return Err(INTERNAL);
+    }
+    let mut written = 0;
+    if unsafe { WriteProcessMemory(process.0, memory, name.as_ptr().cast(), size, &mut written) }
+        == 0
+        || written != size
+    {
+        unsafe {
+            VirtualFreeEx(process.0, memory, 0, MEM_RELEASE);
+        }
+        return Err(INTERNAL);
+    }
+    let result = invoke(
+        process.0,
+        remote_owner + load as usize - owner as usize,
+        memory,
+    );
+    // A timed-out remote thread may still read this allocation. Leave it resident.
+    if result != Err(sod2se_abi::BUSY) {
+        unsafe {
+            VirtualFreeEx(process.0, memory, 0, MEM_RELEASE);
+        }
+    }
+    result?;
+    // Confirm the full module address; remote-thread exit codes cannot hold a 64-bit HMODULE.
+    let remote = remote_module(pid, runtime)?;
+    let local = unsafe {
+        LoadLibraryExW(
+            wide(runtime).as_ptr(),
+            ptr::null_mut(),
+            DONT_RESOLVE_DLL_REFERENCES,
+        )
+    };
+    if local.is_null() {
+        return Err(INTERNAL);
+    }
+    let export = unsafe { GetProcAddress(local, c"sod2se_runtime_start".as_ptr().cast()) };
+    let address = export.map(|f| remote + f as usize - local as usize);
+    unsafe {
+        FreeLibrary(local);
+    }
+    let status = invoke(process.0, address.ok_or(INTERNAL)?, ptr::null())? as i32;
+    if status != sod2se_abi::OK {
+        return Err(status);
+    }
+    Ok(())
+}
+pub(super) fn launch(exe: &Path, options: &Options) -> Result<(), i32> {
+    let instance = Handle(unsafe {
+        CreateMutexW(
+            ptr::null(),
+            0,
+            wide(Path::new("Local\\SoD2SE.Native.Loader")).as_ptr(),
+        )
+    });
+    if instance.0.is_null() || unsafe { GetLastError() } == ERROR_ALREADY_EXISTS {
+        return Err(sod2se_abi::BUSY);
+    }
+    let dir = std::env::current_exe()
+        .map_err(|_| INTERNAL)?
+        .parent()
+        .ok_or(INVALID)?
+        .to_path_buf();
+    let runtime = dir
+        .join("SoD2SE.Runtime.dll")
+        .canonicalize()
+        .map_err(|_| INTERNAL)?;
+    if dir.canonicalize().map_err(|_| INTERNAL)?
+        != sod2se_game_api::game_root(exe)?
+            .canonicalize()
+            .map_err(|_| INTERNAL)?
+    {
+        return Err(INVALID);
+    }
+    let manifest: sod2se_services::install::Manifest = serde_json::from_slice(
+        &std::fs::read(dir.join("framework.manifest.json")).map_err(|_| INTERNAL)?,
+    )
+    .map_err(|_| INVALID)?;
+    manifest.verify(&dir)?;
+    let (target, ownership) = overlay_paths(&options.profile)?;
+    let mut mounted = false;
+    let plugins = sod2se_services::plugin::discover(&dir.join("Plugins"))?;
+    let ui_required = plugins.iter().any(|(_, m)| {
+        m.capabilities
+            .iter()
+            .any(|c| c == sod2se_game_api::SETTINGS)
+    });
+    if ui_required {
+        sod2se_game_api::native_ui::verify_files(&dir)?;
+        let receipt: serde_json::Value = serde_json::from_slice(
+            &std::fs::read(dir.join("SoD2SE/Assets/native-ui.json")).map_err(|_| INTERNAL)?,
+        )
+        .map_err(|_| INVALID)?;
+        if receipt["reviewed"].as_bool() != Some(true)
+            || receipt["game_sha256"].as_str()
+                != Some(&sod2se_game_api::target().sha256.to_lowercase())
+        {
+            return Err(sod2se_abi::UNSUPPORTED);
+        }
+        let hash = receipt["sha256"].as_str().ok_or(INVALID)?;
+        if options.mo2 {
+            if sod2se_services::diagnostics::digest(&target)? != hash {
+                return Err(sod2se_abi::UNSUPPORTED);
+            }
+        } else {
+            sod2se_services::overlay::prepare(
+                &dir.join("SoD2SE/Assets/settings.uasset"),
+                hash,
+                &target,
+                &ownership,
+            )?;
+            mounted = true;
+        }
+    }
+    let mut command = Command::new(exe);
+    command
+        .current_dir(exe.parent().ok_or(INVALID)?)
+        .env("SOD2SE_PROFILE", &options.profile);
+    if !options.arguments.is_empty() {
+        command.raw_arg(&options.arguments);
+    }
+    let mut child = match command.spawn() {
+        Ok(child) => child,
+        Err(_) => {
+            if mounted {
+                let _ = sod2se_services::overlay::recover(&target, &ownership);
+            }
+            return Err(INTERNAL);
+        }
+    };
+    // MO2 launches this exact child with inherited USVFS; never attach or search unrelated games.
+    let result = (|| -> Result<(), i32> {
+        if options.mo2 {
+            let snapshot = Handle(unsafe {
+                CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, child.id())
+            });
+            if snapshot.0 == INVALID_HANDLE_VALUE {
+                return Err(INTERNAL);
+            }
+            let mut entry: MODULEENTRY32W = unsafe { std::mem::zeroed() };
+            entry.dwSize = std::mem::size_of::<MODULEENTRY32W>() as u32;
+            let mut found = false;
+            let mut present = unsafe { Module32FirstW(snapshot.0, &mut entry) } != 0;
+            while present {
+                let n = entry
+                    .szModule
+                    .iter()
+                    .position(|&c| c == 0)
+                    .unwrap_or(entry.szModule.len());
+                let name = String::from_utf16_lossy(&entry.szModule[..n]).to_ascii_lowercase();
+                found |= name.starts_with("usvfs") && name.ends_with(".dll");
+                present = unsafe { Module32NextW(snapshot.0, &mut entry) } != 0;
+            }
+            if !found {
+                return Err(sod2se_abi::UNSUPPORTED);
+            }
+        }
+        inject(child.id(), &runtime)
+    })();
+    if let Err(code) = result {
+        eprintln!("RUNTIME_REFUSED: {code}; game session remains tracked until exit");
+    }
+    // Keep the GUI/MO2 parent alive for the complete game session, including failed initialization.
+    child.wait().map_err(|_| INTERNAL)?;
+    if mounted {
+        sod2se_services::overlay::recover(&target, &ownership)?;
+    }
+    result
+}
+fn overlay_paths(profile: &str) -> Result<(PathBuf, PathBuf), i32> {
+    let local = PathBuf::from(std::env::var_os("LOCALAPPDATA").ok_or(INVALID)?);
+    Ok((local.join("StateOfDecay2/Saved/Cooked/WindowsNoEditor/StateOfDecay2/Content/Art/UI/settings.uasset"),local.join("StateOfDecay2/SoD2SE/Rust").join(profile).join("ui-overlay.json")))
+}
+pub(super) fn recover_resources(options: &Options) -> Result<(), i32> {
+    if options.mo2 {
+        return Ok(());
+    }
+    let (target, ownership) = overlay_paths(&options.profile)?;
+    sod2se_services::overlay::recover(&target, &ownership)
+}

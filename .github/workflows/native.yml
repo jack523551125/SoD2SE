@@ -1,0 +1,27 @@
+name: Native ABI offline checks
+on:
+  push:
+    branches: [main, 'codex/sod2se-rust']
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  native:
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Install locked toolchain
+        shell: pwsh
+        run: rustup toolchain install 1.97.1 --profile minimal --component rustfmt --component clippy
+      - name: Fetch locked public Cargo dependencies
+        shell: pwsh
+        run: cargo fetch --locked
+      - name: Native offline and independent C checks
+        shell: pwsh
+        run: pwsh -NoProfile -File Automation/Rust.ps1 -Command test
+      - name: Report external acceptance gates
+        shell: pwsh
+        run: '"SKIPPED: protected original UI asset and real-game/save/controller acceptance are not CI inputs." >> $env:GITHUB_STEP_SUMMARY'

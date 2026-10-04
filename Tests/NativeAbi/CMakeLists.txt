@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 3.20)
+project(SoD2SENativeAbi LANGUAGES C)
+add_executable(NativeAbiTest consumer.c)
+target_include_directories(NativeAbiTest PRIVATE ../../Rust/abi/include)
+target_compile_options(NativeAbiTest PRIVATE /W4 /WX)
+target_compile_features(NativeAbiTest PRIVATE c_std_11)

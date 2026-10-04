@@ -1,5 +1,9 @@
 # SoD2SE design boundary
 
+## Authorized Rust transition
+
+The owner approved merging Loader and NativeModSettingsEntry responsibilities into this repository. The new native line uses the Cargo workspace version authority, C ABI 1, profile-owned Settings Registry, GameApi-only game access and a generic original-UI extension interface (settings surface first). MCM and UnlimitedFollowers remain independent Rust plugins; MCM is an optional Registry frontend. Native release and retiring the old submodules require the explicit gates in Docs/Migration/Rust/STATUS.md. The managed line below remains the historical compatibility boundary during staged rollout.
+
 Product: SoD2SE. Current status: preview. This repository owns Core, GameApi, shared native runtime, and framework automation. The machine-readable entry is project.toml; version authority is `Core/SoD2SE.Core.cs`.
 
 This is an independent Git repository. Its build/release scripts must work independently of workspace navigation. Do not assume another repository's Core or GameApi snapshot can replace its files.

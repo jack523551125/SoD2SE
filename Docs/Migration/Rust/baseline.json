@@ -1,0 +1,241 @@
+{
+  "schema": 1,
+  "captured_utc": "2026-10-04T06:45:40.609852+00:00",
+  "repositories": {
+    "SoD2SE": {
+      "head": "966b307e645ba4b015b2f6321e9dc0df6b2985c8",
+      "branch": "codex/sod2se-rust",
+      "status": "?? Automation/Migration/\n?? Cargo.lock\n?? Cargo.toml\n?? Rust/\n?? Tests/NativeAbi/\n?? rust-toolchain.toml",
+      "remotes": "origin\thttps://github.com/jack523551125/SoD2SE.git (fetch)\norigin\thttps://github.com/jack523551125/SoD2SE.git (push)"
+    },
+    "SoD2SE-Loader": {
+      "head": "b3c74da11767fd98a211d3bf2b5ba3bfae1b9438",
+      "branch": "migration/repo-layout-v1.1",
+      "status": "",
+      "remotes": "origin\thttps://github.com/jack523551125/SoD2SE_loader.git (fetch)\norigin\thttps://github.com/jack523551125/SoD2SE_loader.git (push)"
+    },
+    "NativeModSettingsEntry": {
+      "head": "54c1834d8b1dff4bc10013016f1245c2318a15c8",
+      "branch": "migration/repo-layout-v1.1",
+      "status": "",
+      "remotes": "origin\thttps://github.com/jack523551125/NativeModSettingsEntry.git (fetch)\norigin\thttps://github.com/jack523551125/NativeModSettingsEntry.git (push)"
+    },
+    "MCM": {
+      "head": "04725c8c286b8683967ec29f5f83f441d204f8d5",
+      "branch": "codex/sod2se-rust",
+      "status": "?? Cargo.toml\n?? rust/",
+      "remotes": "origin\thttps://github.com/jack523551125/MCM.git (fetch)\norigin\thttps://github.com/jack523551125/MCM.git (push)"
+    },
+    "UnlimitedFollowers": {
+      "head": "1513833220fd53cb80c1a1a0ccd7617434569f2a",
+      "branch": "codex/sod2se-rust",
+      "status": "?? Cargo.toml\n?? rust/",
+      "remotes": "origin\thttps://github.com/jack523551125/UnlimitedFollowers.git (fetch)\norigin\thttps://github.com/jack523551125/UnlimitedFollowers.git (push)"
+    },
+    "MO2-Support": {
+      "head": "c26c0feeb0086655d0dcb4ceb3c9c5b1902c7ed1",
+      "branch": "migration/repo-layout-v1.1",
+      "status": "M .gitignore\n M DESIGN.md\n M Install.ps1\n M LICENSE\n M README.md\n M TESTING.md\n D bridge/HeilosBridge.cs\n M build_release.py\n M plugins/sod2_support/core.py\n M plugins/sod2_support/deployment.py\n M plugins/sod2_support/launch.py\n M plugins/sod2_support/migration.py\n M plugins/sod2_support/pak.py\n M plugins/sod2_support/plugin.py\n M plugins/sod2_support/runtime.py\n M plugins/sod2_support/storage.py\n M plugins/sod2_support/ui.py\n?? experiments/\n?? plugins/sod2_support/i18n.py\n?? tools/\n?? translations/",
+      "remotes": "origin\thttps://github.com/jack523551125/MO2-Support.git (fetch)\norigin\thttps://github.com/jack523551125/MO2-Support.git (push)"
+    }
+  },
+  "comparison": {
+    "framework.Core": {
+      "AssemblyInfo.cs": "a69635270b8888ff08863df829081e3ad79700117bb828efc21f38a05a818703",
+      "Growth/GrowthNativeConnection.cs": "329ec803426d367afbe6786dc8fde8e9669faf69a2270c5ddbbe1cdb1d82f096",
+      "Growth/GrowthNativeUiChannel.cs": "3f70179cfb92e67ebc60c719f6c42265aeed39fe1265747c9ccf29e1e3c3d18a",
+      "Growth/GrowthPagePresenter.cs": "a557b1ca82e335d698767ca278ce06b614a87ca1a65c81f990e4f9d9137b045e",
+      "Growth/GrowthRuntime.cs": "f909783147f1541f331cb19f9c19292a20416f3fdd492e31d091310b1ba37c86",
+      "Input/InputActions.cs": "48acb19d1c86c7e242c0b3c017b9cd5893c397ea5f71322057e9ae5c60da34b1",
+      "Input/InputBindingProfile.cs": "8dd7dc99c9c9278f3418e7502e6209bfe654580e8d3dc4eb9ca60e11db6480d1",
+      "Interop/NativePluginModule.cs": "12ce7bdfd3dd1803c0b2487a8e0a9001401597c1715fd9aa967ffbbc2f004441",
+      "Runtime/RuntimeArchitecture.cs": "ad3f357414242becd0e1cd92f9acb9e21f0f6089124740ea25d7ff3e9ff03300",
+      "Runtime/ThreadSafety.cs": "1c15ebd0275d35802c5f3cbc20812137f65333cc75fc2d715b8fab4a612c8f1e",
+      "SoD2SE.Core.cs": "cd0602419f0bd26b827a6e1621ca3ae6d3d436c2f61abc2dccf6755de2686df4",
+      "UI/Mcm.cs": "b52e4cae3eb55ff69616adc8bac398ac0cd235626bc9cd096f3f0e4399d71803",
+      "UI/McmKeys.cs": "9db0674f9add9796374f71c363ab5e8081074360dbeac56f8e0a942834524546",
+      "UI/Ui.cs": "513b8e5c5c9c9083d880f3418e2d7cbcb8c1e4768479e0b23ddcdb5649d9ee7e"
+    },
+    "loader.Core": {
+      "AssemblyInfo.cs": "a69635270b8888ff08863df829081e3ad79700117bb828efc21f38a05a818703",
+      "Mcm.cs": "b52e4cae3eb55ff69616adc8bac398ac0cd235626bc9cd096f3f0e4399d71803",
+      "McmKeys.cs": "9db0674f9add9796374f71c363ab5e8081074360dbeac56f8e0a942834524546",
+      "NativePluginModule.cs": "12ce7bdfd3dd1803c0b2487a8e0a9001401597c1715fd9aa967ffbbc2f004441",
+      "RuntimeArchitecture.cs": "b62b4f14d60c6aeec1faa6d4f442c3d78c662dd4c18e753521e83bac6c1de2da",
+      "SoD2SE.Core.cs": "2078215a4288d72691b9e614abef67824953e14b5881f174d8f007a208302d8a",
+      "ThreadSafety.cs": "1c15ebd0275d35802c5f3cbc20812137f65333cc75fc2d715b8fab4a612c8f1e",
+      "Ui.cs": "513b8e5c5c9c9083d880f3418e2d7cbcb8c1e4768479e0b23ddcdb5649d9ee7e"
+    },
+    "framework.GameApi": {
+      "AssemblyInfo.cs": "11df41c2208ccd00d523f7bdcc4bf116efdaf4294638b26aaa9da3a51670c258",
+      "StateOfDecay2GameApi.cs": "f970904debc0cd7d96974bc2b8896dbfbb00e8849101ba98044d28481049d9e4"
+    },
+    "loader.GameApi": {
+      "AssemblyInfo.cs": "11df41c2208ccd00d523f7bdcc4bf116efdaf4294638b26aaa9da3a51670c258",
+      "StateOfDecay2GameApi.cs": "f970904debc0cd7d96974bc2b8896dbfbb00e8849101ba98044d28481049d9e4"
+    },
+    "framework.Loader": {
+      "AssemblyInfo.cs": "c12954506e7f367fc240a253416e08ffb69276fc27c2ddcb01771684dd1afbf6",
+      "McmOverlay.cs": "3b13c8b9ee51c70d74ca3d97d4f990595b4c7e06f3245547ec68604db0fde92d",
+      "Program.cs": "76ee4ed90e924755a40bef8f74af77724a4092f61c4acf41c4bc0f28c52e34aa"
+    },
+    "loader.Loader": {
+      "AssemblyInfo.cs": "c12954506e7f367fc240a253416e08ffb69276fc27c2ddcb01771684dd1afbf6",
+      "Program.cs": "ada427e3819ee76413690043cbe607f9ed54a3dcef3aacd6089d5afe281088d6"
+    }
+  },
+  "checks": [
+    {
+      "product": "workspace",
+      "action": "check",
+      "status": "PASS",
+      "exit": 0,
+      "log": ".work/migration/sod2se-rust/baseline/workspace-check.log",
+      "log_sha256": "eb2aa02aeb0828fbfb04affaff8cf2a6ba3b22bdac33bea1a21c4c99897d40bd"
+    },
+    {
+      "product": "SoD2SE",
+      "action": "build",
+      "status": "PASS",
+      "exit": 0,
+      "log": ".work/migration/sod2se-rust/baseline/SoD2SE-build.log",
+      "log_sha256": "b70749b7f8a26c056d8a428cdd8c3be3c365778ff7c9c4b2456ca1496298451f"
+    },
+    {
+      "product": "SoD2SE",
+      "action": "check",
+      "status": "PASS",
+      "exit": 0,
+      "log": ".work/migration/sod2se-rust/baseline/SoD2SE-check.log",
+      "log_sha256": "4cf23594a6ffe22a47fc669b6ff14fae8668391720f96648458031cae578b9c7"
+    },
+    {
+      "product": "SoD2SE",
+      "action": "test",
+      "status": "PASS",
+      "exit": 0,
+      "log": ".work/migration/sod2se-rust/baseline/SoD2SE-test.log",
+      "log_sha256": "07dd7db110838171512fec1c37a5325e2142a8bf53748c0f8f56f1bd6fcee449"
+    },
+    {
+      "product": "SoD2SE-Loader",
+      "action": "build",
+      "status": "PASS",
+      "exit": 0,
+      "log": ".work/migration/sod2se-rust/baseline/SoD2SE-Loader-build.log",
+      "log_sha256": "e8c37d4cd4626e72174fd0a2c0fc8ebfaf63b4fb6d40426553ab3946fe883d17"
+    },
+    {
+      "product": "SoD2SE-Loader",
+      "action": "check",
+      "status": "PASS",
+      "exit": 0,
+      "log": ".work/migration/sod2se-rust/baseline/SoD2SE-Loader-check.log",
+      "log_sha256": "1ea541afae3e5668dda0ea4bc5841b982445dd352acc2cd756bbdc0a80884fda"
+    },
+    {
+      "product": "SoD2SE-Loader",
+      "action": "test",
+      "status": "PASS",
+      "exit": 0,
+      "log": ".work/migration/sod2se-rust/baseline/SoD2SE-Loader-test.log",
+      "log_sha256": "1ea541afae3e5668dda0ea4bc5841b982445dd352acc2cd756bbdc0a80884fda"
+    },
+    {
+      "product": "NativeModSettingsEntry",
+      "action": "build",
+      "status": "SKIPPED",
+      "exit": 0,
+      "log": ".work/migration/sod2se-rust/baseline/NativeModSettingsEntry-build.log",
+      "log_sha256": "3dd3e36f0e6da611cc0a7e6815c92c8fc31851cb9e14c83567d24112c389272e"
+    },
+    {
+      "product": "NativeModSettingsEntry",
+      "action": "check",
+      "status": "SKIPPED",
+      "exit": 0,
+      "log": ".work/migration/sod2se-rust/baseline/NativeModSettingsEntry-check.log",
+      "log_sha256": "628ecddefae763133153c357345fcd4b203761c3104cde9d51dbf304feb4ef9f"
+    },
+    {
+      "product": "NativeModSettingsEntry",
+      "action": "test",
+      "status": "SKIPPED",
+      "exit": 0,
+      "log": ".work/migration/sod2se-rust/baseline/NativeModSettingsEntry-test.log",
+      "log_sha256": "9ad3f256ef64b23fd553782b35ef4221f4210078b12be15b8f1c696adfe132e6"
+    },
+    {
+      "product": "MCM",
+      "action": "build",
+      "status": "PASS",
+      "exit": 0,
+      "log": ".work/migration/sod2se-rust/baseline/MCM-build.log",
+      "log_sha256": "561139b7e136ada04ccfc4b4a51b2ba9d8ba1b44acd07534078c9d267e068822"
+    },
+    {
+      "product": "MCM",
+      "action": "check",
+      "status": "PASS",
+      "exit": 0,
+      "log": ".work/migration/sod2se-rust/baseline/MCM-check.log",
+      "log_sha256": "a407571970c6cb30bbd531879d2797392f7317d2a2f515c192f7f34210f39504"
+    },
+    {
+      "product": "MCM",
+      "action": "test",
+      "status": "PASS",
+      "exit": 0,
+      "log": ".work/migration/sod2se-rust/baseline/MCM-test.log",
+      "log_sha256": "09a628176ecadd95be0b23f1c03c53c63c7245c9ddaeccc9c08442ed81719659"
+    },
+    {
+      "product": "UnlimitedFollowers",
+      "action": "build",
+      "status": "PASS",
+      "exit": 0,
+      "log": ".work/migration/sod2se-rust/baseline/UnlimitedFollowers-build.log",
+      "log_sha256": "33ed31517399ba45a46ee48bc8142eea7855215ec7028a6897af1e13a05674cd"
+    },
+    {
+      "product": "UnlimitedFollowers",
+      "action": "check",
+      "status": "PASS",
+      "exit": 0,
+      "log": ".work/migration/sod2se-rust/baseline/UnlimitedFollowers-check.log",
+      "log_sha256": "d1b8dd5d8823307ef9953d94fc96328db533d6c1df3d4cd20d81d5ad6f27447b"
+    },
+    {
+      "product": "UnlimitedFollowers",
+      "action": "test",
+      "status": "SKIPPED",
+      "exit": 0,
+      "log": ".work/migration/sod2se-rust/baseline/UnlimitedFollowers-test.log",
+      "log_sha256": "0220930f2cded36c3c74b94593cc5bb17259b0ee5bfbe109f4335f9d9a3ca104"
+    },
+    {
+      "product": "MO2-Support",
+      "action": "build",
+      "status": "PASS",
+      "exit": 0,
+      "log": ".work/migration/sod2se-rust/baseline/MO2-Support-build.log",
+      "log_sha256": "b34b0296bfa9dd2d44b45888d86666b158c3a6b3802acb5872a43a6c175a2f62"
+    },
+    {
+      "product": "MO2-Support",
+      "action": "check",
+      "status": "PASS",
+      "exit": 0,
+      "log": ".work/migration/sod2se-rust/baseline/MO2-Support-check.log",
+      "log_sha256": "338c269263c34f9a7b6519cdcc0648ed95e4054d4a5eeff4b5dea544ca5ff6a1"
+    },
+    {
+      "product": "MO2-Support",
+      "action": "test",
+      "status": "FAIL",
+      "exit": 1,
+      "log": ".work/migration/sod2se-rust/baseline/MO2-Support-test.log",
+      "log_sha256": "c49555d705f96902d6d96ef5b4fc98d6c20a8d30b0c17cbbbf4913c8ec2a1b28"
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "schema": 1,
+  "reviewed": false,
+  "revision": "PENDING_NATIVE_RELEASE_COMMIT",
+  "version": "0.7.0-preview.1",
+  "checks": {
+    "save-compat": {"status":"NOT_RUN","evidence":"Requires live existing-save load/save/reload"},
+    "safe-uninstall": {"status":"NOT_RUN","evidence":"Requires original game loading affected saves after uninstall"},
+    "update-compat": {"status":"NOT_RUN","evidence":"Requires reviewed config/state and player upgrade acceptance"},
+    "original-file-integrity": {"status":"NOT_RUN","evidence":"Requires live before/after hash inventory"},
+    "fail-closed": {"status":"NOT_RUN","evidence":"Offline foreign-image/context tests plus live startup refusal"},
+    "api-docs": {"status":"NOT_RUN","evidence":"Docs/RUST-API.md requires API review"},
+    "diagnostics": {"status":"NOT_RUN","evidence":"Requires live diagnostic report inspection"},
+    "git-provenance": {"status":"NOT_RUN","evidence":"Requires synchronized exact source revisions"},
+    "shared-gameapi": {"status":"NOT_RUN","evidence":"Requires fixed-build evidence/source review"},
+    "gameapi-only": {"status":"NOT_RUN","evidence":"Requires official plugin source audit"},
+    "rust-abi": {"status":"NOT_RUN","evidence":"Rust tests and independent C fixture"},
+    "input-support": {"status":"NOT_RUN","evidence":"Keyboard/controller live settings scenarios"},
+    "live-tools": {"status":"NOT_RUN","evidence":"Developer Tools connected to explicit test session"},
+    "translations": {"status":"NOT_RUN","evidence":"Template/catalog checks plus native text/layout acceptance"},
+    "mcm-optional": {"status":"NOT_RUN","evidence":"Follower gameplay without installed MCM"},
+    "mcm-adapter": {"status":"NOT_RUN","evidence":"Original settings page and Registry roundtrip"},
+    "risk-markers": {"status":"NOT_RUN","evidence":"Registry acknowledgement/refusal and UI labeling"},
+    "settings-authority": {"status":"NOT_RUN","evidence":"Frontend and Mod configuration source audit"}
+  }
+}
