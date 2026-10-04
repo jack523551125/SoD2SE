@@ -36,6 +36,8 @@ Missing fixed inputs remain SKIPPED. No synthetic original asset, accepted save,
 
 ## Owner-directed test handoff
 
+After child readiness succeeded, the owner reached RUNTIME_MODULE_FOUND but bootstrap returned -1. Local profile state confirmed that legacy import had completed. Runtime's separate DLL-loading function still compared physical canonical paths and rejected legal mapped DLLs. Runtime now obtains its virtual DLL path from the same manifest verifier as preflight, and shares DLL/ABI inspection with a developer-only inactive probe. Plugin refusals are logged with manifest identity and stable error code; no real-game success is inferred from the probe.
+
 A read-only isolated USVFS diagnostic reproduced the continuing `-1`: all three DLL hashes matched, but their resolved paths were outside the physical virtual-parent directory. The old Rust preflight returned `PLUGIN_PREFLIGHT_REFUSED: -1` in this non-game child. Verification now retains the safe virtual filename with hash/link guards rather than requiring physical-parent containment. A full non-launching Loader preflight is provided for this diagnostic; real-game results remain separate.
 
 The first owner-run standalone test failed: MCM and UnlimitedFollowers were not effective, and the loader recorded `LAUNCH_FAILED: -4` without Runtime initialization logs. This is a failed live result, not a pass. Investigation found extended-length (`\\?\`) DLL paths were compared literally with ToolHelp's ordinary paths. The Loader now normalizes full Windows paths, retries early module enumeration, and emits injection stage diagnostics. An authored inert child fixture exercises actual remote loading and confirms bootstrap rejects the foreign image; no game is started by this fixture.

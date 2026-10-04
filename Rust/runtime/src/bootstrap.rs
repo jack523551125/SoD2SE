@@ -1,7 +1,7 @@
 use super::*;
 use sod2se_game_api::process::{module_path, wide};
 use std::ptr;
-use windows_sys::Win32::Foundation::FreeLibrary;
+use windows_sys::Win32::Foundation::{FreeLibrary, HMODULE};
 use windows_sys::Win32::System::LibraryLoader::*;
 
 // Modules remain resident until game exit. Only services and callbacks are withdrawn on stop.
@@ -62,11 +62,35 @@ fn start_inner() -> Result<(), i32> {
     }
     let data = local.join("StateOfDecay2/SoD2SE/Rust").join(profile);
     let session = data.join("session.json");
-    let mut services = Services::open(data, true)?;
+    let early_logger = Logger::new(data.join("runtime.jsonl"));
+    let mut services = Services::open(data, true).inspect_err(|code| {
+        let _ = early_logger.write(
+            3,
+            "runtime",
+            "SERVICES_OPEN_REFUSED",
+            &format!("status {code}"),
+        );
+    })?;
+    services.logger.write(
+        1,
+        "runtime",
+        "SERVICES_OPENED",
+        "Profile services initialized",
+    )?;
     services.catalog.locale = sod2se_game_api::language::detect(root, &local);
     let legacy = local.join("StateOfDecay2/SoD2SE/mcm.ini");
     if legacy.exists() {
-        services.settings.import_legacy(&legacy)?;
+        services
+            .settings
+            .import_legacy(&legacy)
+            .inspect_err(|code| {
+                let _ = services.logger.write(
+                    3,
+                    "runtime",
+                    "LEGACY_IMPORT_REFUSED",
+                    &format!("status {code}"),
+                );
+            })?;
     }
     SERVICES.set(Mutex::new(services)).map_err(|_| BUSY)?;
     LOADED.set(Mutex::new(Vec::new())).map_err(|_| BUSY)?;
@@ -202,47 +226,41 @@ fn load(path: &std::path::Path) -> Result<(), i32> {
         .map(|v| v.to_string_lossy().into_owned())
         .unwrap_or_else(|| "unknown plugin".into());
     let result = load_inner(path);
-    if let Err(code) = result {
-        if let Some(services) = SERVICES.get() {
-            if let Ok(services) = services.lock() {
-                let _ = services.logger.write(
-                    3,
-                    "runtime",
-                    "PLUGIN_LOAD_REFUSED",
-                    &format!("{name}: {code}"),
-                );
-            }
-        }
+    if let Err(code) = result
+        && let Some(services) = SERVICES.get()
+        && let Ok(services) = services.lock()
+    {
+        let _ = services.logger.write(
+            3,
+            "runtime",
+            "PLUGIN_LOAD_REFUSED",
+            &format!("{name}: {code}"),
+        );
     }
     result
 }
-fn load_inner(path: &std::path::Path) -> Result<(), i32> {
-    let checked = sod2se_services::plugin::Manifest::read(path)?;
-    let plugin_root = path.parent().ok_or(INVALID)?;
-    checked.verify(plugin_root)?;
-    let manifest = serde_json::to_value(checked).map_err(|_| INVALID)?;
-    if manifest["abi"].as_u64() != Some(ABI_VERSION as u64) {
-        return Err(UNSUPPORTED);
+struct InspectedPlugin {
+    module: HMODULE,
+    manifest: sod2se_services::plugin::Manifest,
+    api: PluginApi,
+    resident: bool,
+}
+impl Drop for InspectedPlugin {
+    fn drop(&mut self) {
+        if !self.resident {
+            unsafe {
+                FreeLibrary(self.module);
+            }
+        }
     }
-    let id = manifest["id"].as_str().ok_or(INVALID)?;
-    let file = manifest["file"].as_str().ok_or(INVALID)?;
-    if !sod2se_services::valid_id(id)
-        || !sod2se_services::install::safe_relative(file)
-        || file.contains('/')
-    {
-        return Err(INVALID);
-    }
+}
+fn inspect_plugin(path: &std::path::Path) -> Result<InspectedPlugin, i32> {
+    let manifest = sod2se_services::plugin::Manifest::read(path)?;
     // Preserve the virtual namespace for LoadLibraryExW. In USVFS the virtual
     // Plugins directory stays under the game root while DLL bytes resolve to
     // MO2's source tree, so comparing canonical physical paths rejects a
     // valid, hash-verified mapped plugin.
-    let library = plugin_root.join(file);
-    sod2se_services::overlay::no_links(&library)?;
-    if sod2se_services::diagnostics::digest(&library)?
-        != manifest["sha256"].as_str().ok_or(INVALID)?
-    {
-        return Err(INVALID);
-    }
+    let library = manifest.verify(path.parent().ok_or(INVALID)?)?;
     let module = unsafe {
         LoadLibraryExW(
             wide(&library).as_ptr(),
@@ -253,32 +271,52 @@ fn load_inner(path: &std::path::Path) -> Result<(), i32> {
     if module.is_null() {
         return Err(INTERNAL);
     }
+    let mut plugin = InspectedPlugin {
+        module,
+        manifest,
+        api: unsafe { std::mem::zeroed() },
+        resident: false,
+    };
     let Some(entry) = (unsafe { GetProcAddress(module, c"sod2se_plugin_entry".as_ptr().cast()) })
     else {
-        unsafe {
-            FreeLibrary(module);
-        }
         return Err(UNSUPPORTED);
     };
     let entry: Entry = unsafe { std::mem::transmute(entry) };
     let mut api = std::mem::MaybeUninit::<PluginApi>::zeroed();
     let result = unsafe { entry(ABI_VERSION, api.as_mut_ptr()) };
     if result != OK {
-        unsafe {
-            FreeLibrary(module);
-        }
         return Err(result);
     }
     let api = unsafe { api.assume_init() };
     if api.abi_version != ABI_VERSION
         || api.struct_size < std::mem::size_of::<PluginApi>() as u32
-        || unsafe { api.id.read()? } != id
-        || unsafe { api.version.read()? } != manifest["version"].as_str().ok_or(INVALID)?
+        || unsafe { api.id.read()? } != plugin.manifest.id
+        || unsafe { api.version.read()? } != plugin.manifest.version
     {
         return Err(UNSUPPORTED);
     }
-    let stop = api.stop.ok_or(INVALID)?;
-    let begin = api.start.ok_or(INVALID)?;
+    api.stop.ok_or(INVALID)?;
+    api.start.ok_or(INVALID)?;
+    plugin.api = api;
+    Ok(plugin)
+}
+#[unsafe(no_mangle)]
+/// Inspect a plugin's verified DLL and ABI without activating its callbacks.
+/// # Safety
+/// manifest_path must reference readable UTF-8 storage for the duration of the call.
+pub unsafe extern "C" fn sod2se_runtime_probe_plugin_v1(manifest_path: Utf8) -> i32 {
+    boundary(|| {
+        let path = std::path::Path::new(unsafe { manifest_path.read()? });
+        let _plugin = inspect_plugin(path)?;
+        Ok(())
+    })
+}
+fn load_inner(path: &std::path::Path) -> Result<(), i32> {
+    let mut plugin = inspect_plugin(path)?;
+    let module = plugin.module;
+    let id = plugin.manifest.id.as_str();
+    let stop = plugin.api.stop.ok_or(INVALID)?;
+    let begin = plugin.api.start.ok_or(INVALID)?;
     let owner = {
         let mut services = SERVICES.get().unwrap().lock().map_err(|_| INTERNAL)?;
         if services.owners.values().any(|x| x == id) {
@@ -295,9 +333,11 @@ fn load_inner(path: &std::path::Path) -> Result<(), i32> {
         services.owners.insert(owner, id.into());
         owner
     };
-    if manifest["permissions"]
-        .as_array()
-        .is_some_and(|a| a.iter().any(|p| p == "settings.frontend"))
+    if plugin
+        .manifest
+        .permissions
+        .iter()
+        .any(|p| p == "settings.frontend")
     {
         SERVICES
             .get()
@@ -307,6 +347,8 @@ fn load_inner(path: &std::path::Path) -> Result<(), i32> {
             .frontends
             .insert(owner);
     }
+    // Once activation begins, the module remains resident even on startup failure.
+    plugin.resident = true;
     let host = host_api(owner);
     let result = unsafe { begin(&host) };
     if result != OK {
