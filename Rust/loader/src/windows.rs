@@ -40,10 +40,13 @@ fn remote_module_once(pid: u32, name: &Path) -> Result<usize, i32> {
 }
 pub(super) fn injection_self_test() -> Result<(), String> {
     let executable = std::env::current_exe().map_err(|e| e.to_string())?;
-    let runtime = executable
-        .parent()
-        .ok_or("Missing test binary directory")?
-        .join("sod2se_runtime.dll")
+    let directory = executable.parent().ok_or("Missing test binary directory")?;
+    let runtime = directory
+        .join(if directory.join("sod2se_runtime.dll").exists() {
+            "sod2se_runtime.dll"
+        } else {
+            "SoD2SE.Runtime.dll"
+        })
         .canonicalize()
         .map_err(|e| e.to_string())?;
     let mut child = Command::new(&executable)
