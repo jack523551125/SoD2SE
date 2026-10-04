@@ -49,13 +49,21 @@ def main(argv=None):
     output.mkdir(parents=True, exist_ok=True)
     name = 'SoD2SE' if framework else product.name
     archive = output / f'{name}-v{version}{"-candidate" if args.candidate else ""}.zip'
-    if archive.exists():
-        raise FileExistsError(f'Existing package is preserved: {archive}')
+    developer_archive = output / f'{name}-v{version}{"-candidate" if args.candidate else ""}-developer.zip'
+    for target in (archive, developer_archive):
+        if target.exists():
+            raise FileExistsError(f'Existing package is preserved: {target}')
     with tempfile.TemporaryDirectory(prefix='package-', dir=output) as temporary:
-        stage = Path(temporary)
+        stage = Path(temporary)/'player'
+        stage.mkdir()
+        developer = Path(temporary)/'developer'
+        developer.mkdir()
         root = stage / 'Root'
         root.mkdir()
-        provenance.write(product, root/'SoD2SE/Licenses/Cargo' if framework else stage/'Licenses/Cargo')
+        evidence = developer/'Provenance/Cargo'
+        provenance.write(product, evidence)
+        provenance.bundle(evidence, root/'SoD2SE/THIRD-PARTY-NOTICES.txt' if framework else stage/'THIRD-PARTY-NOTICES.txt',
+            [('MinHook (including Hacker Disassembler Engine)',product/'Native/vendor/minhook/LICENSE.txt')] if framework else [])
         def copy(source, target):
             target = root / target
             target.parent.mkdir(parents=True, exist_ok=True)
@@ -68,12 +76,12 @@ def main(argv=None):
             builtin={'schema':1,'abi':1,'id':'mcm','version':version,'file':'Mcm.dll','sha256':digest(build/'Mcm.dll'),
                 'capabilities':['sod2.ui.native-settings'],'permissions':['settings.frontend'],'publish':not args.candidate,'framework_revision':revision}
             (root/'SoD2SE/BuiltinPlugins/Mcm.native.json').write_text(json.dumps(builtin,indent=2)+'\n',encoding='utf-8')
-            copy(product / 'Docs/RUST-API.md', 'SoD2SE/Docs/API.md')
-            copy(product / 'Rust/abi/include/sod2se.h', 'SoD2SE/SDK/sod2se.h')
-            copy(product / 'Rust/locales/template.json', 'SoD2SE/Localization/template.json')
-            copy(product / 'Native/vendor/minhook/LICENSE.txt', 'SoD2SE/Licenses/MinHook.txt')
-            copy(product / 'Automation/NativeTest.py', 'SoD2SE/Tools/NativeTest.py')
-            copy(product / 'Docs/NATIVE-TEST.zh-CN.md', 'SoD2SE/Docs/NativeTest.zh-CN.md')
+            for source,target in [('Docs/RUST-API.md','Docs/API.md'),('Rust/abi/include/sod2se.h','SDK/sod2se.h'),
+                ('Rust/locales/template.json','Localization/template.json'),('Automation/NativeTest.py','Tools/NativeTest.py'),
+                ('Docs/NATIVE-TEST.zh-CN.md','Docs/NativeTest.zh-CN.md')]:
+                destination = developer/target
+                destination.parent.mkdir(parents=True,exist_ok=True)
+                shutil.copyfile(product/source,destination)
             shutil.copyfile(product / 'Automation/Install-Rust.ps1', stage / 'Install.ps1')
             ui_status = 'SKIPPED'
             if args.native_settings_asset and args.native_ui_receipt:
@@ -99,11 +107,16 @@ def main(argv=None):
             (root / f'Plugins/{binary}.native.json').write_text(json.dumps(manifest,indent=2)+'\n',encoding='utf-8')
             (stage / 'meta.ini').write_text(f'[General]\nname={product.name}\nversion={version}\n',encoding='utf-8')
         (stage / 'README.txt').write_text('SoD2SE native ABI 1.\n'+('DEVELOPMENT CANDIDATE: live/save/controller acceptance is NOT_RUN.\n' if args.candidate else 'Reviewed native release.\n')+'Install the SoD2SE prerequisite once; MCM is built in. Install gameplay Mods separately. Legacy managed plugins require the legacy framework.\n',encoding='utf-8')
+        (developer/'build-info.json').write_text(json.dumps({'schema':1,'product':name,'version':version,'revision':revision,'scope':'Developer tools and complete license/source provenance; not a player Mod.'},indent=2)+'\n',encoding='utf-8')
         # Exclusive creation prevents any historical/candidate archive being overwritten.
         with zipfile.ZipFile(archive,'x',compression=zipfile.ZIP_DEFLATED) as zipped:
             for path in sorted(stage.rglob('*')):
                 if path.is_file(): zipped.write(path,path.relative_to(stage).as_posix())
+        with zipfile.ZipFile(developer_archive,'x',compression=zipfile.ZIP_DEFLATED) as zipped:
+            for path in sorted(developer.rglob('*')):
+                if path.is_file(): zipped.write(path,path.relative_to(developer).as_posix())
     print(f'CREATED: {archive}; SHA256={digest(archive)}')
+    print(f'CREATED: {developer_archive}; SHA256={digest(developer_archive)}')
     return 0
 
 if __name__ == '__main__':

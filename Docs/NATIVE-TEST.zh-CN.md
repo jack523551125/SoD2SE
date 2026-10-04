@@ -6,7 +6,7 @@
 
 `Automation/NativeTest.py prepare` 使用显式指定的游戏、存档和解压包路径。它先校验游戏版本与包哈希，复制并校验存档备份，再按已审查的旧版文件清单迁移安装。备份、配置、资源和报告都留在本地。此命令不会启动游戏或切换正在运行的 MO2 实例。
 
-当前本机按用户要求使用 `E:\Game\SD2_mod` 的 MO2 配置档 `SoD2SE Rust Test`。MCM 已内置于框架；无限随从与验收示例由 MO2 虚拟映射；只有框架安装在游戏根目录。打开桌面 `SoD2SE Rust 测试` 的 MO2 入口，选择该配置档并运行 `SoD2SE (MO2)`。不要使用含旧版 managed Mod 的 Default 配置档测试 Rust 框架。
+当前本机按用户要求使用 `E:\Game\SD2_mod` 的 MO2 配置档 `SoD2SE Rust Test`。MCM 已内置于框架；无限随从与验收示例由 MO2 虚拟映射；只有框架安装在游戏根目录。直接启动现有 MO2，选择该配置档并运行 `SoD2SE (MO2)`。不创建桌面测试快捷方式。旧独立 MCM 保持禁用，避免同 ID 重复加载。不要使用含旧版 managed Mod 的 Default 配置档测试 Rust 框架。
 
 测试包包括可选的开发验收示例：一个布尔值和一个 1–10 的整数，只验证配置、翻译和风险标记，不改变玩法。正式的无限随从没有新增数量滑块。
 
@@ -21,11 +21,13 @@
 
 ## 无 MCM 路径
 
-退出游戏和 Loader，运行 `NativeTest.py mode --environment <测试目录> --mode without-mcm`。再次启动，确认无限随从可工作；Mod 设置前端不应启用。可通过 Developer Tools 的 Registry 接口修改示例配置。测试完退出，再用 `--mode with-mcm` 恢复前端。
+合并包中的 MCM 是框架所有的内置文件，不能通过旧 mode 脚本移动。无前端服务验收使用隔离开发宿主；当前玩家包正常包含 MCM。旧候选版的独立 MCM 文件仍可按其旧 receipt 使用 without-mcm / with-mcm 模式。
 
 ## 更新、回退与卸载
 
 新候选版本先通过框架 `install` 完成带备份的更新；Mod 包必须匹配新框架精确 revision，并在游戏退出后更新。原生代码更新必须重启。
+
+从包含 SDK/多文件 Licenses 的旧布局切换到精简玩家包时，先从外部解压包运行 uninstall，再 install 新包；现有安装器会拒绝直接更新含有移除文件的布局。卸载只处理清单声明并校验过的框架文件，配置与存档不在删除清单中。SDK、API 文档、翻译模板、NativeTest.py 和完整来源记录另放在 -developer.zip 中，不安装进游戏。
 
 `NativeTest.py rollback --environment <测试目录>` 校验本次文件所有权、恢复受控 UI 覆盖、卸载框架并恢复旧版文件。遇到用户修改或外来文件时拒绝覆盖。存档不会自动还原，测试前的副本始终保留；需要恢复时先保留测试后的存档副本。游戏退出后的原版存档载入、超出原版限制的随从状态仍需要实际验证。
 

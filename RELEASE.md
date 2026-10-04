@@ -1,5 +1,7 @@
 # SoD2SE release record
 
+Native player and developer archives are generated separately by Automation/Rust.ps1. The player archive contains one consolidated third-party notices file; the developer archive retains SDK, tools and complete dependency provenance. Never remove copyright, license conditions or required NOTICE content to reduce file count. No player acknowledgment dialog is required by these bundled notices.
+
 ## Authority and current state
 
 - Version authority: Core/SoD2SE.Core.cs (`FrameworkInfo.Version`)

@@ -21,12 +21,12 @@ def main():
     args = parser.parse_args()
     report = {'schema': 1, 'captured_utc': datetime.now(timezone.utc).isoformat(), 'repositories': {}, 'comparison': {}, 'checks': []}
     for name in REPOS:
-        repo = WORKSPACE / 'Projects' / name
+        repo = WORKSPACE / ('Compatibility' if name in ('SoD2SE-Loader','NativeModSettingsEntry','MCM') else 'Projects') / name
         report['repositories'][name] = {'head': git(repo, 'rev-parse', 'HEAD'), 'branch': git(repo, 'branch', '--show-current'), 'status': git(repo, 'status', '--porcelain=v1'), 'remotes': git(repo, 'remote', '-v')}
     # Source only: do not traverse builds, game installs, research inputs or vendor.
     for directory in ['Core', 'GameApi', 'Loader']:
         left = PRODUCT / directory
-        right = WORKSPACE / 'Projects/SoD2SE-Loader' / directory
+        right = WORKSPACE / 'Compatibility/SoD2SE-Loader' / directory
         for root, label in [(left,'framework'),(right,'loader')]:
             report['comparison'][label+'.'+directory] = {p.relative_to(root).as_posix(): hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(root.rglob('*.cs'))}
     if args.run_checks:

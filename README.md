@@ -2,6 +2,8 @@
 
 The player prerequisite now includes built-in Rust MCM. No separate MCM download is needed. Loader creates the Plugins namespace; Registry configuration lives under `Plugins/SoD2SE/Settings/<profile>/registry.json`. MO2 redirects creation to overwrite; standalone startup uses the game directory.
 
+Player packages contain runtime files, installation/diagnostic support and one `THIRD-PARTY-NOTICES.txt`. SDK, API documents, translation templates, test tools and complete dependency provenance are distributed separately in `-developer.zip`. The superseded standalone Loader, MCM and native settings repositories are compatibility/rollback sources; new native development is owned here.
+
 The staged Rust product is **SoD2SE — State of Decay 2 System Extender**. Native ABI 1, Loader, Runtime, Settings Registry and native UI adapters are owned here. See [native APIs and commands](Docs/RUST-API.md) and [execution/acceptance status](Docs/Migration/Rust/STATUS.md). Select `Automation/dev.ps1 test SoD2SE --rust` for native checks. Legacy managed entrypoints remain available until required live acceptance permits release cutover.
 
 [Existing usage and installation](README.zh-CN.md). Status: preview; this repository owns SoD2SE Core, GameApi, shared native runtime, and framework build entrypoints.

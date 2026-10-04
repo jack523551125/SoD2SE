@@ -30,3 +30,26 @@ def write(product:Path,destination:Path):
     (destination/'third-party.json').write_text(json.dumps({'schema':1,'packages':entries,
         'authored_license':'No redistribution license grant is declared by the private authored source repositories.',
         'scope':'Locked dependency source/license evidence; build dependencies may be included.'},indent=2)+'\n',encoding='utf-8')
+
+def bundle(evidence: Path, destination: Path, additional=()):
+    """Consolidate complete notices, deduplicating identical texts with explicit attribution."""
+    inventory = json.loads((evidence/'third-party.json').read_text(encoding='utf-8'))
+    texts = {}
+    for package in inventory['packages']:
+        for item in package['license_files']:
+            source = evidence/item['path']
+            if hashlib.sha256(source.read_bytes()).hexdigest() != item['sha256']:
+                raise ValueError(f'License evidence hash mismatch: {source.name}')
+            text = source.read_text(encoding='utf-8-sig').replace('\r\n', '\n')
+            label = f"{package['name']} {package['version']} / {source.name} / {package['source']}"
+            texts.setdefault(text, []).append(label)
+    for label, source in additional:
+        text = Path(source).read_text(encoding='utf-8-sig').replace('\r\n', '\n')
+        texts.setdefault(text, []).append(label)
+    if not texts:
+        raise ValueError('No third-party license evidence found')
+    destination.parent.mkdir(parents=True, exist_ok=True)
+    parts = ['Third-party notices supplied with this distribution.\nNo in-game acknowledgment is required.\n']
+    for text, labels in texts.items():
+        parts.append('\n'+'='*78+'\nApplies to:\n'+'\n'.join(labels)+'\n\n'+text+'\n')
+    destination.write_text(''.join(parts), encoding='utf-8')

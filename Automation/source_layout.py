@@ -4,6 +4,11 @@ import os
 from pathlib import Path
 
 _MAPPING = json.loads(Path(__file__).with_name('source-layout.json').read_text(encoding='utf-8'))
+# Keep the historical provenance labels while resolving relocated compatibility owners.
+for old, target in _MAPPING.items():
+    for name in ('MCM', 'SoD2SE-Loader', 'NativeModSettingsEntry'):
+        target = target.replace('../../Projects/'+name+'/', '../../Compatibility/'+name+'/')
+    _MAPPING[old] = target
 
 def resolve(relative):
     original = relative

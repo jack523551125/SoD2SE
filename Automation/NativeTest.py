@@ -92,7 +92,12 @@ def prepare(args):
         raise ValueError('Existing game-root plugins require a separate reviewed migration')
     info = json.loads((args.framework_root / 'SoD2SE/build-info.json').read_text(encoding='utf-8'))
     payloads = []
-    for root in [args.mcm_root, args.followers_root, *([args.example_root] if args.example_root else [])]:
+    builtin_mcm = 'mcm' in info.get('builtin_plugins', [])
+    if builtin_mcm and args.mcm_root:
+        raise ValueError('MCM is built into this framework; omit --mcm-root to avoid duplicate plugins')
+    if not builtin_mcm and not args.mcm_root:
+        raise ValueError('Legacy candidate without built-in MCM requires --mcm-root')
+    for root in [*([args.mcm_root] if args.mcm_root else []), args.followers_root, *([args.example_root] if args.example_root else [])]:
         payloads.extend(plugin_files(root, info['revision']))
     if len({name.casefold() for _, name in payloads}) != len(payloads):
         raise ValueError('Plugin packages collide')
@@ -130,7 +135,7 @@ def prepare(args):
         if digest(source) != digest(staged / name):
             raise ValueError('Staging verification failed')
     receipt = {'schema':1, 'game_root':str(game), 'save_root':str(saved), 'profile':'rust-acceptance',
-        'framework_revision':info['revision'], 'stage':'prepared', 'legacy_archived':False,
+        'framework_revision':info['revision'], 'builtin_mcm':builtin_mcm, 'stage':'prepared', 'legacy_archived':False,
         'save_backup':backups, 'plugins':[{'name':name,'sha256':digest(staged/name)} for _,name in payloads],
         'input_device':'Xbox controller via Bluetooth', 'live_acceptance':'NOT_RUN'}
     destination = environment / 'test-session.json'
@@ -184,6 +189,8 @@ def mode(args):
     path, receipt, game, _ = paths(args.environment)
     if receipt['stage'] != 'ready':
         raise ValueError('Session is not ready')
+    if args.mode == 'without-mcm' and receipt.get('builtin_mcm'):
+        raise ValueError('Built-in MCM is framework-owned; use an isolated developer host for without-frontend acceptance')
     verify_plugins(receipt, game, args.environment)
     (args.environment / 'Disabled').mkdir(exist_ok=True)
     for entry in receipt['plugins']:
@@ -233,8 +240,9 @@ def main():
     parser=argparse.ArgumentParser(description=__doc__)
     commands=parser.add_subparsers(dest='command',required=True)
     prepare_parser=commands.add_parser('prepare')
-    for name in ['game-root','environment','save-root','framework-root','mcm-root','followers-root']:
+    for name in ['game-root','environment','save-root','framework-root','followers-root']:
         prepare_parser.add_argument('--'+name,type=Path,required=True)
+    prepare_parser.add_argument('--mcm-root',type=Path,help='Legacy candidates only; bundled MCM requires no separate package')
     prepare_parser.add_argument('--example-root',type=Path)
     prepare_parser.add_argument('--legacy-review',type=Path)
     for name in ['mode','rollback','report']:
