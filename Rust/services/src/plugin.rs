@@ -101,3 +101,17 @@ pub fn discover(root: &Path) -> Result<Vec<(PathBuf, Manifest)>, i32> {
     found.sort_by(|a, b| a.0.cmp(&b.0));
     Ok(found)
 }
+
+/// Discover framework-owned builtins together with external plugins.
+pub fn discover_all(game_root: &Path) -> Result<Vec<(PathBuf, Manifest)>, i32> {
+    let mut found = discover(&game_root.join("SoD2SE/BuiltinPlugins"))?;
+    found.extend(discover(&game_root.join("Plugins"))?);
+    let mut ids = BTreeSet::new();
+    if found
+        .iter()
+        .any(|(_, manifest)| !ids.insert(manifest.id.clone()))
+    {
+        return Err(INVALID);
+    }
+    Ok(found)
+}

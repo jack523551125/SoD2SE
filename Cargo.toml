@@ -1,6 +1,6 @@
 [workspace]
 resolver = "2"
-members = ["Rust/abi", "Rust/sdk", "Rust/services", "Rust/game-api", "Rust/runtime", "Rust/loader", "Rust/devtools", "Rust/example"]
+members = ["Rust/abi", "Rust/sdk", "Rust/services", "Rust/game-api", "Rust/runtime", "Rust/loader", "Rust/devtools", "Rust/example", "Rust/mcm"]
 
 [workspace.package]
 version = "0.7.0-preview.1"

@@ -6,7 +6,7 @@
 
 `Automation/NativeTest.py prepare` 使用显式指定的游戏、存档和解压包路径。它先校验游戏版本与包哈希，复制并校验存档备份，再按已审查的旧版文件清单迁移安装。备份、配置、资源和报告都留在本地。此命令不会启动游戏或切换正在运行的 MO2 实例。
 
-当前本机按用户要求使用 `E:\Game\SD2_mod` 的 MO2 配置档 `SoD2SE Rust Test`。MCM、无限随从与验收示例均由 MO2 虚拟映射；只有框架安装在游戏根目录。打开桌面 `SoD2SE Rust 测试` 的 MO2 入口，选择该配置档并运行 `SoD2SE (MO2)`。不要使用含旧版 managed Mod 的 Default 配置档测试 Rust 框架。
+当前本机按用户要求使用 `E:\Game\SD2_mod` 的 MO2 配置档 `SoD2SE Rust Test`。MCM 已内置于框架；无限随从与验收示例由 MO2 虚拟映射；只有框架安装在游戏根目录。打开桌面 `SoD2SE Rust 测试` 的 MO2 入口，选择该配置档并运行 `SoD2SE (MO2)`。不要使用含旧版 managed Mod 的 Default 配置档测试 Rust 框架。
 
 测试包包括可选的开发验收示例：一个布尔值和一个 1–10 的整数，只验证配置、翻译和风险标记，不改变玩法。正式的无限随从没有新增数量滑块。
 
@@ -34,3 +34,5 @@ MO2 测试使用独立的便携程序副本与 `SoD2SE Rust Test` 配置档，�
 ## 反馈
 
 记录入口、版本、社区槽位、操作步骤、预期与实际结果、输入设备和诊断报告。不要上传原始存档、派生游戏资源、session.json 或内存转储。手工未执行的项目保留 NOT_RUN，失败项记录 FAIL。
+
+当前合并包不再启用独立 Rust MCM Mod，避免同 ID 重复加载。配置由 Registry 写入 Plugins 命名空间，MO2 对应 overwrite/Root/Plugins/SoD2SE/Settings/<配置档 ID>/registry.json。

@@ -103,6 +103,36 @@ impl Registry {
             declared_schemas: BTreeMap::new(),
         })
     }
+    /// Import the previous Registry location once without removing its bytes.
+    pub fn import_document(&mut self, source: &Path) -> Result<bool, i32> {
+        if self.path.exists() || !source.exists() {
+            return Ok(false);
+        }
+        let raw = fs::read(source).map_err(|_| INTERNAL)?;
+        let document: Document = serde_json::from_slice(&raw).map_err(|_| INVALID)?;
+        if document.schema != 1 {
+            return Err(STALE);
+        }
+        let backup = source.with_extension("json.before-plugins");
+        if backup.exists() {
+            if fs::read(&backup).map_err(|_| INTERNAL)? != raw {
+                return Err(INVALID);
+            }
+        } else {
+            use std::io::Write;
+            let mut file = fs::OpenOptions::new()
+                .write(true)
+                .create_new(true)
+                .open(&backup)
+                .map_err(|_| INTERNAL)?;
+            file.write_all(&raw)
+                .and_then(|_| file.sync_all())
+                .map_err(|_| INTERNAL)?;
+        }
+        self.save(&document)?;
+        self.document = document;
+        Ok(true)
+    }
     pub fn register(
         &mut self,
         owner: u64,

@@ -324,7 +324,11 @@ pub(super) fn launch(exe: &Path, options: &Options) -> Result<(), i32> {
     }
     let (target, ownership) = overlay_paths(&options.profile)?;
     let mut mounted = false;
-    let plugins = sod2se_services::plugin::discover(&dir.join("Plugins"))?;
+    // In MO2 this directory is virtual and its creation target is overwrite.
+    if !options.mo2 {
+        std::fs::create_dir_all(dir.join("Plugins")).map_err(|_| INTERNAL)?;
+    }
+    let plugins = sod2se_services::plugin::discover_all(&dir)?;
     if plugins
         .iter()
         .any(|(_, m)| m.framework_revision != revision)

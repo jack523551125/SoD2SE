@@ -64,6 +64,10 @@ def main(argv=None):
         if framework:
             for source, target in [('sod2se-loader.exe','SoD2SE.Loader.exe'),('sod2se_runtime.dll','SoD2SE.Runtime.dll'),('sod2se-devtools.exe','SoD2SE.DevTools.exe')]:
                 copy(build / source, target)
+            copy(build/'Mcm.dll','SoD2SE/BuiltinPlugins/Mcm.dll')
+            builtin={'schema':1,'abi':1,'id':'mcm','version':version,'file':'Mcm.dll','sha256':digest(build/'Mcm.dll'),
+                'capabilities':['sod2.ui.native-settings'],'permissions':['settings.frontend'],'publish':not args.candidate,'framework_revision':revision}
+            (root/'SoD2SE/BuiltinPlugins/Mcm.native.json').write_text(json.dumps(builtin,indent=2)+'\n',encoding='utf-8')
             copy(product / 'Docs/RUST-API.md', 'SoD2SE/Docs/API.md')
             copy(product / 'Rust/abi/include/sod2se.h', 'SoD2SE/SDK/sod2se.h')
             copy(product / 'Rust/locales/template.json', 'SoD2SE/Localization/template.json')
@@ -82,19 +86,19 @@ def main(argv=None):
                 ui_status = 'PACKAGED_NOT_LIVE_VERIFIED'
             elif not args.candidate:
                 raise ValueError('SKIPPED: reviewed fixed-build native UI resource and receipt are required')
-            info = {'schema':1, 'native_abi':1, 'version':version, 'revision':revision, 'publish':not args.candidate, 'native_ui':ui_status, 'live_acceptance':'NOT_RUN' if args.candidate else 'REVIEWED'}
+            info = {'schema':1, 'native_abi':1, 'version':version, 'revision':revision, 'publish':not args.candidate, 'native_ui':ui_status, 'builtin_plugins':['mcm'], 'live_acceptance':'NOT_RUN' if args.candidate else 'REVIEWED'}
             (root / 'SoD2SE/build-info.json').parent.mkdir(parents=True, exist_ok=True)
             (root / 'SoD2SE/build-info.json').write_text(json.dumps(info,indent=2)+'\n',encoding='utf-8')
             entries = [{'path':p.relative_to(root).as_posix(),'sha256':digest(p)} for p in sorted(root.rglob('*')) if p.is_file()]
             (root / 'framework.manifest.json').write_text(json.dumps({'schema':1,'version':version,'files':entries},indent=2)+'\n',encoding='utf-8')
         else:
-            mapping = {'MCM':('Mcm','mcm',['sod2.ui.native-settings'],['settings.frontend']), 'UnlimitedFollowers':('UnlimitedFollowers','unlimited-followers',['sod2.followers.quantity'],[])}
+            mapping = {'UnlimitedFollowers':('UnlimitedFollowers','unlimited-followers',['sod2.followers.quantity'],[])}
             binary, plugin_id, capabilities, permissions = mapping[product.name]
             copy(build / f'{binary}.dll', f'Plugins/{binary}.dll')
             manifest = {'schema':1,'abi':1,'id':plugin_id,'version':version,'file':f'{binary}.dll','sha256':digest(build/f'{binary}.dll'),'capabilities':capabilities,'permissions':permissions,'publish':not args.candidate,'framework_revision':json.loads((product/'rust-dependencies.lock.json').read_text(encoding='utf-8'))['SoD2SE']['revision']}
             (root / f'Plugins/{binary}.native.json').write_text(json.dumps(manifest,indent=2)+'\n',encoding='utf-8')
             (stage / 'meta.ini').write_text(f'[General]\nname={product.name}\nversion={version}\n',encoding='utf-8')
-        (stage / 'README.txt').write_text('SoD2SE native ABI 1.\n'+('DEVELOPMENT CANDIDATE: live/save/controller acceptance is NOT_RUN.\n' if args.candidate else 'Reviewed native release.\n')+'Install the SoD2SE prerequisite once. Install MCM and UnlimitedFollowers separately. Legacy managed plugins require the legacy framework.\n',encoding='utf-8')
+        (stage / 'README.txt').write_text('SoD2SE native ABI 1.\n'+('DEVELOPMENT CANDIDATE: live/save/controller acceptance is NOT_RUN.\n' if args.candidate else 'Reviewed native release.\n')+'Install the SoD2SE prerequisite once; MCM is built in. Install gameplay Mods separately. Legacy managed plugins require the legacy framework.\n',encoding='utf-8')
         # Exclusive creation prevents any historical/candidate archive being overwritten.
         with zipfile.ZipFile(archive,'x',compression=zipfile.ZIP_DEFLATED) as zipped:
             for path in sorted(stage.rglob('*')):

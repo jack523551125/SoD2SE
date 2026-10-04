@@ -9,7 +9,7 @@ fn run() -> Result<(), String> {
             let package:sod2se_services::install::Manifest=serde_json::from_slice(&std::fs::read(game.join("framework.manifest.json")).map_err(|e|e.to_string())?).map_err(|e|e.to_string())?;
             package.verify(&game).map_err(|c|format!("PACKAGE_REFUSED: {c}"))?;
             let info:serde_json::Value=serde_json::from_slice(&std::fs::read(game.join("SoD2SE/build-info.json")).map_err(|e|e.to_string())?).map_err(|e|e.to_string())?;
-            let plugins=sod2se_services::plugin::discover(&game.join("Plugins")).map_err(|c|format!("PLUGIN_PREFLIGHT_REFUSED: {c}"))?;
+            let plugins=sod2se_services::plugin::discover_all(&game).map_err(|c|format!("PLUGIN_PREFLIGHT_REFUSED: {c}"))?;
             if plugins.iter().any(|(_,manifest)|Some(manifest.framework_revision.as_str())!=info["revision"].as_str()) {return Err("PLUGIN_DEPENDENCY_REFUSED: framework revision mismatch".into());}
             println!("PASS: {} plugin manifests, ABI, hashes and framework pins",plugins.len());Ok(())
         },

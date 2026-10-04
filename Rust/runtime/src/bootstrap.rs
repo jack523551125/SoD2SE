@@ -48,7 +48,7 @@ fn start_inner() -> Result<(), i32> {
     if info["version"].as_str() != Some(env!("CARGO_PKG_VERSION")) {
         return Err(UNSUPPORTED);
     }
-    let discovered = sod2se_services::plugin::discover(&root.join("Plugins"))?;
+    let discovered = sod2se_services::plugin::discover_all(root)?;
     if discovered
         .iter()
         .any(|(_, manifest)| manifest.framework_revision != revision)
@@ -60,23 +60,31 @@ fn start_inner() -> Result<(), i32> {
     if !sod2se_services::valid_id(&profile) {
         return Err(INVALID);
     }
-    let data = local.join("StateOfDecay2/SoD2SE/Rust").join(profile);
+    let data = local.join("StateOfDecay2/SoD2SE/Rust").join(&profile);
     let session = data.join("session.json");
     let early_logger = Logger::new(data.join("runtime.jsonl"));
-    let mut services = Services::open(data, true).inspect_err(|code| {
-        let _ = early_logger.write(
-            3,
-            "runtime",
-            "SERVICES_OPEN_REFUSED",
-            &format!("status {code}"),
-        );
-    })?;
+    let config_path = root
+        .join("Plugins/SoD2SE/Settings")
+        .join(&profile)
+        .join("registry.json");
+    let mut services =
+        Services::open_with_settings(data.clone(), config_path, true).inspect_err(|code| {
+            let _ = early_logger.write(
+                3,
+                "runtime",
+                "SERVICES_OPEN_REFUSED",
+                &format!("status {code}"),
+            );
+        })?;
     services.logger.write(
         1,
         "runtime",
         "SERVICES_OPENED",
         "Profile services initialized",
     )?;
+    services
+        .settings
+        .import_document(&data.join("settings.json"))?;
     services.catalog.locale = sod2se_game_api::language::detect(root, &local);
     let legacy = local.join("StateOfDecay2/SoD2SE/mcm.ini");
     if legacy.exists() {

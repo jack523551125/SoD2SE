@@ -1,0 +1,11 @@
+[package]
+name = "sod2se-mcm"
+version.workspace = true
+edition.workspace = true
+publish.workspace = true
+[lib]
+name = "Mcm"
+path = "src/lib.rs"
+crate-type = ["cdylib", "rlib"]
+[dependencies]
+sod2se-sdk.workspace = true

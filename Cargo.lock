@@ -213,6 +213,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "sod2se-mcm"
+version = "0.7.0-preview.1"
+dependencies = [
+ "sod2se-sdk",
+]
+
+[[package]]
 name = "sod2se-runtime"
 version = "0.7.0-preview.1"
 dependencies = [

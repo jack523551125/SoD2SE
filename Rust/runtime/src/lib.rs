@@ -31,9 +31,17 @@ pub struct Services {
 }
 impl Services {
     pub fn open(path: PathBuf, game_verified: bool) -> Result<Self, i32> {
+        let settings = path.join("settings.json");
+        Self::open_with_settings(path, settings, game_verified)
+    }
+    pub fn open_with_settings(
+        path: PathBuf,
+        settings: PathBuf,
+        game_verified: bool,
+    ) -> Result<Self, i32> {
         Ok(Self {
             state: sod2se_services::state::Store::open(&path.join("state"))?,
-            settings: Registry::open(path.join("settings.json"))?,
+            settings: Registry::open(settings)?,
             ui: UiRegistry::default(),
             owners: BTreeMap::new(),
             logger: Logger::new(path.join("runtime.jsonl")),
