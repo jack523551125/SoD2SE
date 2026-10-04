@@ -190,3 +190,28 @@ python .\Automation/Check/verify_release.py
 这是固定补丁版本、单机优先的最小框架。启动器的路径解析和进程创建不绑定游戏版本，但插件的 RVA、原始字节和上下文只针对 Update 38.2 / Build 16535856。尚未实测多人模式、所有任务、车辆、角色切换和存档重载行为。无限随从只解除数量判断，仍保留重复角色、任务占用、关系和其他原版条件。社区招募插件不等于任意人数都能稳定运行，且没有改写建造者遗产等资产中的独立人数剧情条件。
 
 内部实体目录及新命令见 [INTERNAL_LAYOUT.md](Docs/INTERNAL_LAYOUT.md)。默认构建和原生缓存已统一到工作区 `.work/SoD2SE`；旧 compiled 目录已分类归档。
+
+
+## 开发、离线验证与打包
+
+Windows x64、PowerShell 7、Visual Studio 2022 C++ 工具链与 CMake、.NET Framework 4.x C# 编译器、Python 3.13；打包测试依赖通过 `python -m pip install -r Automation/Test/requirements.txt` 安装。
+
+独立 checkout 使用本仓库维护的入口：
+
+```powershell
+.\Automation\Build\build.ps1
+.\Automation\Test\test.ps1
+.\package.ps1
+```
+
+
+在 workspace 根目录，`Automation/dev.ps1` 会调用同一套产品入口：
+
+```powershell
+.\Automation\dev.ps1 build SoD2SE
+.\Automation\dev.ps1 check SoD2SE
+.\Automation\dev.ps1 test SoD2SE
+.\Automation\dev.ps1 package SoD2SE
+```
+
+构建、测试和打包入口不会启动或附加到游戏；可复现产物写入忽略的 `.work`。 版本来源、tag 约定、验收材料和发布输入见 [RELEASE.md](RELEASE.md)。

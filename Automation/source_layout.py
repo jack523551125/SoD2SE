@@ -1,5 +1,6 @@
 """Resolve historical provenance paths without rewriting research evidence."""
 import json
+import os
 from pathlib import Path
 
 _MAPPING = json.loads(Path(__file__).with_name('source-layout.json').read_text(encoding='utf-8'))
@@ -21,19 +22,39 @@ def work_root(source_root):
 
 def source_file(base, relative):
     relative = resolve(relative)
-    base = Path(base)
+    base = Path(base).resolve()
+    workspace = workspace_root()
+    allowed_roots = [base]
+    if workspace is not None:
+        allowed_roots.append(workspace.resolve())
     for candidate in (base / relative, base / 'source' / relative):
+        candidate = candidate.resolve()
+        if not any(candidate == root or root in candidate.parents for root in allowed_roots):
+            continue
         if candidate.is_file():
             return candidate
-    raise FileNotFoundError(f'No source file for {relative} in {base} or its source directory')
+    raise FileNotFoundError(f'No source file for {relative} within {base}' + (f' or {workspace}' if workspace else ''))
 
 def project_root():
     return Path(__file__).resolve().parents[1]
 
-def research_root():
-    return project_root() / 'Research'
-
 def workspace_root():
+    override = os.environ.get('SOD2_WORKSPACE_ROOT')
+    if override:
+        candidate = Path(override).resolve()
+        if (candidate / 'workspace.toml').is_file():
+            return candidate
     project = project_root()
     candidate = project.parent.parent
     return candidate if (candidate / 'workspace.toml').is_file() else None
+
+def research_root():
+    override = os.environ.get('SOD2_RESEARCH_ROOT')
+    if override:
+        return Path(override).resolve()
+    workspace = workspace_root()
+    if workspace is not None:
+        candidate = workspace / 'ReverseEngineering'
+        if candidate.is_dir():
+            return candidate
+    return project_root() / 'Research'
