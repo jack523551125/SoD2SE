@@ -233,25 +233,6 @@ fn inject(pid: u32, runtime: &Path) -> Result<(), i32> {
     }
     Ok(())
 }
-#[cfg(test)]
-mod tests {
-    use super::*;
-    #[test]
-    fn extended_paths_identify_the_same_module_without_basename_matching() {
-        assert!(same_module_path(
-            Path::new(r"\\?\E:\Game\SoD2SE.Runtime.dll"),
-            Path::new(r"E:\Game\SoD2SE.Runtime.dll")
-        ));
-        assert!(same_module_path(
-            Path::new(r"\\?\UNC\server\share\Runtime.dll"),
-            Path::new(r"\\server\share\Runtime.dll")
-        ));
-        assert!(!same_module_path(
-            Path::new(r"E:\Other\Runtime.dll"),
-            Path::new(r"E:\Game\Runtime.dll")
-        ));
-    }
-}
 pub(super) fn launch(exe: &Path, options: &Options) -> Result<(), i32> {
     let instance = Handle(unsafe {
         CreateMutexW(
@@ -407,4 +388,24 @@ pub(super) fn recover_resources(options: &Options) -> Result<(), i32> {
     }
     let (target, ownership) = overlay_paths(&options.profile)?;
     sod2se_services::overlay::recover(&target, &ownership)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    #[test]
+    fn extended_paths_identify_the_same_module_without_basename_matching() {
+        assert!(same_module_path(
+            Path::new(r"\\?\E:\Game\SoD2SE.Runtime.dll"),
+            Path::new(r"E:\Game\SoD2SE.Runtime.dll")
+        ));
+        assert!(same_module_path(
+            Path::new(r"\\?\UNC\server\share\Runtime.dll"),
+            Path::new(r"\\server\share\Runtime.dll")
+        ));
+        assert!(!same_module_path(
+            Path::new(r"E:\Other\Runtime.dll"),
+            Path::new(r"E:\Game\Runtime.dll")
+        ));
+    }
 }
