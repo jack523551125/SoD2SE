@@ -1,3 +1,5 @@
+#![cfg_attr(all(windows, not(debug_assertions)), windows_subsystem = "windows")]
+
 use sod2se_abi::{INTERNAL, INVALID};
 use std::{
     path::{Path, PathBuf},
@@ -104,6 +106,14 @@ fn run() -> Result<(), String> {
     }
 }
 fn main() {
+    #[cfg(all(windows, not(debug_assertions)))]
+    if std::env::args().any(|arg| arg == "--console") {
+        // Player packages are GUI-subsystem executables. Developers can opt
+        // into a console; ordinary startup keeps diagnostics in the log file.
+        unsafe {
+            windows_sys::Win32::System::Console::AllocConsole();
+        }
+    }
     if let Err(error) = run() {
         eprintln!("{error}");
         if let Some(local) = std::env::var_os("LOCALAPPDATA") {

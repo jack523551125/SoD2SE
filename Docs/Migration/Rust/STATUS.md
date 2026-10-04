@@ -36,6 +36,8 @@ Missing fixed inputs remain SKIPPED. No synthetic original asset, accepted save,
 
 ## Owner-directed test handoff
 
+On 2026-10-05 the owner reported that the current features work in game, then requested removal of the persistent command window. This confirms the basic live load/function path; it does not certify all save/update/controller scenarios. Player release Loader binaries now use the Windows GUI subsystem, with an explicit developer `--console` opt-in and existing file logging.
+
 After child readiness succeeded, the owner reached RUNTIME_MODULE_FOUND but bootstrap returned -1. Local profile state confirmed that legacy import had completed. Runtime's separate DLL-loading function still compared physical canonical paths and rejected legal mapped DLLs. Runtime now obtains its virtual DLL path from the same manifest verifier as preflight, and shares DLL/ABI inspection with a developer-only inactive probe. Plugin refusals are logged with manifest identity and stable error code; no real-game success is inferred from the probe.
 
 A read-only isolated USVFS diagnostic reproduced the continuing `-1`: all three DLL hashes matched, but their resolved paths were outside the physical virtual-parent directory. The old Rust preflight returned `PLUGIN_PREFLIGHT_REFUSED: -1` in this non-game child. Verification now retains the safe virtual filename with hash/link guards rather than requiring physical-parent containment. A full non-launching Loader preflight is provided for this diagnostic; real-game results remain separate.

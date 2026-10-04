@@ -60,6 +60,8 @@ The Iggy bridge ports the existing reviewed 16535856 callback layout, pinned mod
 
 ## Player installation, diagnostics and rollback
 
+Release Loader binaries use the Windows GUI subsystem and do not create a console during ordinary player startup. Explicit `--console` allocates a developer console; debug builds remain console applications. File diagnostics remain enabled throughout the tracked game session.
+
 `archive-legacy <game-root> <reviewed-inventory.json>` archives only the three explicitly allowed legacy framework filenames after exact SHA-256 review. A durable transition record supports interrupted recovery. `restore-legacy <game-root>` requires native uninstall and refuses foreign targets, including identical content with a different file identity. `recover-overlay <profile-id>` removes only a matching framework-owned UI overlay after game exit. `recover-settings <offline-settings.json>` restores last-good configuration with the writer lock and preserves the damaged input.
 
 `verify-plugins <game-root>` validates manifest/ABI/hash and exact framework revision before launch. Loader and Runtime both refuse mismatched dependency pins. Installing, updating, recovering and uninstalling the framework take the same deployment lock.
