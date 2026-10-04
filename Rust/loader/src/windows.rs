@@ -53,7 +53,12 @@ pub(super) fn injection_self_test() -> Result<(), String> {
         .arg("--inert-host-child")
         .spawn()
         .map_err(|e| e.to_string())?;
-    let result = inject(child.id(), &runtime);
+    let result = if unsafe { GetModuleHandleW(wide(Path::new("usvfs_x64.dll")).as_ptr()) }.is_null()
+    {
+        inject(child.id(), &runtime)
+    } else {
+        ensure_usvfs(&mut child).and_then(|_| inject(child.id(), &runtime))
+    };
     // This process was created exclusively as an authored non-game ABI fixture.
     let _ = child.kill();
     let _ = child.wait();
@@ -95,12 +100,52 @@ fn module_snapshot(pid: u32) -> Result<Handle, i32> {
         if handle != INVALID_HANDLE_VALUE {
             return Ok(Handle(handle));
         }
-        if unsafe { GetLastError() } != ERROR_BAD_LENGTH {
+        let error = unsafe { GetLastError() };
+        if ![ERROR_BAD_LENGTH, ERROR_PARTIAL_COPY].contains(&error) {
+            diagnostic(
+                "MODULE_SNAPSHOT_FAILED",
+                &format!("PID {pid}; Win32 {error}"),
+            );
             return Err(INTERNAL);
         }
         std::thread::sleep(std::time::Duration::from_millis(20));
     }
     Err(sod2se_abi::BUSY)
+}
+fn ensure_usvfs(child: &mut std::process::Child) -> Result<(), i32> {
+    let deadline = std::time::Instant::now() + std::time::Duration::from_secs(10);
+    while std::time::Instant::now() < deadline {
+        if let Some(status) = child.try_wait().map_err(|_| INTERNAL)? {
+            diagnostic(
+                "CHILD_EXITED_BEFORE_USVFS",
+                &format!("PID {}; {status}", child.id()),
+            );
+            return Err(INTERNAL);
+        }
+        let snapshot = module_snapshot(child.id())?;
+        let mut entry: MODULEENTRY32W = unsafe { std::mem::zeroed() };
+        entry.dwSize = std::mem::size_of::<MODULEENTRY32W>() as u32;
+        let mut present = unsafe { Module32FirstW(snapshot.0, &mut entry) } != 0;
+        while present {
+            let count = entry
+                .szModule
+                .iter()
+                .position(|&c| c == 0)
+                .unwrap_or(entry.szModule.len());
+            let name = String::from_utf16_lossy(&entry.szModule[..count]).to_ascii_lowercase();
+            if name.starts_with("usvfs") && name.ends_with(".dll") {
+                diagnostic("MO2_CHILD_READY", &format!("PID {}", child.id()));
+                return Ok(());
+            }
+            present = unsafe { Module32NextW(snapshot.0, &mut entry) } != 0;
+        }
+        std::thread::sleep(std::time::Duration::from_millis(20));
+    }
+    diagnostic(
+        "MO2_CHILD_USVFS_TIMEOUT",
+        "Created child did not expose USVFS within the readiness deadline",
+    );
+    Err(sod2se_abi::UNSUPPORTED)
 }
 fn invoke(process: HANDLE, function: usize, argument: *const c_void) -> Result<u32, i32> {
     let routine: unsafe extern "system" fn(*mut c_void) -> u32 =
@@ -344,27 +389,7 @@ pub(super) fn launch(exe: &Path, options: &Options) -> Result<(), i32> {
     // MO2 launches this exact child with inherited USVFS; never attach or search unrelated games.
     let result = (|| -> Result<(), i32> {
         if options.mo2 {
-            let snapshot = module_snapshot(child.id())?;
-            if snapshot.0 == INVALID_HANDLE_VALUE {
-                return Err(INTERNAL);
-            }
-            let mut entry: MODULEENTRY32W = unsafe { std::mem::zeroed() };
-            entry.dwSize = std::mem::size_of::<MODULEENTRY32W>() as u32;
-            let mut found = false;
-            let mut present = unsafe { Module32FirstW(snapshot.0, &mut entry) } != 0;
-            while present {
-                let n = entry
-                    .szModule
-                    .iter()
-                    .position(|&c| c == 0)
-                    .unwrap_or(entry.szModule.len());
-                let name = String::from_utf16_lossy(&entry.szModule[..n]).to_ascii_lowercase();
-                found |= name.starts_with("usvfs") && name.ends_with(".dll");
-                present = unsafe { Module32NextW(snapshot.0, &mut entry) } != 0;
-            }
-            if !found {
-                return Err(sod2se_abi::UNSUPPORTED);
-            }
+            ensure_usvfs(&mut child)?;
         }
         inject(child.id(), &runtime)
     })();
