@@ -23,6 +23,30 @@ pub struct Session {
     message: String,
 }
 impl Session {
+    /// Advance view revisions only when the republished model exactly matches
+    /// the acknowledged snapshot. External edits and structural changes stay stale.
+    pub fn refresh(&mut self, models: Vec<(String, Model)>) {
+        if self.pending.is_some() || self.token == 0 {
+            return;
+        }
+        let mut candidate = Session::default();
+        if candidate.open(models) == 0
+            || candidate.pages != self.pages
+            || candidate.language != self.language
+            || candidate.options.len() != self.options.len()
+        {
+            return;
+        }
+        if candidate
+            .options
+            .iter()
+            .zip(&self.options)
+            .any(|(next, old)| next.0 != old.0 || next.3 != old.3 || next.2 < old.2)
+        {
+            return;
+        }
+        self.options = candidate.options;
+    }
     pub fn open(&mut self, models: Vec<(String, Model)>) -> i32 {
         if self.pending.is_some() || self.token == i32::MAX {
             return 0;

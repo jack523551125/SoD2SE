@@ -151,6 +151,7 @@ impl Services {
                 let model: Model =
                     serde_json::from_value(input["model"].clone()).map_err(|_| INVALID)?;
                 self.ui.publish(owner, string("id")?, model)?;
+                self.native_session.refresh(self.ui.models());
                 Ok(json!({}))
             }
             "ui.actions" => Ok(json!(self.ui.drain(owner, string("id")?)?)),

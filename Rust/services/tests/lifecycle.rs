@@ -186,6 +186,26 @@ fn native_snapshot_acknowledgement_and_risk_refusal() {
     assert_eq!(session.open(vec![]), 0);
     session.complete(token, -1, "refused".into(), 0).unwrap();
     assert!(matches!(session.query(10, token, 0, 0), Reply::Number(100)));
+    assert!(matches!(
+        session.query(15, token, 0, 200),
+        Reply::Edit { revision: 1, .. }
+    ));
+    let mut updated = model.clone();
+    updated.revision = 2;
+    updated.settings_revision = 1;
+    updated.options[0].value = 200;
+    session.refresh(vec![("example.settings".into(), updated.clone())]);
+    session.complete(token, 0, "saved".into(), 1).unwrap();
+    session.refresh(vec![("example.settings".into(), updated.clone())]);
+    // A foreign update must not silently advance the player's snapshot.
+    updated.revision = 3;
+    updated.options[0].value = 300;
+    session.refresh(vec![("example.settings".into(), updated)]);
+    assert!(matches!(
+        session.query(15, token, 0, 250),
+        Reply::Edit { revision: 2, .. }
+    ));
+    session.complete(token, -1, "refused".into(), 1).unwrap();
     let mut dangerous = model;
     dangerous.options[0].risk = "dangerous".into();
     let token = session.open(vec![("example.settings".into(), dangerous)]);
