@@ -264,7 +264,9 @@ pub(super) fn launch(exe: &Path, options: &Options) -> Result<(), i32> {
         return Err(sod2se_abi::BUSY);
     }
     // Never recover an overlay while another loader is using it.
-    recover_resources(options)?;
+    if !options.preflight {
+        recover_resources(options)?;
+    }
     let dir = std::env::current_exe()
         .map_err(|_| INTERNAL)?
         .parent()
@@ -325,7 +327,7 @@ pub(super) fn launch(exe: &Path, options: &Options) -> Result<(), i32> {
             if sod2se_services::diagnostics::digest(&target)? != hash {
                 return Err(sod2se_abi::UNSUPPORTED);
             }
-        } else {
+        } else if !options.preflight {
             sod2se_services::overlay::prepare(
                 &dir.join("SoD2SE/Assets/settings.uasset"),
                 hash,
@@ -334,6 +336,13 @@ pub(super) fn launch(exe: &Path, options: &Options) -> Result<(), i32> {
             )?;
             mounted = true;
         }
+    }
+    if options.preflight {
+        diagnostic(
+            "PREFLIGHT_READY",
+            "Version, framework, plugin dependencies and native UI preflight passed; game not started",
+        );
+        return Ok(());
     }
     let mut command = Command::new(exe);
     command

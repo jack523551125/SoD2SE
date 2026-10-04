@@ -8,7 +8,7 @@ struct Receipt {
     sha256: String,
     file_id: [u64; 2],
 }
-fn no_links(path: &Path) -> Result<(), i32> {
+pub(crate) fn no_links(path: &Path) -> Result<(), i32> {
     if !path.is_absolute() {
         return Err(INVALID);
     }

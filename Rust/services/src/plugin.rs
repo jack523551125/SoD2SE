@@ -58,10 +58,12 @@ impl Manifest {
     pub fn verify(&self, parent: &Path) -> Result<PathBuf, i32> {
         self.validate()?;
         let root = parent.canonicalize().map_err(|_| INTERNAL)?;
-        let file = root.join(&self.file).canonicalize().map_err(|_| INTERNAL)?;
-        if !file.starts_with(&root)
-            || super::diagnostics::digest(&file)? != self.sha256.to_ascii_lowercase()
-        {
+        // The validated filename is a single safe component. Preserve this
+        // virtual namespace: USVFS resolves the file to the MO2 source, while
+        // its existing parent directory may remain a physical game directory.
+        let file = root.join(&self.file);
+        super::overlay::no_links(&file)?;
+        if super::diagnostics::digest(&file)? != self.sha256.to_ascii_lowercase() {
             return Err(INVALID);
         }
         Ok(file)

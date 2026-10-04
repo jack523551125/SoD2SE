@@ -48,6 +48,8 @@ Configuration revisions prevent lost updates. Unknown future documents and corru
 
 ## Game and native UI boundary
 
+Native plugin verification uses a validated single-component filename in its virtual namespace, SHA-256 and rejection of filesystem reparse/symlink paths. USVFS may resolve a DLL to an MO2 source directory while its virtual parent remains physical; physical-prefix comparison is not an ownership proof in that environment. `--preflight-launch` runs Loader checks without starting a game or activating a standalone UI overlay.
+
 Schema migration cannot introduce a dangerous nondefault value without consent. An unchanged stored value may carry forward; other dangerous values must migrate to their default and then use acknowledged `settings.set`. Persistent state has a separate format/schema/revision and a 1 MiB limit; malformed/future data is preserved and refused. State is retained when a Mod is removed.
 
 Only `sod2se-game-api` owns fixed-build facts. Follower descriptors use the existing reviewed patch manifest. Full image SHA-256, contexts, page boundaries, paused-thread instruction pointers and active stacks are checked before writes. Restoration verifies the complete expected patched context and refuses foreign changes. Any failed write poisons the lease; no further mutations are permitted in that session.

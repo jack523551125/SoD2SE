@@ -12,6 +12,7 @@ struct Options {
     arguments: String,
     mo2: bool,
     diagnose: bool,
+    preflight: bool,
     profile: String,
 }
 fn parse(args: impl IntoIterator<Item = String>) -> Result<Options, String> {
@@ -30,6 +31,7 @@ fn parse(args: impl IntoIterator<Item = String>) -> Result<Options, String> {
             "--mo2" => result.mo2 = true,
             "--direct-main" | "--console" => {}
             "--diagnose-launch" => result.diagnose = true,
+            "--preflight-launch" => result.preflight = true,
             _ if argument.starts_with("--game-args=") => result.arguments = argument[12..].into(),
             _ => return Err(format!("Unsupported argument: {argument}")),
         }

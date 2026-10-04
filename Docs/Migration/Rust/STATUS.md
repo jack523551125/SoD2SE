@@ -36,6 +36,8 @@ Missing fixed inputs remain SKIPPED. No synthetic original asset, accepted save,
 
 ## Owner-directed test handoff
 
+A read-only isolated USVFS diagnostic reproduced the continuing `-1`: all three DLL hashes matched, but their resolved paths were outside the physical virtual-parent directory. The old Rust preflight returned `PLUGIN_PREFLIGHT_REFUSED: -1` in this non-game child. Verification now retains the safe virtual filename with hash/link guards rather than requiring physical-parent containment. A full non-launching Loader preflight is provided for this diagnostic; real-game results remain separate.
+
 The first owner-run standalone test failed: MCM and UnlimitedFollowers were not effective, and the loader recorded `LAUNCH_FAILED: -4` without Runtime initialization logs. This is a failed live result, not a pass. Investigation found extended-length (`\\?\`) DLL paths were compared literally with ToolHelp's ordinary paths. The Loader now normalizes full Windows paths, retries early module enumeration, and emits injection stage diagnostics. An authored inert child fixture exercises actual remote loading and confirms bootstrap rejects the foreign image; no game is started by this fixture.
 
 The owner requested gameplay Mods only through `E:\Game\SD2_mod`. Physical test plugins are withdrawn; the framework stays in the game root, while matched MCM/follower/example packages use a dedicated native MO2 profile. Subsequent game tests remain the owner's responsibility.
