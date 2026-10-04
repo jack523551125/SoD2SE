@@ -197,8 +197,29 @@ fn start_inner() -> Result<(), i32> {
     Ok(())
 }
 fn load(path: &std::path::Path) -> Result<(), i32> {
+    let name = path
+        .file_name()
+        .map(|v| v.to_string_lossy().into_owned())
+        .unwrap_or_else(|| "unknown plugin".into());
+    let result = load_inner(path);
+    if let Err(code) = result {
+        if let Some(services) = SERVICES.get() {
+            if let Ok(services) = services.lock() {
+                let _ = services.logger.write(
+                    3,
+                    "runtime",
+                    "PLUGIN_LOAD_REFUSED",
+                    &format!("{name}: {code}"),
+                );
+            }
+        }
+    }
+    result
+}
+fn load_inner(path: &std::path::Path) -> Result<(), i32> {
     let checked = sod2se_services::plugin::Manifest::read(path)?;
-    checked.verify(path.parent().ok_or(INVALID)?)?;
+    let plugin_root = path.parent().ok_or(INVALID)?;
+    checked.verify(plugin_root)?;
     let manifest = serde_json::to_value(checked).map_err(|_| INVALID)?;
     if manifest["abi"].as_u64() != Some(ABI_VERSION as u64) {
         return Err(UNSUPPORTED);
@@ -211,19 +232,15 @@ fn load(path: &std::path::Path) -> Result<(), i32> {
     {
         return Err(INVALID);
     }
-    let library = path.parent().ok_or(INVALID)?.join(file);
+    // Preserve the virtual namespace for LoadLibraryExW. In USVFS the virtual
+    // Plugins directory stays under the game root while DLL bytes resolve to
+    // MO2's source tree, so comparing canonical physical paths rejects a
+    // valid, hash-verified mapped plugin.
+    let library = plugin_root.join(file);
+    sod2se_services::overlay::no_links(&library)?;
     if sod2se_services::diagnostics::digest(&library)?
         != manifest["sha256"].as_str().ok_or(INVALID)?
     {
-        return Err(INVALID);
-    }
-    let library = library.canonicalize().map_err(|_| INTERNAL)?;
-    let parent = path
-        .parent()
-        .ok_or(INVALID)?
-        .canonicalize()
-        .map_err(|_| INTERNAL)?;
-    if !library.starts_with(parent) {
         return Err(INVALID);
     }
     let module = unsafe {
