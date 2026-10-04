@@ -1,6 +1,6 @@
 # Rust migration execution record
 
-Owner decision: merge SoD2SE, SoD2SE-Loader and NativeModSettingsEntry into SoD2SE — State of Decay 2 System Extender. First native delivery includes MCM and UnlimitedFollowers. MCM remains optional. Original UI extension v1 targets settings only. New native ABI; preserve managed rollback packages.
+Owner decision: merge SoD2SE, SoD2SE-Loader and NativeModSettingsEntry into SoD2SE — State of Decay 2 System Extender. The subsequent bundling decision moves native MCM into the prerequisite as a built-in Registry frontend; UnlimitedFollowers remains separate. Original UI extension v1 targets settings only. New native ABI; preserve managed rollback packages. Framework services and gameplay plugins do not require the MCM implementation; without-frontend acceptance is an isolated developer scenario, not a player installation step.
 
 ## Baseline
 
