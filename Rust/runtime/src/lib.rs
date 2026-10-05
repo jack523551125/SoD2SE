@@ -362,6 +362,7 @@ fn native_query(
             1 => (1, "MCM_PANEL_CLOSED"),
             2 => (3, "MCM_PANEL_REFUSED"),
             3 => (3, "MCM_PANEL_FAILURE_STAGE"),
+            4 => (1, "MCM_PANEL_DRAW_STAGE"),
             _ => return Reply::Number(INVALID),
         };
         return match services.logger.write(level, "native-ui", code,
