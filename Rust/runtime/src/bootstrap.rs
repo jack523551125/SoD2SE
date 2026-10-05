@@ -82,7 +82,8 @@ fn start_inner() -> Result<(), i32> {
                 &format!("status {code}"),
             );
         })?;
-    let ui_asset = sod2se_game_api::native_ui::asset_name(root)?;
+    let ui_assets = sod2se_game_api::native_ui::asset_names(root)?;
+    let ui_asset = ui_assets[0];
     services.ui_surface = ui_asset.into();
     services.logger.write(
         1,
@@ -127,17 +128,17 @@ fn start_inner() -> Result<(), i32> {
     {
         // Revalidate through the same GameApi selector used by Loader. A pause
         // package must never fall back to the retired settings resource path.
-        let active_asset = sod2se_game_api::native_ui::asset_name(root).inspect_err(|code| {
+        let active_assets = sod2se_game_api::native_ui::asset_names(root).inspect_err(|code| {
             if let Ok(s) = SERVICES.get().unwrap().lock() {
                 let _ = s.logger.write(3, "game-api", "UI_RESOURCE_REFUSED",
                     &format!("surface {ui_asset}; validation status {code}"));
             }
         })?;
-        if active_asset != ui_asset {
+        if active_assets != ui_assets {
             return Err(UNSUPPORTED);
         }
         SERVICES.get().unwrap().lock().map_err(|_| INTERNAL)?.logger.write(
-            1, "game-api", "UI_RESOURCE_VERIFIED", &format!("Validated {active_asset} resource before callback activation"))?;
+            1, "game-api", "UI_RESOURCE_VERIFIED", &format!("Validated {active_assets:?} resources before callback activation"))?;
         super::workers::spawn("SoD2SE-NativeUI", || {
             while !super::workers::stopping() {
                 match sod2se_game_api::native_ui::try_install(super::native_query) {

@@ -62,6 +62,24 @@ pub fn verify_files(root: &Path) -> Result<(), i32> {
     }
     Ok(())
 }
+pub fn asset_names(root: &Path) -> Result<Vec<&'static str>, i32> {
+    let primary = asset_name(root)?;
+    let receipt: serde_json::Value = serde_json::from_slice(&std::fs::read(root.join("SoD2SE/Assets/native-ui.json")).map_err(|_| INTERNAL)?).map_err(|_| INVALID)?;
+    let mut names = vec![primary];
+    if let Some(extra) = receipt.get("additional_assets") {
+        let entries = extra.as_array().ok_or(INVALID)?;
+        if entries.len() > 1 { return Err(UNSUPPORTED); }
+        for entry in entries {
+            let actual_hash = sod2se_services::diagnostics::digest(&root.join("SoD2SE/Assets/main_menu.uasset"))?;
+            if entry["asset"] != "main_menu" || entry["source_asset_sha256"] != "ab1b361d498e8dfba559930085a3f3c2c7a6d0d21fc0ec23e4eda8f9ca5392bb"
+                || entry["sha256"].as_str() != Some(actual_hash.as_str()) {
+                return Err(UNSUPPORTED);
+            }
+            names.push("main_menu");
+        }
+    }
+    Ok(names)
+}
 static ORIGINAL: AtomicUsize = AtomicUsize::new(0);
 static RESULT_PATH: AtomicUsize = AtomicUsize::new(0);
 static SET_INT: AtomicUsize = AtomicUsize::new(0);

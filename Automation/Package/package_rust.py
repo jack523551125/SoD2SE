@@ -31,6 +31,7 @@ def main(argv=None):
     parser.add_argument('--build-root', type=Path, required=True)
     parser.add_argument('--native-settings-asset', type=Path)
     parser.add_argument('--native-ui-receipt', type=Path)
+    parser.add_argument('--main-menu-asset', type=Path)
     parser.add_argument('--acceptance', type=Path)
     parser.add_argument('--candidate', action='store_true')
     args = parser.parse_args(argv)
@@ -94,6 +95,10 @@ def main(argv=None):
                     raise ValueError('Built-in MCM requires the reviewed independent pause panel resource')
                 copy(args.native_settings_asset, f'SoD2SE/Assets/{asset}.uasset')
                 copy(args.native_ui_receipt, 'SoD2SE/Assets/native-ui.json')
+                for extra in receipt.get('additional_assets', []):
+                    if extra.get('asset') != 'main_menu' or not args.main_menu_asset or extra.get('sha256') != digest(args.main_menu_asset):
+                        raise ValueError('Reviewed main-menu resource mismatch')
+                    copy(args.main_menu_asset, 'SoD2SE/Assets/main_menu.uasset')
                 ui_status = 'PACKAGED_NOT_LIVE_VERIFIED'
             elif not args.candidate:
                 raise ValueError('SKIPPED: reviewed fixed-build native UI resource and receipt are required')

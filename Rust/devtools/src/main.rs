@@ -18,7 +18,7 @@ fn run() -> Result<(), String> {
             if !sod2se_services::valid_id(&profile){return Err("Invalid profile id".into());}
             ensure_stopped()?;
             let local=PathBuf::from(std::env::var_os("LOCALAPPDATA").ok_or("LOCALAPPDATA unavailable")?);
-            for (asset,receipt) in [("settings","ui-overlay.json"),("pause","pause-ui-overlay.json")] {
+            for (asset,receipt) in [("settings","ui-overlay.json"),("pause","pause-ui-overlay.json"),("main_menu","main_menu-ui-overlay.json")] {
                 sod2se_services::overlay::recover(
                     &local.join(format!("StateOfDecay2/Saved/Cooked/WindowsNoEditor/StateOfDecay2/Content/Art/UI/{asset}.uasset")),
                     &local.join("StateOfDecay2/SoD2SE/Rust").join(&profile).join(receipt)

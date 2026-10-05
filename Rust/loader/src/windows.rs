@@ -322,7 +322,8 @@ pub(super) fn launch(exe: &Path, options: &Options) -> Result<(), i32> {
     if info["version"].as_str() != Some(env!("CARGO_PKG_VERSION")) {
         return Err(sod2se_abi::UNSUPPORTED);
     }
-    let asset = sod2se_game_api::native_ui::asset_name(&dir)?;
+    let assets = sod2se_game_api::native_ui::asset_names(&dir)?;
+    let asset = assets[0];
     let (target, ownership) = overlay_paths(&options.profile, asset)?;
     let mut mounted = false;
     // In MO2 this directory is virtual and its creation target is overwrite.
@@ -354,6 +355,15 @@ pub(super) fn launch(exe: &Path, options: &Options) -> Result<(), i32> {
             return Err(sod2se_abi::UNSUPPORTED);
         }
         let hash = receipt["sha256"].as_str().ok_or(INVALID)?;
+        for extra in assets.iter().skip(1) {
+            let (extra_target, extra_ownership) = overlay_paths(&options.profile, extra)?;
+            let expected = receipt["additional_assets"].as_array().ok_or(INVALID)?.iter().find(|e| e["asset"].as_str()==Some(extra)).and_then(|e|e["sha256"].as_str()).ok_or(INVALID)?;
+            if options.mo2 {
+                if sod2se_services::diagnostics::digest(&extra_target)? != expected { return Err(sod2se_abi::UNSUPPORTED); }
+            } else if !options.preflight {
+                sod2se_services::overlay::prepare(&dir.join(format!("SoD2SE/Assets/{extra}.uasset")),expected,&extra_target,&extra_ownership)?;
+            }
+        }
         if options.mo2 {
             if sod2se_services::diagnostics::digest(&target)? != hash {
                 return Err(sod2se_abi::UNSUPPORTED);
@@ -404,20 +414,20 @@ pub(super) fn launch(exe: &Path, options: &Options) -> Result<(), i32> {
     // Keep the GUI/MO2 parent alive for the complete game session, including failed initialization.
     child.wait().map_err(|_| INTERNAL)?;
     if mounted {
-        sod2se_services::overlay::recover(&target, &ownership)?;
+        recover_resources(options)?;
     }
     result
 }
 fn overlay_paths(profile: &str, asset: &str) -> Result<(PathBuf, PathBuf), i32> {
     let local = PathBuf::from(std::env::var_os("LOCALAPPDATA").ok_or(INVALID)?);
-    if !["settings", "pause"].contains(&asset) { return Err(sod2se_abi::UNSUPPORTED); }
-    Ok((local.join(format!("StateOfDecay2/Saved/Cooked/WindowsNoEditor/StateOfDecay2/Content/Art/UI/{asset}.uasset")),local.join("StateOfDecay2/SoD2SE/Rust").join(profile).join(if asset=="settings" {"ui-overlay.json"} else {"pause-ui-overlay.json"})))
+    if !["settings", "pause", "main_menu"].contains(&asset) { return Err(sod2se_abi::UNSUPPORTED); }
+    Ok((local.join(format!("StateOfDecay2/Saved/Cooked/WindowsNoEditor/StateOfDecay2/Content/Art/UI/{asset}.uasset")),local.join("StateOfDecay2/SoD2SE/Rust").join(profile).join(if asset=="settings" {"ui-overlay.json"} else if asset=="pause" {"pause-ui-overlay.json"} else {"main_menu-ui-overlay.json"})))
 }
 pub(super) fn recover_resources(options: &Options) -> Result<(), i32> {
     if options.mo2 {
         return Ok(());
     }
-    for asset in ["settings", "pause"] {
+    for asset in ["settings", "pause", "main_menu"] {
         let (target, ownership) = overlay_paths(&options.profile, asset)?;
         sod2se_services::overlay::recover(&target, &ownership)?;
     }
