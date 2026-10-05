@@ -102,6 +102,7 @@ def main(argv=None):
             (root / 'SoD2SE/build-info.json').write_text(json.dumps(info,indent=2)+'\n',encoding='utf-8')
             entries = [{'path':p.relative_to(root).as_posix(),'sha256':digest(p)} for p in sorted(root.rglob('*')) if p.is_file()]
             (root / 'framework.manifest.json').write_text(json.dumps({'schema':1,'version':version,'files':entries},indent=2)+'\n',encoding='utf-8')
+            subprocess.run([str(root/'SoD2SE.DevTools.exe'),'verify-plugins',str(root)],check=True)
         else:
             mapping = {'UnlimitedFollowers':('UnlimitedFollowers','unlimited-followers',['sod2.followers.quantity'],[])}
             binary, plugin_id, capabilities, permissions = mapping[product.name]
