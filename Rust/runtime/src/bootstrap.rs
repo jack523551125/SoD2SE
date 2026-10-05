@@ -18,7 +18,13 @@ pub fn start() -> Result<(), i32> {
         return Err(BUSY);
     }
     let result = start_inner();
-    if result.is_err() {
+    if let Err(code) = result {
+        if let Some(services) = SERVICES.get()
+            && let Ok(s) = services.lock()
+        {
+            let _ = s.logger.write(3, "runtime", "RUNTIME_INIT_REFUSED",
+                &format!("Initialization status {code}; acquired plugin resources will be withdrawn"));
+        }
         cleanup();
     }
     result
@@ -76,7 +82,8 @@ fn start_inner() -> Result<(), i32> {
                 &format!("status {code}"),
             );
         })?;
-    services.ui_surface = sod2se_game_api::native_ui::asset_name(root)?.into();
+    let ui_asset = sod2se_game_api::native_ui::asset_name(root)?;
+    services.ui_surface = ui_asset.into();
     services.logger.write(
         1,
         "runtime",
@@ -118,26 +125,28 @@ fn start_inner() -> Result<(), i32> {
             .extensions()
             .is_empty()
     {
-        let receipt: Value = serde_json::from_slice(&std::fs::read(receipt).map_err(|_| INTERNAL)?)
-            .map_err(|_| INVALID)?;
-        if receipt["game_sha256"].as_str()
-            != Some(&sod2se_game_api::target().sha256.to_ascii_lowercase())
-            || receipt["reviewed"].as_bool() != Some(true)
-        {
-            cleanup();
+        // Revalidate through the same GameApi selector used by Loader. A pause
+        // package must never fall back to the retired settings resource path.
+        let active_asset = sod2se_game_api::native_ui::asset_name(root).inspect_err(|code| {
+            if let Ok(s) = SERVICES.get().unwrap().lock() {
+                let _ = s.logger.write(3, "game-api", "UI_RESOURCE_REFUSED",
+                    &format!("surface {ui_asset}; validation status {code}"));
+            }
+        })?;
+        if active_asset != ui_asset {
             return Err(UNSUPPORTED);
         }
-        let asset = root.join("SoD2SE/Assets/settings.uasset");
-        if sod2se_services::diagnostics::digest(&asset)?
-            != receipt["sha256"].as_str().ok_or(INVALID)?
-        {
-            cleanup();
-            return Err(UNSUPPORTED);
-        }
+        SERVICES.get().unwrap().lock().map_err(|_| INTERNAL)?.logger.write(
+            1, "game-api", "UI_RESOURCE_VERIFIED", &format!("Validated {active_asset} resource before callback activation"))?;
         super::workers::spawn("SoD2SE-NativeUI", || {
             while !super::workers::stopping() {
                 match sod2se_game_api::native_ui::try_install(super::native_query) {
-                    Ok(true) => break,
+                    Ok(true) => {
+                        if let Ok(s) = SERVICES.get().unwrap().lock() {
+                            let _ = s.logger.write(1, "game-api", "NATIVE_UI_READY", "Fixed-build callback adapter ready");
+                        }
+                        break;
+                    },
                     Ok(false) => std::thread::sleep(std::time::Duration::from_millis(100)),
                     Err(code) => {
                         if let Ok(s) = SERVICES.get().unwrap().lock() {
