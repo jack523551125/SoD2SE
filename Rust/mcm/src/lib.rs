@@ -38,13 +38,15 @@ fn publish(host: Host, revision: u64) -> Result<(), i32> {
     let mut rows = Vec::new();
     if let Some(modules) = snapshot["definitions"].as_object() {
         for (module, definitions) in modules {
+            if module == "mcm" && definitions.as_object().is_some_and(|d|d.is_empty()) { continue; }
             let page = pages.len();
             let name = host.request("translation.get", json!({"key":format!("{module}.title")}))?;
             let description = host.request(
                 "translation.get",
                 json!({"key":format!("{module}.description")}),
             )?;
-            pages.push(json!({"id":module,"name":name,"description":description,"loaded":plugins.as_array().is_some_and(|a|a.iter().any(|p|p["id"].as_str()==Some(module.as_str())))}));
+            let plugin=plugins.as_array().and_then(|a|a.iter().find(|p|p["id"].as_str()==Some(module.as_str())));
+            pages.push(json!({"version":plugin.and_then(|p|p.get("version")),"id":module,"name":name,"description":description,"loaded":plugins.as_array().is_some_and(|a|a.iter().any(|p|p["id"].as_str()==Some(module.as_str())))}));
             if let Some(definitions) = definitions.as_object() {
                 for (id, definition) in definitions {
                     let mut value = snapshot["values"][module][id].clone();
@@ -73,13 +75,15 @@ fn publish(host: Host, revision: u64) -> Result<(), i32> {
                     } else {
                         value.as_i64().ok_or(INVALID)?
                     };
-                    rows.push(json!({"module":module,"id":id,"page":page,"label":translate("label"),"description":translate("description"),"kind":if boolean{0}else{1},"value":i32::try_from(n).map_err(|_|INVALID)?,"minimum":i32::try_from(lo).map_err(|_|INVALID)?,"maximum":i32::try_from(hi).map_err(|_|INVALID)?,"restart":definition["apply"]=="restart","risk":definition["risk"]}));
+                    rows.push(json!({"module":module,"id":id,"page":page,"label":translate("label"),"description":translate("description"),"kind":if boolean{0}else{1},"value":i32::try_from(n).map_err(|_|INVALID)?,"minimum":i32::try_from(lo).map_err(|_|INVALID)?,"maximum":i32::try_from(hi).map_err(|_|INVALID)?,"restart":definition["apply"]=="restart","risk":definition["risk"],"default_value":if boolean { definition["default"].as_bool().map(|v|v as i32) } else { definition["default"].as_i64().and_then(|v|i32::try_from(v).ok()) }}));
                 }
             }
         }
     }
     let locale = host.request("translation.locale", json!({}))?;
-    host.request("ui.publish",json!({"id":"mcm.settings","model":{"revision":revision,"settings_revision":snapshot["revision"],"language":locale,"pages":pages,"options":rows}}))?;
+    let contract:Value=serde_catalog(include_str!("../ui-contract.json"))?;
+    let chrome:Vec<Value>=contract["chrome_keys"].as_array().ok_or(INVALID)?.iter().map(|key|host.request("translation.get",json!({"key":key}))).collect::<Result<_,_>>()?;
+    host.request("ui.publish",json!({"id":"mcm.settings","model":{"presentation":2,"chrome":chrome,"revision":revision,"settings_revision":snapshot["revision"],"language":locale,"pages":pages,"options":rows}}))?;
     Ok(())
 }
 unsafe extern "C" fn start(api: *const HostApi) -> i32 {
@@ -103,7 +107,7 @@ unsafe extern "C" fn start(api: *const HostApi) -> i32 {
                         if action["action"]=="set" {
                             let value=&action["value"];
                             let result=host.request("settings.set",json!({"module":value["module"],"id":value["id"],"value":value["value"],"revision":value["settings_revision"],"risk_ack":value["risk_ack"]}));
-                            let (status,message)=match result {Ok(_)=>(0,"Settings synchronized / 设置已同步".to_owned()),Err(error)=>{host.log(3,"MCM_SETTING_REFUSED",&format!("Registry refused setting: {error}"));(error,format!("Registry refused setting / 配置被拒绝: {error}"))}};
+                            let (status,message)=match result {Ok(_)=>(0,host.request("translation.get",json!({"key":"mcm.ui.saved"})).ok().and_then(|v|v.as_str().map(str::to_owned)).unwrap_or_default()),Err(error)=>{host.log(3,"MCM_SETTING_REFUSED",&format!("Registry refused {}.{}: {error}",value["module"].as_str().unwrap_or("?"),value["id"].as_str().unwrap_or("?")));(error,host.request("translation.get",json!({"key":if error==STALE{"mcm.ui.stale"}else{"mcm.ui.failed"}})).ok().and_then(|v|v.as_str().map(str::to_owned)).unwrap_or_default())}};
                             let _=host.request("ui.complete",json!({"token":value["token"],"status":status,"message":message}));
                         }
                     } },

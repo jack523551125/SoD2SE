@@ -18,6 +18,8 @@ pub struct Page {
     pub name: String,
     pub description: String,
     pub loaded: bool,
+    #[serde(default)]
+    pub version: Option<String>,
 }
 #[derive(Clone, Debug, Serialize, Deserialize, PartialEq)]
 pub struct OptionRow {
@@ -32,9 +34,15 @@ pub struct OptionRow {
     pub maximum: i32,
     pub restart: bool,
     pub risk: String,
+    #[serde(default)]
+    pub default_value: Option<i32>,
 }
 #[derive(Clone, Debug, Default, Serialize, Deserialize, PartialEq)]
 pub struct Model {
+    #[serde(default)]
+    pub presentation: u32,
+    #[serde(default)]
+    pub chrome: Vec<String>,
     pub revision: u64,
     pub settings_revision: u64,
     pub language: String,
@@ -78,6 +86,8 @@ impl UiRegistry {
         Ok(())
     }
     pub fn publish(&mut self, owner: u64, id: &str, model: Model) -> Result<(), i32> {
+        if model.presentation>2 { return Err(UNSUPPORTED); }
+        if model.chrome.len()>64 || model.chrome.iter().any(|s|s.len()>4096) { return Err(INVALID); }
         if self.extensions.get(id).map(|e| e.0) != Some(owner)
             || model.pages.len()
                 + self
@@ -106,6 +116,8 @@ impl UiRegistry {
                 || ![0, 1, 2].contains(&row.kind)
                 || (row.kind == 0
                     && (row.minimum != 0 || row.maximum != 1 || ![0, 1].contains(&row.value)))
+                || row.default_value.is_some_and(|v| v < row.minimum || v > row.maximum)
+                || !["normal", "experimental", "dangerous"].contains(&row.risk.as_str())
             {
                 return Err(INVALID);
             }

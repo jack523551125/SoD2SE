@@ -163,6 +163,7 @@ fn native_snapshot_acknowledgement_and_risk_refusal() {
         maximum: 1000,
         restart: false,
         risk: "normal".into(),
+        default_value: Some(100),
     };
     let model = Model {
         revision: 1,
@@ -173,8 +174,10 @@ fn native_snapshot_acknowledgement_and_risk_refusal() {
             name: "Example".into(),
             description: "Help".into(),
             loaded: true,
+            version: None,
         }],
         options: vec![row],
+        ..Default::default()
     };
     let mut session = Session::default();
     let token = session.open(vec![("example.settings".into(), model.clone())]);

@@ -79,7 +79,10 @@ def main(argv=None):
             (root/'SoD2SE/BuiltinPlugins/Mcm.native.json').write_text(json.dumps(builtin,indent=2)+'\n',encoding='utf-8')
             for source,target in [('Docs/RUST-API.md','Docs/API.md'),('Rust/abi/include/sod2se.h','SDK/sod2se.h'),
                 ('Rust/locales/template.json','Localization/template.json'),('Automation/NativeTest.py','Tools/NativeTest.py'),
-                ('Docs/NATIVE-TEST.zh-CN.md','Docs/NativeTest.zh-CN.md')]:
+                ('Docs/NATIVE-TEST.zh-CN.md','Docs/NativeTest.zh-CN.md'),
+                ('Docs/UI/MCM-PRESENTATION-V2.md','Docs/UI/MCM-PRESENTATION-V2.md'),
+                ('Docs/UI/mcm-preview.html','Docs/UI/mcm-preview.html'),
+                ('Rust/mcm/ui-contract.json','SDK/mcm-ui-contract.json')]:
                 destination = developer/target
                 destination.parent.mkdir(parents=True,exist_ok=True)
                 shutil.copyfile(product/source,destination)

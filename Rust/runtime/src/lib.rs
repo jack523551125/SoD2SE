@@ -18,6 +18,7 @@ pub struct Services {
     pub ui: UiRegistry,
     pub ui_surface: String,
     pub owners: BTreeMap<u64, String>,
+    pub versions: BTreeMap<u64, String>,
     pub logger: Logger,
     #[cfg(windows)]
     followers: sod2se_game_api::process::FollowerLease,
@@ -46,6 +47,7 @@ impl Services {
             ui: UiRegistry::default(),
             ui_surface: "settings".into(),
             owners: BTreeMap::new(),
+            versions: BTreeMap::new(),
             logger: Logger::new(path.join("runtime.jsonl")),
             game_verified,
             catalog: sod2se_services::translation::Catalog::new("en-US".into()),
@@ -114,7 +116,7 @@ impl Services {
             "plugins.snapshot" => Ok(json!(
                 self.owners
                     .iter()
-                    .map(|(owner, id)| json!({"owner":owner,"id":id}))
+                    .map(|(owner, id)| json!({"owner":owner,"id":id,"version":self.versions.get(owner)}))
                     .collect::<Vec<_>>()
             )),
             "translation.register" => {
@@ -245,6 +247,7 @@ impl Services {
         self.ui.unregister(owner);
         self.catalog.unregister(owner);
         self.owners.remove(&owner);
+        self.versions.remove(&owner);
         self.frontends.remove(&owner);
         self.scheduler.unregister(owner);
         let handles: Vec<_> = self
@@ -352,9 +355,11 @@ fn native_query(
     let Ok(mut services) = lock.try_lock() else {
         return Reply::Number(-3);
     };
+    let v2 = op >= 1000;
+    let op = if v2 { op - 1000 } else { op };
     if op == 0 {
         let models = services.ui.models();
-        return Reply::Number(services.native_session.open(models));
+        return Reply::Number(if v2 { services.native_session.open_v2(models) } else { services.native_session.open(models) });
     }
     if op == 19 {
         let (level, code) = match index {
@@ -371,7 +376,10 @@ fn native_query(
             Err(code) => Reply::Number(code),
         };
     }
-    match services.native_session.query(op, token, index, value) {
+    let current_revision = services.settings.document.revision;
+    let reply = if v2 { services.native_session.query_v2(op, token, index, value, current_revision) }
+        else { services.native_session.query(op, token, index, value) };
+    match reply {
         Reply::Edit {
             extension,
             revision,

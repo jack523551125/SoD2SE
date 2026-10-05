@@ -123,15 +123,16 @@ unsafe extern "C" fn dispatch(user: *mut c_void, player: *mut c_void, call: *mut
     let name_pointer = unsafe { std::ptr::addr_of!((*call).name).read() };
     let name_length = unsafe { std::ptr::addr_of!((*call).length).read() };
     let name = b"SoD2SE_Mcm_v1";
+    let protocol_two = name_length == name.len() as i32 && !name_pointer.is_null() && unsafe { if WIDE.load(Ordering::Acquire) { *name_pointer.cast::<u16>().add(name.len()-1) == 50 } else { *name_pointer.add(name.len()-1) == 50 } };
     let ours = name_length == name.len() as i32
         && !name_pointer.is_null()
         && if WIDE.load(Ordering::Acquire) {
             unsafe { std::slice::from_raw_parts(name_pointer.cast::<u16>(), name.len()) }
                 .iter()
                 .zip(name)
-                .all(|(a, b)| *a == *b as u16)
+                .enumerate().all(|(i,(a,b))| *a == *b as u16 || (i==name.len()-1 && protocol_two))
         } else {
-            (unsafe { std::slice::from_raw_parts(name_pointer, name.len()) }) == name
+            { let bytes=unsafe { std::slice::from_raw_parts(name_pointer,name.len()) }; bytes==name || (protocol_two && bytes[..name.len()-1]==name[..name.len()-1]) }
         };
     if !ours {
         return unsafe { original(user, player, call) };
@@ -151,8 +152,9 @@ unsafe extern "C" fn dispatch(user: *mut c_void, player: *mut c_void, call: *mut
             };
             args[i] = n;
         }
+        if !(0..=28).contains(&args[0]) { return Reply::Number(-2); }
         QUERY.get().map_or(Reply::Number(-4), |query| {
-            query(args[0], args[1], args[2], args[3])
+            query(args[0] + if protocol_two {1000} else {0}, args[1], args[2], args[3])
         })
     }))
     .unwrap_or(Reply::Number(-4));

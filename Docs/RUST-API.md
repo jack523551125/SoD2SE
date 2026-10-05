@@ -1,5 +1,7 @@
 # SoD2SE native ABI 1
 
+MCM presentation v2 is documented in [the presentation contract](UI/MCM-PRESENTATION-V2.md). It adds localized shell snapshots, optional defaults/versions and one-use dangerous-change confirmation through `SoD2SE_Mcm_v2`, without changing C ABI 1 or configuration IDs. The v1 resource protocol remains supported and refuses dangerous edits. Player-facing save messages use translation catalogs and distinguish saved settings from runtime application.
+
 ## Current MCM surface
 
 Built-in MCM registers target `pause` and requires `sod2.ui.pause-mcm`. The pause entry opens an independent panel with Mod pages on the left and the selected Mod's settings on the right. Vanilla settings is not overlaid by this package. Registry configuration IDs and the four-integer UI protocol remain unchanged; operation 19 records panel open/close/refusal lifecycle diagnostics. Runtime reports `ui_surface` and `native_pause_mcm`; a target that does not match the installed reviewed asset is refused. Character/community/arbitrary pages remain unsupported. Legacy settings assets remain recognized for recovery/compatibility.

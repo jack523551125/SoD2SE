@@ -4,6 +4,8 @@ The player prerequisite now includes built-in Rust MCM. No separate MCM download
 
 MCM now opens from the pause menu in its own panel: Mod list on the left, selected Mod controls/status on the right. The normal settings page uses vanilla resources. Keyboard/controller actions and native mouse callbacks drive navigation; live rendering/input acceptance remains separate from static resource checks.
 
+Presentation v2 shares one modal panel between the main and pause menus, with fixed typography, native input hints, separate boolean/numeric controls, per-setting reset, translated save feedback and single-use dangerous-change confirmation. See the [visual specification and protocol](Docs/UI/MCM-PRESENTATION-V2.md). Real-game visual/input acceptance is pending.
+
 Player packages contain runtime files, installation/diagnostic support and one `THIRD-PARTY-NOTICES.txt`. SDK, API documents, translation templates, test tools and complete dependency provenance are distributed separately in `-developer.zip`. The superseded standalone Loader, MCM and native settings repositories are compatibility/rollback sources; new native development is owned here.
 
 The staged Rust product is **SoD2SE — State of Decay 2 System Extender**. Native ABI 1, Loader, Runtime, Settings Registry and native UI adapters are owned here. See [native APIs and commands](Docs/RUST-API.md) and [execution/acceptance status](Docs/Migration/Rust/STATUS.md). Select `Automation/dev.ps1 test SoD2SE --rust` for native checks. Legacy managed entrypoints remain available until required live acceptance permits release cutover.

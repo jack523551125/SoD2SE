@@ -1,0 +1,59 @@
+{
+  "schema": 2,
+  "rpc": "SoD2SE_Mcm_v2",
+  "chrome_keys": [
+    "mcm.ui.title",
+    "mcm.ui.loaded",
+    "mcm.ui.unloaded",
+    "mcm.ui.on",
+    "mcm.ui.off",
+    "mcm.ui.close",
+    "mcm.ui.empty",
+    "mcm.ui.no_options",
+    "mcm.ui.saving",
+    "mcm.ui.saved",
+    "mcm.ui.failed",
+    "mcm.ui.stale",
+    "mcm.ui.refresh",
+    "mcm.ui.restart",
+    "mcm.ui.experimental",
+    "mcm.ui.dangerous",
+    "mcm.ui.warning",
+    "mcm.ui.warning_body",
+    "mcm.ui.cancel",
+    "mcm.ui.confirm",
+    "mcm.ui.reset",
+    "mcm.ui.default",
+    "mcm.ui.range",
+    "mcm.ui.details",
+    "mcm.ui.mods",
+    "mcm.ui.settings",
+    "mcm.ui.select",
+    "mcm.ui.enter",
+    "mcm.ui.adjust",
+    "mcm.ui.back",
+    "mcm.ui.developer",
+    "mcm.ui.loading",
+    "mcm.ui.unavailable",
+    "mcm.ui.current",
+    "mcm.ui.target",
+    "mcm.ui.position",
+    "mcm.ui.immediate"
+  ],
+  "canvas": [
+    1920,
+    1080
+  ],
+  "panel": [
+    260,
+    100,
+    1400,
+    880
+  ],
+  "font_sizes": {
+    "title": 32,
+    "mod": 28,
+    "label": 24,
+    "body": 20
+  }
+}

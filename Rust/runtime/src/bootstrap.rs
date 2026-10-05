@@ -350,6 +350,7 @@ fn load_inner(path: &std::path::Path) -> Result<(), i32> {
             .checked_add(1)
             .ok_or(INTERNAL)?;
         services.owners.insert(owner, id.into());
+        services.versions.insert(owner, plugin.manifest.version.clone());
         owner
     };
     if plugin
