@@ -25,6 +25,18 @@ mod consent_expiry {
         assert!(session.pending.is_none());
         assert!(session.consent.is_none());
     }
+    #[test]
+    fn native_menu_handoff_is_single_use_and_expires() {
+        let mut session=Session::default();
+        assert_eq!(session.take_native_open(),0);
+        assert_eq!(session.request_native_open(),1);
+        assert_eq!(session.take_native_open(),1);
+        assert_eq!(session.take_native_open(),0);
+        session.native_open=Some(std::time::Instant::now()-std::time::Duration::from_secs(11));
+        assert_eq!(session.take_native_open(),0);
+        session.pending=Some((0,0));
+        assert_eq!(session.request_native_open(),-3);
+    }
 }
 #[derive(Default)]
 pub struct Session {
@@ -40,8 +52,17 @@ pub struct Session {
     presentation_v2: bool,
     consent: Option<(i32, usize, i32, u64, std::time::Instant)>,
     nonce: i32,
+    native_open: Option<std::time::Instant>,
 }
 impl Session {
+    /// One-shot handoff from a menu button to the native settings host.
+    pub fn request_native_open(&mut self) -> i32 {
+        if self.pending.is_some() { return -3; }
+        self.native_open=Some(std::time::Instant::now());1
+    }
+    pub fn take_native_open(&mut self) -> i32 {
+        self.native_open.take().is_some_and(|issued| issued.elapsed().as_secs()<10) as i32
+    }
     pub fn pending_extension(&self) -> Option<&str> {
         self.pending
             .and_then(|(index, _)| self.options.get(index).map(|row| row.0.as_str()))

@@ -68,14 +68,19 @@ pub fn asset_names(root: &Path) -> Result<Vec<&'static str>, i32> {
     let mut names = vec![primary];
     if let Some(extra) = receipt.get("additional_assets") {
         let entries = extra.as_array().ok_or(INVALID)?;
-        if entries.len() > 1 { return Err(UNSUPPORTED); }
+        if entries.len() > 2 { return Err(UNSUPPORTED); }
         for entry in entries {
-            let actual_hash = sod2se_services::diagnostics::digest(&root.join("SoD2SE/Assets/main_menu.uasset"))?;
-            if entry["asset"] != "main_menu" || entry["source_asset_sha256"] != "ab1b361d498e8dfba559930085a3f3c2c7a6d0d21fc0ec23e4eda8f9ca5392bb"
+            let (name, original)=match entry["asset"].as_str() {
+                Some("main_menu") => ("main_menu","ab1b361d498e8dfba559930085a3f3c2c7a6d0d21fc0ec23e4eda8f9ca5392bb"),
+                Some("settings") => ("settings","d8d320363be69ea9dfb39b5c20c8de5237c642841fe3ac86b00f8115050fe06e"),
+                _ => return Err(UNSUPPORTED),
+            };
+            let actual_hash = sod2se_services::diagnostics::digest(&root.join(format!("SoD2SE/Assets/{name}.uasset")))?;
+            if names.contains(&name) || entry["source_asset_sha256"] != original
                 || entry["sha256"].as_str() != Some(actual_hash.as_str()) {
                 return Err(UNSUPPORTED);
             }
-            names.push("main_menu");
+            names.push(name);
         }
     }
     Ok(names)
@@ -152,7 +157,7 @@ unsafe extern "C" fn dispatch(user: *mut c_void, player: *mut c_void, call: *mut
             };
             args[i] = n;
         }
-        if !(0..=28).contains(&args[0]) { return Reply::Number(-2); }
+        if !(0..=if protocol_two {30} else {28}).contains(&args[0]) { return Reply::Number(-2); }
         QUERY.get().map_or(Reply::Number(-4), |query| {
             query(args[0] + if protocol_two {1000} else {0}, args[1], args[2], args[3])
         })

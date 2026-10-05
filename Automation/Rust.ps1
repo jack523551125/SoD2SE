@@ -6,6 +6,7 @@ param(
     [string]$NativeSettingsAsset = '',
     [string]$NativeUiReceipt = '',
     [string]$MainMenuAsset = '',
+    [string]$SettingsHostAsset = '',
     [string]$Acceptance = '',
     [switch]$Candidate
 )
@@ -54,6 +55,7 @@ try {
         if ($NativeSettingsAsset) { $argsList += @('--native-settings-asset', $NativeSettingsAsset) }
         if ($NativeUiReceipt) { $argsList += @('--native-ui-receipt', $NativeUiReceipt) }
         if ($MainMenuAsset) { $argsList += @('--main-menu-asset', $MainMenuAsset) }
+        if ($SettingsHostAsset) { $argsList += @('--settings-host-asset', $SettingsHostAsset) }
         if ($Acceptance) { $argsList += @('--acceptance', $Acceptance) }
         & python @argsList
         if ($LASTEXITCODE -ne 0) { throw 'Rust package failed or release gate refused.' }

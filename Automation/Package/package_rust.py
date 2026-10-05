@@ -32,6 +32,7 @@ def main(argv=None):
     parser.add_argument('--native-settings-asset', type=Path)
     parser.add_argument('--native-ui-receipt', type=Path)
     parser.add_argument('--main-menu-asset', type=Path)
+    parser.add_argument('--settings-host-asset', type=Path)
     parser.add_argument('--acceptance', type=Path)
     parser.add_argument('--candidate', action='store_true')
     args = parser.parse_args(argv)
@@ -81,12 +82,22 @@ def main(argv=None):
                 ('Rust/locales/template.json','Localization/template.json'),('Automation/NativeTest.py','Tools/NativeTest.py'),
                 ('Docs/NATIVE-TEST.zh-CN.md','Docs/NativeTest.zh-CN.md'),
                 ('Docs/UI/MCM-PRESENTATION-V2.md','Docs/UI/MCM-PRESENTATION-V2.md'),
+                ('Docs/UI/MCM-NATIVE-CONTROLS.md','Docs/UI/MCM-NATIVE-CONTROLS.md'),
                 ('Docs/UI/mcm-preview.html','Docs/UI/mcm-preview.html'),
                 ('Rust/mcm/ui-contract.json','SDK/mcm-ui-contract.json')]:
                 destination = developer/target
                 destination.parent.mkdir(parents=True,exist_ok=True)
                 shutil.copyfile(product/source,destination)
             shutil.copyfile(product / 'Automation/Install-Rust.ps1', stage / 'Install.ps1')
+            # The inert example belongs only to the developer package and pins
+            # the same revision as the runtime used for local acceptance.
+            example=developer/'Example/Root/Plugins'
+            example.mkdir(parents=True)
+            shutil.copyfile(build/'sod2se_example.dll',example/'SoD2SE.Example.dll')
+            (example/'SoD2SE.Example.native.json').write_text(json.dumps({'schema':1,'abi':1,'id':'example','version':version,
+                'file':'SoD2SE.Example.dll','sha256':digest(example/'SoD2SE.Example.dll'),'capabilities':[],'permissions':[],
+                'publish':False,'framework_revision':revision},indent=2)+'\n',encoding='utf-8')
+            (developer/'Example/meta.ini').write_text(f'[General]\nname=SoD2SE Developer Example\nversion={version}\n',encoding='utf-8')
             ui_status = 'SKIPPED'
             if args.native_settings_asset and args.native_ui_receipt:
                 receipt = json.loads(args.native_ui_receipt.read_text(encoding='utf-8'))
@@ -99,9 +110,11 @@ def main(argv=None):
                 copy(args.native_settings_asset, f'SoD2SE/Assets/{asset}.uasset')
                 copy(args.native_ui_receipt, 'SoD2SE/Assets/native-ui.json')
                 for extra in receipt.get('additional_assets', []):
-                    if extra.get('asset') != 'main_menu' or not args.main_menu_asset or extra.get('sha256') != digest(args.main_menu_asset):
-                        raise ValueError('Reviewed main-menu resource mismatch')
-                    copy(args.main_menu_asset, 'SoD2SE/Assets/main_menu.uasset')
+                    extra_name=extra.get('asset')
+                    source={'main_menu':args.main_menu_asset,'settings':args.settings_host_asset}.get(extra_name)
+                    if not source or extra.get('sha256') != digest(source):
+                        raise ValueError('Reviewed additional UI resource mismatch')
+                    copy(source, f'SoD2SE/Assets/{extra_name}.uasset')
                 ui_status = 'PACKAGED_NOT_LIVE_VERIFIED'
             elif not args.candidate:
                 raise ValueError('SKIPPED: reviewed fixed-build native UI resource and receipt are required')

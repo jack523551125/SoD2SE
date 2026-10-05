@@ -357,6 +357,10 @@ fn native_query(
     };
     let v2 = op >= 1000;
     let op = if v2 { op - 1000 } else { op };
+    if v2 && matches!(op,29|30) {
+        if token!=0 || index!=0 || value!=0 { return Reply::Number(INVALID); }
+        return Reply::Number(if op==29 {services.native_session.request_native_open()} else {services.native_session.take_native_open()});
+    }
     if op == 0 {
         let models = services.ui.models();
         return Reply::Number(if v2 { services.native_session.open_v2(models) } else { services.native_session.open(models) });
@@ -371,7 +375,7 @@ fn native_query(
             _ => return Reply::Number(INVALID),
         };
         return match services.logger.write(level, "native-ui", code,
-            &format!("Independent pause panel lifecycle; detail {value}")) {
+            &format!("MCM native UI lifecycle; detail {value}")) {
             Ok(()) => Reply::Number(1),
             Err(code) => Reply::Number(code),
         };

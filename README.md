@@ -2,7 +2,9 @@
 
 The player prerequisite now includes built-in Rust MCM. No separate MCM download is needed. Loader creates the Plugins namespace; Registry configuration lives under `Plugins/SoD2SE/Settings/<profile>/registry.json`. MO2 redirects creation to overwrite; standalone startup uses the game directory.
 
-MCM now opens from the pause menu in its own panel: Mod list on the left, selected Mod controls/status on the right. The normal settings page uses vanilla resources. Keyboard/controller actions and native mouse callbacks drive navigation; live rendering/input acceptance remains separate from static resource checks.
+The current candidate uses [original native controls](Docs/UI/MCM-NATIVE-CONTROLS.md) in a dedicated Mod view of the native settings host. Main-menu and pause entries share this view; the original host owns modality and the single hint bar. Normal Settings retains its categories. Live MCM acceptance remains pending.
+
+MCM opens from the main and pause menus: Mod list on the left, selected Mod controls/status on the right. Normal Settings retains its original categories and game-value bindings. Keyboard/controller actions and native mouse callbacks drive navigation; live rendering/input acceptance remains separate from static resource checks.
 
 Presentation v2 shares one modal panel between the main and pause menus, with fixed typography, native input hints, separate boolean/numeric controls, per-setting reset, translated save feedback and single-use dangerous-change confirmation. See the [visual specification and protocol](Docs/UI/MCM-PRESENTATION-V2.md). Real-game visual/input acceptance is pending.
 
