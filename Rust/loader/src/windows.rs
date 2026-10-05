@@ -322,7 +322,8 @@ pub(super) fn launch(exe: &Path, options: &Options) -> Result<(), i32> {
     if info["version"].as_str() != Some(env!("CARGO_PKG_VERSION")) {
         return Err(sod2se_abi::UNSUPPORTED);
     }
-    let (target, ownership) = overlay_paths(&options.profile)?;
+    let asset = sod2se_game_api::native_ui::asset_name(&dir)?;
+    let (target, ownership) = overlay_paths(&options.profile, asset)?;
     let mut mounted = false;
     // In MO2 this directory is virtual and its creation target is overwrite.
     if !options.mo2 {
@@ -338,7 +339,7 @@ pub(super) fn launch(exe: &Path, options: &Options) -> Result<(), i32> {
     let ui_required = plugins.iter().any(|(_, m)| {
         m.capabilities
             .iter()
-            .any(|c| c == sod2se_game_api::SETTINGS)
+            .any(|c| c == sod2se_game_api::SETTINGS || c == sod2se_game_api::PAUSE_MCM)
     });
     if ui_required {
         sod2se_game_api::native_ui::verify_files(&dir)?;
@@ -359,7 +360,7 @@ pub(super) fn launch(exe: &Path, options: &Options) -> Result<(), i32> {
             }
         } else if !options.preflight {
             sod2se_services::overlay::prepare(
-                &dir.join("SoD2SE/Assets/settings.uasset"),
+                &dir.join(format!("SoD2SE/Assets/{asset}.uasset")),
                 hash,
                 &target,
                 &ownership,
@@ -407,16 +408,20 @@ pub(super) fn launch(exe: &Path, options: &Options) -> Result<(), i32> {
     }
     result
 }
-fn overlay_paths(profile: &str) -> Result<(PathBuf, PathBuf), i32> {
+fn overlay_paths(profile: &str, asset: &str) -> Result<(PathBuf, PathBuf), i32> {
     let local = PathBuf::from(std::env::var_os("LOCALAPPDATA").ok_or(INVALID)?);
-    Ok((local.join("StateOfDecay2/Saved/Cooked/WindowsNoEditor/StateOfDecay2/Content/Art/UI/settings.uasset"),local.join("StateOfDecay2/SoD2SE/Rust").join(profile).join("ui-overlay.json")))
+    if !["settings", "pause"].contains(&asset) { return Err(sod2se_abi::UNSUPPORTED); }
+    Ok((local.join(format!("StateOfDecay2/Saved/Cooked/WindowsNoEditor/StateOfDecay2/Content/Art/UI/{asset}.uasset")),local.join("StateOfDecay2/SoD2SE/Rust").join(profile).join(if asset=="settings" {"ui-overlay.json"} else {"pause-ui-overlay.json"})))
 }
 pub(super) fn recover_resources(options: &Options) -> Result<(), i32> {
     if options.mo2 {
         return Ok(());
     }
-    let (target, ownership) = overlay_paths(&options.profile)?;
-    sod2se_services::overlay::recover(&target, &ownership)
+    for asset in ["settings", "pause"] {
+        let (target, ownership) = overlay_paths(&options.profile, asset)?;
+        sod2se_services::overlay::recover(&target, &ownership)?;
+    }
+    Ok(())
 }
 
 #[cfg(test)]

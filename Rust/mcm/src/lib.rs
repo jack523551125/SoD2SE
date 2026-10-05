@@ -91,7 +91,7 @@ unsafe extern "C" fn start(api: *const HostApi) -> i32 {
         }
         host.request("translation.register",json!({"en-US":serde_catalog(include_str!("../locales/en-US.json"))?,"zh-CN":serde_catalog(include_str!("../locales/zh-CN.json"))?}))?;
         host.request("settings.register", json!({"definitions":[]}))?;
-        host.request("ui.register",json!({"id":"mcm.settings","target":"settings","title":"mcm.title","description":"mcm.description"}))?;
+        host.request("ui.register",json!({"id":"mcm.settings","target":"pause","title":"mcm.title","description":"mcm.description"}))?;
         publish(host, 1)?;
         let stop = Arc::new(AtomicBool::new(false));
         let signal = stop.clone();

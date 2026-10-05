@@ -76,6 +76,7 @@ fn start_inner() -> Result<(), i32> {
                 &format!("status {code}"),
             );
         })?;
+    services.ui_surface = sod2se_game_api::native_ui::asset_name(root)?.into();
     services.logger.write(
         1,
         "runtime",

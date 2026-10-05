@@ -18,10 +18,12 @@ fn run() -> Result<(), String> {
             if !sod2se_services::valid_id(&profile){return Err("Invalid profile id".into());}
             ensure_stopped()?;
             let local=PathBuf::from(std::env::var_os("LOCALAPPDATA").ok_or("LOCALAPPDATA unavailable")?);
-            sod2se_services::overlay::recover(
-                &local.join("StateOfDecay2/Saved/Cooked/WindowsNoEditor/StateOfDecay2/Content/Art/UI/settings.uasset"),
-                &local.join("StateOfDecay2/SoD2SE/Rust").join(profile).join("ui-overlay.json")
-            ).map_err(|c|format!("OVERLAY_RECOVERY_REFUSED: {c}; foreign resources preserved"))?;
+            for (asset,receipt) in [("settings","ui-overlay.json"),("pause","pause-ui-overlay.json")] {
+                sod2se_services::overlay::recover(
+                    &local.join(format!("StateOfDecay2/Saved/Cooked/WindowsNoEditor/StateOfDecay2/Content/Art/UI/{asset}.uasset")),
+                    &local.join("StateOfDecay2/SoD2SE/Rust").join(&profile).join(receipt)
+                ).map_err(|c|format!("OVERLAY_RECOVERY_REFUSED: {c}; foreign resources preserved"))?;
+            }
             println!("PASS: owned UI overlay recovered");Ok(())
         },
         Some("archive-legacy") | Some("restore-legacy") => {
@@ -61,7 +63,7 @@ fn run() -> Result<(), String> {
             let package:PathBuf=args.next().ok_or("install requires package Root")?.into();let game:PathBuf=args.next().ok_or("install requires game root")?.into();
             sod2se_game_api::verify_image(&game.join("StateOfDecay2/Binaries/Win64").join(sod2se_game_api::SHIPPING)).map_err(|c|format!("GAME_REFUSED: {c}"))?;
             ensure_stopped()?;
-            sod2se_services::install::install(&package,&game).map_err(|c|format!("INSTALL_REFUSED: {c}; existing files preserved; pending transactions require recover-install"))?;println!("Installed SoD2SE prerequisite. MCM is optional.");Ok(())
+            sod2se_services::install::install(&package,&game).map_err(|c|format!("INSTALL_REFUSED: {c}; existing files preserved; pending transactions require recover-install"))?;println!("Installed SoD2SE prerequisite with built-in MCM.");Ok(())
         },
         Some("recover-install")|Some("uninstall")=>{
             let recover=std::env::args().nth(1).as_deref()==Some("recover-install");

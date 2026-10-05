@@ -2,6 +2,8 @@
 
 ## Authorized Rust transition
 
+The owner subsequently requested an independent pause MCM panel. The fixed pause movie receives three bounded hooks and an authored component; original settings is no longer overlaid. GameApi selects only a reviewed settings/pause resource with fixed original identity and derived hash. The current built-in MCM uses pause; Runtime refuses UI targets that do not match the active resource. Settings configuration identities, file format and game/save behavior are unchanged. Authored resource tooling/evidence belongs to ReverseEngineering; runtime guards, lifecycle, API and packaging belong here.
+
 The owner subsequently authorized moving native MCM ownership into this Cargo workspace and bundling it in the framework. `SoD2SE/BuiltinPlugins` is framework-owned; external Mods and Registry persistence use the Plugins namespace. MO2 supplies an explicit overwrite creation target. Config IDs/formats are unchanged; the old AppData Registry document is preserved and imported once into the new profile-scoped location. SDK/gameplay access remains independent of the frontend.
 
 The owner approved merging Loader and NativeModSettingsEntry responsibilities into this repository. The new native line uses the Cargo workspace version authority, C ABI 1, profile-owned Settings Registry, GameApi-only game access and a generic original-UI extension interface (settings surface first). Native MCM is the bundled Registry frontend; UnlimitedFollowers remains an independent Rust plugin. Native release and retiring the old submodules require the explicit gates in Docs/Migration/Rust/STATUS.md. The managed line below remains the historical compatibility boundary during staged rollout.

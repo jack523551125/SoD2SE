@@ -74,7 +74,7 @@ def main(argv=None):
                 copy(build / source, target)
             copy(build/'Mcm.dll','SoD2SE/BuiltinPlugins/Mcm.dll')
             builtin={'schema':1,'abi':1,'id':'mcm','version':version,'file':'Mcm.dll','sha256':digest(build/'Mcm.dll'),
-                'capabilities':['sod2.ui.native-settings'],'permissions':['settings.frontend'],'publish':not args.candidate,'framework_revision':revision}
+                'capabilities':['sod2.ui.pause-mcm'],'permissions':['settings.frontend'],'publish':not args.candidate,'framework_revision':revision}
             (root/'SoD2SE/BuiltinPlugins/Mcm.native.json').write_text(json.dumps(builtin,indent=2)+'\n',encoding='utf-8')
             for source,target in [('Docs/RUST-API.md','Docs/API.md'),('Rust/abi/include/sod2se.h','SDK/sod2se.h'),
                 ('Rust/locales/template.json','Localization/template.json'),('Automation/NativeTest.py','Tools/NativeTest.py'),
@@ -89,7 +89,10 @@ def main(argv=None):
                 target = json.loads((product / 'patch-manifest.json').read_text(encoding='utf-8'))
                 if receipt.get('schema') != 1 or receipt.get('reviewed') is not True or receipt.get('game_sha256') != target['sha256'].lower() or receipt.get('sha256') != digest(args.native_settings_asset):
                     raise ValueError('Native UI resource receipt/hash/target mismatch')
-                copy(args.native_settings_asset, 'SoD2SE/Assets/settings.uasset')
+                asset = receipt.get('asset', 'settings')
+                if asset != 'pause':
+                    raise ValueError('Built-in MCM requires the reviewed independent pause panel resource')
+                copy(args.native_settings_asset, f'SoD2SE/Assets/{asset}.uasset')
                 copy(args.native_ui_receipt, 'SoD2SE/Assets/native-ui.json')
                 ui_status = 'PACKAGED_NOT_LIVE_VERIFIED'
             elif not args.candidate:

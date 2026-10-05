@@ -1,6 +1,7 @@
 //! Fixed 16535856 Iggy callback adapter, ported from MCM's reviewed NativeSettingsIggy.h.
 //! Hash/export/slot facts are private to GameApi. No game/player pointer is retained by services.
 use super::*;
+use sod2se_abi::INTERNAL;
 use sod2se_services::native_settings::Reply;
 use std::{
     ffi::c_void,
@@ -34,6 +35,26 @@ type SetInt = unsafe extern "C" fn(*mut c_void, *mut c_void, *const u8, i32) -> 
 type SetText = unsafe extern "C" fn(*mut c_void, *mut c_void, *const u8, *const u8, i32) -> i32;
 type Query = fn(i32, i32, i32, i32) -> Reply;
 const IGGY_SHA: &str = "09049ffc7b48639c72336bb809035fa1c1b827e898693fbc2968165bd23940a6";
+/// Select only a reviewed, hash-matched fixed-build UI surface.
+pub fn asset_name(root: &Path) -> Result<&'static str, i32> {
+    let receipt: serde_json::Value = serde_json::from_slice(
+        &std::fs::read(root.join("SoD2SE/Assets/native-ui.json")).map_err(|_| INTERNAL)?,
+    ).map_err(|_| INVALID)?;
+    if receipt["schema"] != 1 || receipt["reviewed"] != true
+        || receipt["game_sha256"].as_str() != Some(&target().sha256.to_lowercase()) {
+        return Err(UNSUPPORTED);
+    }
+    let (name, original) = match receipt["asset"].as_str().unwrap_or("settings") {
+        "settings" => ("settings", "d8d320363be69ea9dfb39b5c20c8de5237c642841fe3ac86b00f8115050fe06e"),
+        "pause" => ("pause", "00b46a42a6fc83645ace9f7068b8fc3b34ed7c9abd0c185580abbfb5a7d53ab6"),
+        _ => return Err(UNSUPPORTED),
+    };
+    if receipt["source_asset_sha256"].as_str() != Some(original)
+        || receipt["sha256"].as_str() != Some(&sod2se_services::diagnostics::digest(&root.join(format!("SoD2SE/Assets/{name}.uasset")))?) {
+        return Err(UNSUPPORTED);
+    }
+    Ok(name)
+}
 pub fn verify_files(root: &Path) -> Result<(), i32> {
     let path = root.join("StateOfDecay2/Plugins/IggyPlugin/Binaries/Win64/iggy_w64.dll");
     if sod2se_services::diagnostics::digest(&path)? != IGGY_SHA {

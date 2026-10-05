@@ -63,7 +63,7 @@ impl UiRegistry {
             .is_some_and(|entry| entry.0 == owner)
     }
     pub fn register(&mut self, owner: u64, extension: Extension) -> Result<(), i32> {
-        if extension.target != "settings" {
+        if !["settings", "pause"].contains(&extension.target.as_str()) {
             return Err(UNSUPPORTED);
         }
         if owner == 0

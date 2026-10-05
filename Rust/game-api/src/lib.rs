@@ -4,6 +4,7 @@ use sod2se_abi::{INVALID, UNSUPPORTED};
 use std::path::Path;
 pub const FOLLOWERS: &str = "sod2.followers.quantity";
 pub const SETTINGS: &str = "sod2.ui.native-settings";
+pub const PAUSE_MCM: &str = "sod2.ui.pause-mcm";
 pub const GAME_BUILD: &str = "16535856";
 pub const SHIPPING: &str = "StateOfDecay2-Win64-Shipping.exe";
 #[derive(Clone, Deserialize)]

@@ -16,6 +16,7 @@ pub struct Services {
     state: sod2se_services::state::Store,
     pub settings: Registry,
     pub ui: UiRegistry,
+    pub ui_surface: String,
     pub owners: BTreeMap<u64, String>,
     pub logger: Logger,
     #[cfg(windows)]
@@ -43,6 +44,7 @@ impl Services {
             state: sod2se_services::state::Store::open(&path.join("state"))?,
             settings: Registry::open(settings)?,
             ui: UiRegistry::default(),
+            ui_surface: "settings".into(),
             owners: BTreeMap::new(),
             logger: Logger::new(path.join("runtime.jsonl")),
             game_verified,
@@ -133,7 +135,7 @@ impl Services {
                 #[cfg(not(windows))]
                 let ui_ready = false;
                 Ok(
-                    json!({"game_build":sod2se_game_api::GAME_BUILD,"followers":self.game_verified && !followers_poisoned,"followers_active":followers_active,"followers_poisoned":followers_poisoned,"native_settings":ui_ready,"live_acceptance":"NOT_RUN"}),
+                    json!({"game_build":sod2se_game_api::GAME_BUILD,"followers":self.game_verified && !followers_poisoned,"followers_active":followers_active,"followers_poisoned":followers_poisoned,"native_settings":ui_ready && self.ui_surface=="settings","native_pause_mcm":ui_ready && self.ui_surface=="pause","ui_surface":self.ui_surface,"live_acceptance":"NOT_RUN"}),
                 )
             }
             "settings.register" => {
@@ -177,6 +179,7 @@ impl Services {
             )),
             "ui.register" => {
                 let extension: Extension = serde_json::from_value(input).map_err(|_| INVALID)?;
+                if self.game_verified && extension.target != self.ui_surface { return Err(UNSUPPORTED); }
                 self.ui.register(owner, extension)?;
                 Ok(json!({}))
             }
@@ -352,6 +355,18 @@ fn native_query(
     if op == 0 {
         let models = services.ui.models();
         return Reply::Number(services.native_session.open(models));
+    }
+    if op == 19 {
+        let (level, code) = match index {
+            0 => (1, "MCM_PANEL_OPENED"),
+            1 => (1, "MCM_PANEL_CLOSED"),
+            2 => (3, "MCM_PANEL_REFUSED"),
+            _ => return Reply::Number(INVALID),
+        };
+        return match services.logger.write(level, "native-ui", code, "Independent pause panel lifecycle") {
+            Ok(()) => Reply::Number(1),
+            Err(code) => Reply::Number(code),
+        };
     }
     match services.native_session.query(op, token, index, value) {
         Reply::Edit {

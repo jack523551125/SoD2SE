@@ -1,5 +1,9 @@
 # SoD2SE native ABI 1
 
+## Current MCM surface
+
+Built-in MCM registers target `pause` and requires `sod2.ui.pause-mcm`. The pause entry opens an independent panel with Mod pages on the left and the selected Mod's settings on the right. Vanilla settings is not overlaid by this package. Registry configuration IDs and the four-integer UI protocol remain unchanged; operation 19 records panel open/close/refusal lifecycle diagnostics. Runtime reports `ui_surface` and `native_pause_mcm`; a target that does not match the installed reviewed asset is refused. Character/community/arbitrary pages remain unsupported. Legacy settings assets remain recognized for recovery/compatibility.
+
 The native preview is State of Decay 2 System Extender. Its version authority is the root Cargo workspace package version. The legacy managed 0.6.x product, assembly names, dependency pins and packages remain available until native acceptance permits cutover. Native ABI 1 and managed plugin API 1 are different interfaces; the native loader refuses legacy DLLs.
 
 ## Build and offline checks
