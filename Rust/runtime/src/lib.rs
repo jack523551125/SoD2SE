@@ -361,9 +361,11 @@ fn native_query(
             0 => (1, "MCM_PANEL_OPENED"),
             1 => (1, "MCM_PANEL_CLOSED"),
             2 => (3, "MCM_PANEL_REFUSED"),
+            3 => (3, "MCM_PANEL_FAILURE_STAGE"),
             _ => return Reply::Number(INVALID),
         };
-        return match services.logger.write(level, "native-ui", code, "Independent pause panel lifecycle") {
+        return match services.logger.write(level, "native-ui", code,
+            &format!("Independent pause panel lifecycle; detail {value}")) {
             Ok(()) => Reply::Number(1),
             Err(code) => Reply::Number(code),
         };
