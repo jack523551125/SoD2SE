@@ -17,12 +17,14 @@ pub struct Record<'a> {
 }
 pub struct Logger {
     path: PathBuf,
+    writer: std::sync::Mutex<()>,
 }
 impl Logger {
     pub fn new(path: impl Into<PathBuf>) -> Self {
-        Self { path: path.into() }
+        Self { path: path.into(), writer: std::sync::Mutex::new(()) }
     }
     pub fn write(&self, level: u32, owner: &str, code: &str, message: &str) -> Result<(), i32> {
+        let _writer = self.writer.lock().map_err(|_| INTERNAL)?;
         if !super::valid_id(code) || message.len() > 8192 {
             return Err(INVALID);
         }

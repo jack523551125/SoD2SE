@@ -33,6 +33,12 @@ fn inert_host_registry_and_missing_game_capabilities() {
             host.request(1, "game.followers.acquire", json!({})),
             Err(UNSUPPORTED)
         );
+        assert_eq!(
+            host.request(1, "game.followers.persistence.acquire", json!({})),
+            Err(UNSUPPORTED)
+        );
+        assert_eq!(host.request(99, "game.followers.persistence.acquire", json!({})), Err(INVALID));
+        assert_eq!(host.request(1, "capabilities", json!({})).unwrap()["followers_persistence"], false);
         host.request(1,"settings.register",json!({"definitions":[{"id":"enabled","kind":"boolean","default":false,"minimum":null,"maximum":null,"label":"example.enabled","description":"example.help","apply":"immediate","risk":"normal"}]})).unwrap();
         assert!(
             host.request(1, "settings.snapshot", json!({})).unwrap()["definitions"]["example"]

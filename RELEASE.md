@@ -25,3 +25,11 @@ Native player and developer archives are generated separately by Automation/Rust
 3. Record each required offline check as PASS, FAIL, or SKIPPED with its reason. A missing protected asset or research database remains SKIPPED.
 4. Generate the package through `package.ps1` / `Automation/Package/package.ps1`; validate its manifest and payload against the product's release inputs.
 5. Review the resulting file list, sizes, hashes, license/provenance, and install-relative paths before any separately authorized release action.
+
+## Follower persistence source checkpoint, 2026-10-09
+
+The final follower repair has [scoped owner acceptance](../UnlimitedFollowers/RELEASE.md#scoped-owner-live-acceptance-2026-10-09) for outside-base restart/menu-reload, nearby appearance and sustained following. This accepted candidate remains unchanged; its product record owns the artifact identities and evidence limits. It is separate from formal framework/plugin release acceptance.
+
+The [current publication preparation and gate matrix](Docs/Migration/Rust/STATUS.md#current-publication-preparation-2026-10-09) records the available evidence, the eighteen formal check IDs, standards 19/20 and the protected UI payload distribution gap. Current source is dirty. A synchronized clean release revision, matching reviewed report and final formal artifact are still missing; the SDK's exact base pin `5eef660a560ab0c99dbed57e8ae6396e3526c7ed` does not contain the later uncommitted repair. Preserve the accepted candidate and generated evidence bytes. Future formal packaging changes artifact identity and requires affected-path revalidation, with explicit limits on any reused evidence; source commits or packaging success alone cannot transfer acceptance. The current UI receipt records protected local outputs: its input/static reviewed flag does not authorize uploading those derived resources.
+
+The owner authorized local task-source commits and the matching exact follower dependency update. This source checkpoint excludes unrelated dirty UI, community and managed-retirement changes. It does not replace the unchanged owner-tested candidate or authorize upload, tag or game operation.

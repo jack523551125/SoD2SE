@@ -48,7 +48,7 @@ impl Manifest {
         if self
             .capabilities
             .iter()
-            .any(|c| !["sod2.followers.quantity", "sod2.ui.native-settings", "sod2.ui.pause-mcm"].contains(&c.as_str()))
+            .any(|c| !["sod2.followers.quantity", "sod2.followers.persistence", "sod2.ui.native-settings", "sod2.ui.pause-mcm"].contains(&c.as_str()))
             || self.permissions.iter().any(|p| p != "settings.frontend")
         {
             return Err(UNSUPPORTED);

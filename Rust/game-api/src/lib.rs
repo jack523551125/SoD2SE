@@ -65,6 +65,11 @@ pub fn decode(hex: &str) -> Result<Vec<u8>, i32> {
         .map(|i| u8::from_str_radix(&hex[i..i + 2], 16).map_err(|_| INVALID))
         .collect()
 }
+#[cfg(windows)]
+mod follower_access;
+#[cfg(windows)]
+pub mod follower_runtime;
+pub mod follower_state;
 pub mod language;
 #[cfg(windows)]
 pub mod native_ui;

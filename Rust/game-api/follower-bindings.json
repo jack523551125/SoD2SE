@@ -1,0 +1,192 @@
+{
+  "schema": 1,
+  "target_sha256": "EBF0A73E164BAA701F74655585F262F8E38A32B1F6DC5057303489BA5B333ECE",
+  "functions": {
+    "tick": {
+      "rva": 31308960,
+      "guard": "488bc448895818555657415441554156"
+    },
+    "save": {
+      "rva": 2643936,
+      "guard": "4885d20f84020b00004c894424184889"
+    },
+    "dismiss": {
+      "rva": 2309520,
+      "guard": "4885d20f84b700000048895c24085748"
+    },
+    "enlist": {
+      "rva": 2488912,
+      "guard": "4053574883ec284883b930070000008b"
+    },
+    "enclave": {
+      "rva": 2607456,
+      "guard": "488b8170110000c3cccccccccccccccc"
+    },
+    "lookup": {
+      "rva": 2617072,
+      "guard": "48895c240848896c2410488974241857"
+    },
+    "allowed": {
+      "rva": 3757616,
+      "guard": "48895c2420574883ec50488b05df5d17"
+    },
+    "restriction": {
+      "rva": 3758176,
+      "guard": "48895c241848896c2420564883ec3048"
+    },
+    "rpc": {
+      "rva": 10891744,
+      "guard": "48895c2408574883ec30488b19488bf9"
+    },
+    "validate_rpc": {
+      "rva": 10145536,
+      "guard": "b001c3cccccccccccccccccccccccccc"
+    },
+    "manager_add": {
+      "rva": 2949744,
+      "guard": "4885d20f84da000000535541564883ec"
+    },
+    "set_busy_state": {
+      "rva": 1974880,
+      "guard": "488bc453554881ec080100000fb6ea48"
+    },
+    "actor_location": {
+      "rva": 28225920,
+      "guard": "4883ec18488b81b00100004885c07425"
+    },
+    "actor_rotation": {
+      "rva": 28235936,
+      "guard": "48895c2408574883ec40488b99b00100"
+    },
+    "follow": {
+      "rva": 1457216,
+      "guard": "40535641574883ec400f297424300f28"
+    },
+    "resolve_weak": {
+      "rva": 18936128,
+      "guard": "448b41044585c0746048631185d27859"
+    },
+    "teleport_character": {
+      "rva": 4132720,
+      "guard": "4c8bdc49895b0849896b104989731849"
+    },
+    "refresh_spawn_category": {
+      "rva": 6478256,
+      "guard": "48895c24084889542410574883ec2048"
+    },
+    "actor_world": {
+      "rva": 28226800,
+      "guard": "4883ec288b4108488bd1c1e804a80175"
+    },
+    "world_self": {
+      "rva": 34268976,
+      "guard": "488bc1c3cccccccccccccccccccccccc"
+    },
+    "record_set_transform": {
+      "rva": 1980256,
+      "guard": "c68128100000010f28020f2981e00f00"
+    },
+    "component_transform": {
+      "rva": 29880656,
+      "guard": "0f288160010000488bc20f2889700100"
+    },
+    "set_saved_position_kind": {
+      "rva": 1980320,
+      "guard": "889110100000c3cccccccccccccccccc"
+    },
+    "get_record_transform": {
+      "rva": 1936448,
+      "guard": "0f2881e00f0000488bc20f2889f00f00"
+    }
+  },
+  "classes": {
+    "controller": 72723408,
+    "character": 72722928,
+    "pawn": 72723344,
+    "component": 72736208,
+    "scene_component": 74646648,
+    "instance": 72731512,
+    "game": 72732488,
+    "followers": 72739664,
+    "characters": 72719968,
+    "dialogue": 72723136,
+    "community": 72720064,
+    "world": 74652472,
+    "level": 74646840,
+    "net_driver": 74656208,
+    "ai_controller": 72720144,
+    "spawn_list": 72744120,
+    "spawn_manager": 72732320,
+    "spawn_category": 72732328,
+    "spawn_payload": 72743728,
+    "uclass": 73600496,
+    "game_mode": 72736432,
+    "player": 72736832,
+    "save_manager": 72731240
+  },
+  "thread_id": 72893260,
+  "thread_initialized": 72893292,
+  "player_global": 74499728,
+  "object_data": 73606832,
+  "object_count": 73606844,
+  "fields": {
+    "object_class": 16,
+    "class_parent": 48,
+    "outer": 32,
+    "controller": 48,
+    "pawn": 872,
+    "component": 2976,
+    "character": 400,
+    "record": 872,
+    "id": 0,
+    "narrative": 8,
+    "dead": 160,
+    "busy_state": 3616,
+    "level_world": 176,
+    "world_instance": 320,
+    "world_mode": 272,
+    "net_driver": 56,
+    "demo_driver": 192,
+    "loading_screen": 1608,
+    "server_connection": 112,
+    "client_connections": 120,
+    "save_manager": 2320,
+    "game_id": 64,
+    "followers": 1960,
+    "dialogue": 1840,
+    "community_component": 2912,
+    "array": 160,
+    "enclave": 4464,
+    "characters_array": 920,
+    "character_component": 3632,
+    "component_owner": 184,
+    "actor_root": 432,
+    "actor_controller": 936,
+    "ai_follow_target": 2400,
+    "last_follower_id": 4676,
+    "enclave_spawn_list": 2704,
+    "spawn_entries": 64,
+    "spawn_count": 72,
+    "spawn_capacity": 76,
+    "spawn_entry_stride": 80,
+    "spawn_entry_character": 8,
+    "get_world_slot": 264,
+    "spawn_categories": 936,
+    "spawn_category_stride": 24,
+    "spawn_category_class": 0,
+    "spawn_category_list": 16,
+    "spawn_category_payload": 8,
+    "spawn_category_default": 256,
+    "spawn_list_category": 56,
+    "spawn_tracking": 40,
+    "spawn_tracking_stride": 16,
+    "spawn_tracking_actor": 0,
+    "spawn_tracking_index": 8,
+    "record_transform": 4064,
+    "saved_position_kind": 4112,
+    "transform_bytes": 48,
+    "transform_alignment": 16,
+    "transform_translation": 16,
+    "transform_scale": 32
+  }
+}

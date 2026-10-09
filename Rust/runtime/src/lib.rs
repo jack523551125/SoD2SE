@@ -9,17 +9,17 @@ use sod2se_services::{
 use std::{
     collections::BTreeMap,
     path::PathBuf,
-    sync::{Mutex, OnceLock},
+    sync::{Arc, Mutex, OnceLock},
 };
 
 pub struct Services {
-    state: sod2se_services::state::Store,
+    state: Arc<Mutex<sod2se_services::state::Store>>,
     pub settings: Registry,
     pub ui: UiRegistry,
     pub ui_surface: String,
     pub owners: BTreeMap<u64, String>,
     pub versions: BTreeMap<u64, String>,
-    pub logger: Logger,
+    pub logger: Arc<Logger>,
     #[cfg(windows)]
     followers: sod2se_game_api::process::FollowerLease,
     pub game_verified: bool,
@@ -42,13 +42,13 @@ impl Services {
         game_verified: bool,
     ) -> Result<Self, i32> {
         Ok(Self {
-            state: sod2se_services::state::Store::open(&path.join("state"))?,
+            state: Arc::new(Mutex::new(sod2se_services::state::Store::open(&path.join("state"))?)),
             settings: Registry::open(settings)?,
             ui: UiRegistry::default(),
             ui_surface: "settings".into(),
             owners: BTreeMap::new(),
             versions: BTreeMap::new(),
-            logger: Logger::new(path.join("runtime.jsonl")),
+            logger: Arc::new(Logger::new(path.join("runtime.jsonl"))),
             game_verified,
             catalog: sod2se_services::translation::Catalog::new("en-US".into()),
             native_session: Default::default(),
@@ -72,9 +72,9 @@ impl Services {
                 let schema =
                     u32::try_from(input["schema"].as_u64().ok_or(INVALID)?).map_err(|_| INVALID)?;
                 if operation == "state.read" {
-                    serde_json::to_value(self.state.read(&module, schema)?).map_err(|_| INTERNAL)
+                    serde_json::to_value(self.state.lock().map_err(|_| INTERNAL)?.read(&module, schema)?).map_err(|_| INTERNAL)
                 } else {
-                    let revision = self.state.write(
+                    let revision = self.state.lock().map_err(|_| INTERNAL)?.write(
                         &module,
                         schema,
                         input["revision"].as_u64().ok_or(INVALID)?,
@@ -137,7 +137,7 @@ impl Services {
                 #[cfg(not(windows))]
                 let ui_ready = false;
                 Ok(
-                    json!({"game_build":sod2se_game_api::GAME_BUILD,"followers":self.game_verified && !followers_poisoned,"followers_active":followers_active,"followers_poisoned":followers_poisoned,"native_settings":ui_ready && self.ui_surface=="settings","native_pause_mcm":ui_ready && self.ui_surface=="pause","ui_surface":self.ui_surface,"live_acceptance":"NOT_RUN"}),
+                    json!({"game_build":sod2se_game_api::GAME_BUILD,"followers":self.game_verified && !followers_poisoned,"followers_persistence":self.game_verified && !followers_poisoned,"followers_active":followers_active,"followers_poisoned":followers_poisoned,"native_settings":ui_ready && self.ui_surface=="settings","native_pause_mcm":ui_ready && self.ui_surface=="pause","ui_surface":self.ui_surface,"live_acceptance":"NOT_RUN"}),
                 )
             }
             "settings.register" => {
@@ -227,6 +227,7 @@ impl Services {
             "game.followers.release" => {
                 #[cfg(windows)]
                 {
+                    if sod2se_game_api::follower_runtime::owned_by(owner) { return Err(BUSY); }
                     self.followers.release(owner)?;
                     Ok(json!({"active":false}))
                 }
@@ -235,10 +236,36 @@ impl Services {
                     Err(UNSUPPORTED)
                 }
             }
+            "game.followers.persistence.acquire" => {
+                if !self.game_verified { return Err(UNSUPPORTED); }
+                #[cfg(windows)]
+                {
+                    if !self.followers.owned_by(owner) { return Err(INVALID); }
+                    sod2se_game_api::follower_runtime::acquire(owner, module, self.state.clone(), self.logger.clone())?;
+                    Ok(json!({"active":true,"schema":1}))
+                }
+                #[cfg(not(windows))] { Err(UNSUPPORTED) }
+            }
+            "game.followers.persistence.release" => {
+                #[cfg(windows)]
+                {
+                    sod2se_game_api::follower_runtime::release(owner)?;
+                    Ok(json!({"active":false}))
+                }
+                #[cfg(not(windows))] { Err(UNSUPPORTED) }
+            }
+            "game.followers.persistence.status" => {
+                #[cfg(windows)] { sod2se_game_api::follower_runtime::status(owner) }
+                #[cfg(not(windows))] { Err(UNSUPPORTED) }
+            }
             _ => Err(UNSUPPORTED),
         }
     }
     pub fn cleanup(&mut self, owner: u64) -> Result<(), i32> {
+        #[cfg(windows)]
+        if sod2se_game_api::follower_runtime::owned_by(owner) {
+            sod2se_game_api::follower_runtime::release(owner)?;
+        }
         #[cfg(windows)]
         if self.followers.owned_by(owner) {
             self.followers.release(owner)?;

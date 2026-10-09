@@ -125,7 +125,7 @@ def main(argv=None):
             (root / 'framework.manifest.json').write_text(json.dumps({'schema':1,'version':version,'files':entries},indent=2)+'\n',encoding='utf-8')
             subprocess.run([str(root/'SoD2SE.DevTools.exe'),'verify-plugins',str(root)],check=True)
         else:
-            mapping = {'UnlimitedFollowers':('UnlimitedFollowers','unlimited-followers',['sod2.followers.quantity'],[])}
+            mapping = {'UnlimitedFollowers':('UnlimitedFollowers','unlimited-followers',['sod2.followers.quantity', 'sod2.followers.persistence'],[])}
             binary, plugin_id, capabilities, permissions = mapping[product.name]
             copy(build / f'{binary}.dll', f'Plugins/{binary}.dll')
             manifest = {'schema':1,'abi':1,'id':plugin_id,'version':version,'file':f'{binary}.dll','sha256':digest(build/f'{binary}.dll'),'capabilities':capabilities,'permissions':permissions,'publish':not args.candidate,'framework_revision':json.loads((product/'rust-dependencies.lock.json').read_text(encoding='utf-8'))['SoD2SE']['revision']}
